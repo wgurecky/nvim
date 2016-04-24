@@ -46,16 +46,10 @@ inoremap jj <ESC>
 " syntax highlight
 syntax on
 
-" allow verticle movement in display lines with tex, md, rst, and txt files
-" set in ~/.config/nvim/ftplugin/<filetype>.vim
-" noremap  <buffer> <silent> k gk
-" noremap  <buffer> <silent> j gj
-
 " ========================================================== "
 "                    PLUGIN SETTINGS                         "
 " ========================================================== "
 
-" Fisrt, ensure to install the vim-plug plugin manager
 " github.com/junegunn/vim-plug
 call plug#begin('~/.nvim/plugged')
 Plug 'https://github.com/scrooloose/nerdtree.git'
@@ -73,6 +67,10 @@ Plug 'https://github.com/Shougo/deoplete.nvim.git'
 Plug 'https://github.com/benekastah/neomake.git', { 'for': 'cpp,c' }
 Plug 'lervag/vimtex'
 call plug#end()
+autocmd VimEnter *
+  \  if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
+  \|   PlugInstall | q
+  \| endif
 
 " Nerdtree settings
 " launch nerdtree on entry if no file is specified
