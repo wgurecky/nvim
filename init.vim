@@ -65,7 +65,9 @@ Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/Shougo/deoplete.nvim.git'
 Plug 'https://github.com/benekastah/neomake.git', { 'for': 'cpp,c' }
+Plug 'https://github.com/davidhalter/jedi.git'
 Plug 'lervag/vimtex'
+Plug 'zchee/deoplete-jedi'
 call plug#end()
 autocmd VimEnter *
   \  if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
