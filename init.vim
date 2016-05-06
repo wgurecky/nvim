@@ -53,7 +53,6 @@ syntax on
 " github.com/junegunn/vim-plug
 call plug#begin('~/.nvim/plugged')
 Plug 'https://github.com/scrooloose/nerdtree.git'
-Plug 'https://github.com/klen/python-mode.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
 Plug 'https://github.com/junegunn/vim-easy-align.git'
 Plug 'https://github.com/kien/ctrlp.vim'
@@ -64,7 +63,7 @@ Plug 'https://github.com/vim-scripts/taglist.vim'
 Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/Shougo/deoplete.nvim.git'
-Plug 'https://github.com/benekastah/neomake.git', { 'for': 'cpp,c' }
+Plug 'https://github.com/benekastah/neomake.git', { 'for': 'cpp,c,python' }
 Plug 'https://github.com/davidhalter/jedi.git'
 Plug 'lervag/vimtex'
 Plug 'zchee/deoplete-jedi'
@@ -73,6 +72,7 @@ autocmd VimEnter *
   \  if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
   \|   PlugInstall | q
   \| endif
+" Plug 'https://github.com/klen/python-mode.git'
 
 " Nerdtree settings
 " launch nerdtree on entry if no file is specified
