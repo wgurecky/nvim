@@ -50,7 +50,9 @@ syntax on
 "                    PLUGIN SETTINGS                         "
 " ========================================================== "
 
-" github.com/junegunn/vim-plug
+" Notes. vim-flake8 requires the python package flake8 to be
+" installed.  TODO: fix ultisnips auto complete issue.  Is
+" ultisnips compatible with deoplete?
 call plug#begin('~/.nvim/plugged')
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
@@ -67,12 +69,12 @@ Plug 'https://github.com/benekastah/neomake.git', { 'for': 'cpp,c,python' }
 Plug 'https://github.com/davidhalter/jedi.git'
 Plug 'lervag/vimtex'
 Plug 'zchee/deoplete-jedi'
+Plug 'nvie/vim-flake8'
 call plug#end()
 autocmd VimEnter *
   \  if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
   \|   PlugInstall | q
   \| endif
-" Plug 'https://github.com/klen/python-mode.git'
 
 " Nerdtree settings
 " launch nerdtree on entry if no file is specified
@@ -121,6 +123,7 @@ endfunction "}}}
 let g:neomake_cpp_enabled_makers=['gcc']
 let g:neomake_cpp_clang_args=["-std=c++14", "-Wextra", "-Wall"]
 let g:neomake_cpp_gcc_args=["-std=c++14", "-Wextra", "-Wall"]
+let g:neomake_python_enabled_makers=['flake8']
 
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
