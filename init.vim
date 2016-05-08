@@ -87,17 +87,12 @@ let NERDTreeChDirMode=2
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
-" Python mode settings
-let pymode_rope = 0  " rope auto-complete causes significant delay in savetime
-let g:pymode_lint_ignore = "E701,E702,E501,W0401"  " ignores line too long pep8 violations
-let pymode_rope_vim_completion=0
-
 " ctlp settings
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 
-" ultisnips settings
-let g:UltiSnipsExpandTrigger="<c-Space>"
+" ultisnips settings (auto integration with deoplete)
+let g:UltiSnipsExpandTrigger="<C-space>"
 
 " Airline settings
 let g:airline#extensions#tabline#enabled = 1
@@ -121,18 +116,47 @@ endfunction "}}}
 
 " neomake (check that c++ compiler supports c++14
 let g:neomake_cpp_enabled_makers=['gcc']
-let g:neomake_cpp_clang_args=["-std=c++14", "-Wextra", "-Wall"]
-let g:neomake_cpp_gcc_args=["-std=c++14", "-Wextra", "-Wall"]
+let g:neomake_c_enabled_makers=['gcc']
+let g:neomake_cpp_clang_args=["-std=c++14", "-Wextra", "-Wall", "-fsyntax-only"]
+let g:neomake_cpp_gcc_args=["-std=c++14", "-Wextra", "-Wall", "-fsyntax-only"]
+let g:neomake_c_gcc_args=["-Wextra", "-Wall", "-fsyntax-only"]
 let g:neomake_python_enabled_makers=['flake8']
 
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
 " ========================================================== "
 
-" show extra whitespace and tabs
+" show extra whitespace
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
 autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+
+" automatically set makeprg (required for large c++ and c projects)
+function! g:BuildInSubDir(buildsubdir)
+    " Sets makeprg base dir
+    let toplevelpath = FindTopLevelProjectDir()
+    let builddir = toplevelpath . a:buildsubdir
+    let makeprgcmd = 'make -C ' . builddir
+    if builddir !=? "//build"
+        let &makeprg=makeprgcmd
+    endif
+endfunction
+
+function! FindTopLevelProjectDir()
+    " Searches for a .git directory upward till root.
+    let isittopdir = finddir('.git')
+    if isittopdir ==? ".git"
+        return getcwd()
+    endif
+    let gitdir = finddir('.git', ';')
+    let gitdirsplit = split(gitdir, '/')
+    let toplevelpath = '/' . join(gitdirsplit[:-2],'/')
+    return toplevelpath
+endfunction
+
+" Do not enable unless you want makeprg auto-set for all filetypes
+" Set in ftplugin files each desired filetype
+" autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
