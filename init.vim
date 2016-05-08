@@ -134,6 +134,13 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
+" remove all trailing whitspace and replace tabs with spaces
+function! DelWhitespace()
+    execute ":retab"
+    :%s/\s\+$//g
+endfunction
+command! Unfuck execute DelWhitespace()
+
 " automatically set makeprg (required for large c++ and c projects)
 function! g:BuildInSubDir(buildsubdir)
     " Sets makeprg base dir
