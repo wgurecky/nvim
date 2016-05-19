@@ -40,6 +40,9 @@ nmap <Space> i_<Esc>r
 " normal esc from terminal window
 tnoremap <Esc> <C-\><C-n>
 
+" fast find/replace word under cursor
+nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
+
 " fast dub j escape
 inoremap jj <ESC>
 
@@ -102,6 +105,9 @@ call remote#host#RegisterPlugin('python3', '~/.nvim/plugged/deoplete.nvim/rplugi
     \ {'sync': 1, 'name': '_deoplete', 'opts': {}, 'type': 'function'},
     \ ])
 let g:deoplete#enable_at_startup=1
+let g:deoplete#sources = {}
+let g:deoplete#sources.c = ['omni', 'buffer', 'member', 'tag', 'ultisnips', 'file']
+let g:deoplete#sources.cpp = ['omni', 'buffer', 'member', 'tag', 'ultisnips', 'file']
 let g:deoplete#omni#input_patterns = {}
 let g:deoplete#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:deoplete#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
@@ -117,8 +123,9 @@ endfunction "}}}
 " neomake (check that c++ compiler supports c++14
 let g:neomake_cpp_enabled_makers=['gcc']
 let g:neomake_c_enabled_makers=['gcc']
-let g:neomake_cpp_clang_args=["-std=c++14", "-Wextra", "-Wall", "-fsyntax-only"]
-let g:neomake_cpp_gcc_args=["-std=c++14", "-Wextra", "-Wall", "-fsyntax-only"]
+let g:neomake_cpp_clang_args=["-std=c++14", "-stdlib=libc++", "-Wextra", "-Wall", "-fsyntax-only"]
+let g:neomake_cpp_gcc_args=["-std=c++14", "-stdlib=libc++", "-Wextra", "-Wall", "-fsyntax-only"]
+let g:neomake_c_clang_args=["-Wextra", "-Wall", "-fsyntax-only"]
 let g:neomake_c_gcc_args=["-Wextra", "-Wall", "-fsyntax-only"]
 let g:neomake_python_enabled_makers=['flake8']
 

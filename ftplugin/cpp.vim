@@ -5,3 +5,9 @@ nmap <silent> \l :copen<CR>
 
 " call g:BuildInSubDir("/build") on open
 autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
+
+" code folding
+set foldmethod=indent
+set foldnestmax=10
+set nofoldenable
+set foldlevel=1
