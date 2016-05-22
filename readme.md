@@ -24,6 +24,7 @@ C++ / C
 
 This neovim configuration assumes that C++ projects will be built out of the src tree:
 
+```
 PROJECT_BASE
 +-- CMakeLists.txt
 +-- README.md
@@ -34,6 +35,7 @@ PROJECT_BASE
 +-- src
 |   +-- foo_bar.cpp
 |   +-- foo_bar.hpp
+```
 
 In order for the neomake plugin to automatically compile the project (async make on write) `makeprg` should be pointed at a folder which includes the project's make file.  Ex:
 
