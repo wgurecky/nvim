@@ -22,13 +22,15 @@ Place `flake8` file in `~/.config/.` to ignore some minor PEP8 violation warning
 C++ / C
 -------
 
-This neovim configuration assumes that C++ projects will be built out of the src tree:
+This neovim configuration assumes that a C/C++ project will be built out of the src tree and is a git repository:
 
 ```
 PROJECT_BASE
 +-- CMakeLists.txt
 +-- README.md
 +-- .git
+|   +-- FETCH_HEAD
+|   +-- ...
 +-- build
 |   +-- do_configure.sh
 |   +-- makefile
@@ -45,6 +47,9 @@ A function present in the included `init.vim` attempts to set `makeprg` automati
 
     :set makeprg
 
+.. note::
+
+    The projects' designated build folder name can be adjusted in the `./ftplugin/<c,cpp>` files.  By default it is set to `build`.
 
 Notes
 =====
