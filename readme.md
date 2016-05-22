@@ -47,9 +47,8 @@ A function present in the included `init.vim` attempts to set `makeprg` automati
 
     :set makeprg
 
-.. note::
 
-    The projects' designated build folder name can be adjusted in the `./ftplugin/<c,cpp>` files.  By default it is set to `build`.
+Note: The designated project build folder name can be adjusted in the `./ftplugin/<c,cpp>` files.  By default it is set to `build`.
 
 Notes
 =====
