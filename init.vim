@@ -95,7 +95,7 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 
 " ultisnips settings (auto integration with deoplete)
-let g:UltiSnipsExpandTrigger="<C-space>"
+let g:UltiSnipsExpandTrigger="<c-@>"
 
 " Airline settings
 let g:airline#extensions#tabline#enabled = 1
@@ -106,8 +106,8 @@ call remote#host#RegisterPlugin('python3', '~/.nvim/plugged/deoplete.nvim/rplugi
     \ ])
 let g:deoplete#enable_at_startup=1
 let g:deoplete#sources = {}
-let g:deoplete#sources.c = ['omni', 'buffer', 'member', 'tag', 'ultisnips', 'file']
-let g:deoplete#sources.cpp = ['omni', 'buffer', 'member', 'tag', 'ultisnips', 'file']
+let g:deoplete#sources.c = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
+let g:deoplete#sources.cpp = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
 let g:deoplete#omni#input_patterns = {}
 let g:deoplete#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:deoplete#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
