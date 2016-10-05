@@ -53,6 +53,12 @@ syntax on
 "                    PLUGIN SETTINGS                         "
 " ========================================================== "
 
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall | source ~/.config/nvim/nvim.init
+endif
+
 " Notes. vim-flake8 requires the python package flake8 to be
 " installed.  TODO: fix ultisnips auto complete issue.  Is
 " ultisnips compatible with deoplete?
@@ -67,17 +73,12 @@ Plug 'https://github.com/honza/vim-snippets.git'
 Plug 'https://github.com/vim-scripts/taglist.vim'
 Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/vim-airline/vim-airline.git'
-Plug 'https://github.com/Shougo/deoplete.nvim.git'
+Plug 'https://github.com/Shougo/deoplete.nvim.git', { 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/benekastah/neomake.git', { 'for': 'cpp,c,python' }
-Plug 'https://github.com/davidhalter/jedi.git'
 Plug 'lervag/vimtex'
 Plug 'zchee/deoplete-jedi'
 Plug 'nvie/vim-flake8'
 call plug#end()
-autocmd VimEnter *
-  \  if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
-  \|   PlugInstall | q
-  \| endif
 
 " Nerdtree settings
 " launch nerdtree on entry if no file is specified
@@ -101,9 +102,6 @@ let g:UltiSnipsExpandTrigger="<c-@>"
 let g:airline#extensions#tabline#enabled = 1
 
 " deoplete settings
-call remote#host#RegisterPlugin('python3', '~/.nvim/plugged/deoplete.nvim/rplugin/python3/deoplete', [
-    \ {'sync': 1, 'name': '_deoplete', 'opts': {}, 'type': 'function'},
-    \ ])
 let g:deoplete#enable_at_startup=1
 let g:deoplete#sources = {}
 let g:deoplete#sources.c = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
