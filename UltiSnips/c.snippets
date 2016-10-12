@@ -1,0 +1,14 @@
+snippet /*- "C doc partition" b
+/*----------------------------------------------------------------------------*/
+endsnippet
+
+snippet bpt "breakpoint" b
+{
+    // XXX spin until gdb attach and set var i=1
+    int i = 0;
+    printf("PID %d ready for attach. \n", getpid());
+    fflush(stdout);
+    while(0 == i)
+    sleep(1);
+}
+endsnippet
