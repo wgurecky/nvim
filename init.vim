@@ -79,10 +79,19 @@ Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/Shougo/deoplete.nvim.git', { 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/benekastah/neomake.git', { 'for': 'cpp,c,python' }
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
+Plug 'Rip-Rip/clang_complete'
 Plug 'lervag/vimtex'
 Plug 'zchee/deoplete-jedi'
 Plug 'nvie/vim-flake8'
 call plug#end()
+
+" Clang complete settings
+let g:clang_library_path='/lib/libclang.so.3.8'
+let g:clang_complete_auto=0
+let g:clang_complete_select=0
+let g:clang_omnicppcomplete_compliance=0
+let g:cland_make_default_keymappings=0
 
 " Vimtex settings
 " Note; <leader>ll builds and <leader>le shows compile errors
@@ -113,24 +122,24 @@ let g:airline#extensions#tabline#enabled = 1
 
 " deoplete settings
 let g:deoplete#enable_at_startup=1
-let g:deoplete#sources = {}
-let g:deoplete#sources.c = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
-let g:deoplete#sources.cpp = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
-let g:deoplete#sources.python = ['omni', 'jedi', 'ultisnips', 'file']
-let g:deoplete#sources.tex = ['omni', 'file']
-let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:deoplete#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-let g:deoplete#omni#input_patterns.tex = '\\(?:'
-    \ .  '\w*cite\w*(?:\s*\[[^]]*\]){0,2}\s*{[^}]*'
-    \ . '|\w*ref(?:\s*\{[^}]*|range\s*\{[^,}]*(?:}{)?)'
-    \ . '|hyperref\s*\[[^]]*'
-    \ . '|includegraphics\*?(?:\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-    \ . '|(?:include(?:only)?|input)\s*\{[^}]*'
-    \ . '|\w*(gls|Gls|GLS)(pl)?\w*(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-    \ . '|includepdf(\s*\[[^]]*\])?\s*\{[^}]*'
-    \ . '|includestandalone(\s*\[[^]]*\])?\s*\{[^}]*'
-    \ .')'
+" let g:deoplete#sources = {}
+" let g:deoplete#sources.c = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
+" let g:deoplete#sources.cpp = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
+" let g:deoplete#sources.python = ['omni', 'jedi', 'ultisnips', 'file']
+" let g:deoplete#sources.tex = ['omni', 'file']
+" let g:deoplete#omni#input_patterns = {}
+" let g:deoplete#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+" let g:deoplete#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+" let g:deoplete#omni#input_patterns.tex = '\\(?:'
+"     \ .  '\w*cite\w*(?:\s*\[[^]]*\]){0,2}\s*{[^}]*'
+"     \ . '|\w*ref(?:\s*\{[^}]*|range\s*\{[^,}]*(?:}{)?)'
+"     \ . '|hyperref\s*\[[^]]*'
+"     \ . '|includegraphics\*?(?:\s*\[[^]]*\]){0,2}\s*\{[^}]*'
+"     \ . '|(?:include(?:only)?|input)\s*\{[^}]*'
+"     \ . '|\w*(gls|Gls|GLS)(pl)?\w*(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
+"     \ . '|includepdf(\s*\[[^]]*\])?\s*\{[^}]*'
+"     \ . '|includestandalone(\s*\[[^]]*\])?\s*\{[^}]*'
+"     \ .')'
 
 " deoplete tab complete
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" :
