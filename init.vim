@@ -49,6 +49,10 @@ inoremap jj <ESC>
 " syntax highlight
 syntax on
 
+" netrw tree style by default
+let g:netrw_liststyle=3
+let g:netrw_winsize=20
+
 " ========================================================== "
 "                    PLUGIN SETTINGS                         "
 " ========================================================== "
@@ -80,6 +84,12 @@ Plug 'zchee/deoplete-jedi'
 Plug 'nvie/vim-flake8'
 call plug#end()
 
+" Vimtex settings
+" Note; <leader>ll builds and <leader>le shows compile errors
+" Note; install xdotool package for live previews in zathura
+" let g:vimtex_view_method='general'
+let g:vimtex_view_method='zathura'
+
 " Nerdtree settings
 " launch nerdtree on entry if no file is specified
 autocmd StdinReadPre * let s:std_in=1
@@ -106,10 +116,23 @@ let g:deoplete#enable_at_startup=1
 let g:deoplete#sources = {}
 let g:deoplete#sources.c = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
 let g:deoplete#sources.cpp = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
+let g:deoplete#sources.python = ['omni', 'jedi', 'ultisnips', 'file']
+let g:deoplete#sources.tex = ['omni', 'file']
 let g:deoplete#omni#input_patterns = {}
 let g:deoplete#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:deoplete#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-" tab complete
+let g:deoplete#omni#input_patterns.tex = '\\(?:'
+    \ .  '\w*cite\w*(?:\s*\[[^]]*\]){0,2}\s*{[^}]*'
+    \ . '|\w*ref(?:\s*\{[^}]*|range\s*\{[^,}]*(?:}{)?)'
+    \ . '|hyperref\s*\[[^]]*'
+    \ . '|includegraphics\*?(?:\s*\[[^]]*\]){0,2}\s*\{[^}]*'
+    \ . '|(?:include(?:only)?|input)\s*\{[^}]*'
+    \ . '|\w*(gls|Gls|GLS)(pl)?\w*(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
+    \ . '|includepdf(\s*\[[^]]*\])?\s*\{[^}]*'
+    \ . '|includestandalone(\s*\[[^]]*\])?\s*\{[^}]*'
+    \ .')'
+
+" deoplete tab complete
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" :
     \ <SID>check_back_space() ? "\<TAB>" :
     \ deoplete#mappings#manual_complete()
