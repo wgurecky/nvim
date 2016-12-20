@@ -89,7 +89,7 @@ Plug 'nvie/vim-flake8'
 call plug#end()
 
 " Clang complete settings
-let g:clang_library_path='/lib/libclang.so.3.8'
+let g:clang_library_path='/lib/libclang.so'
 let g:clang_complete_auto=0
 let g:clang_complete_select=0
 let g:clang_omnicppcomplete_compliance=0
