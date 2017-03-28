@@ -80,12 +80,12 @@ Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
 Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/Shougo/deoplete.nvim.git', { 'do': ':UpdateRemotePlugins' }
-Plug 'https://github.com/benekastah/neomake.git', { 'for': 'cpp,c,python' }
+Plug 'https://github.com/neomake/neomake.git', { 'for': ['cpp', 'c', 'python'] }
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
-Plug 'Rip-Rip/clang_complete'
+Plug 'Rip-Rip/clang_complete', {'for': ['cpp', 'c'] }
 Plug 'lervag/vimtex'
-Plug 'zchee/deoplete-jedi'
-Plug 'nvie/vim-flake8'
+Plug 'zchee/deoplete-jedi', {'for': 'python' }
+Plug 'nvie/vim-flake8', {'for': 'python' }
 call plug#end()
 
 " Clang complete settings
@@ -152,14 +152,14 @@ function! s:check_back_space() "{{{
     return !col || getline('.')[col - 1] =~ '\s'
 endfunction "}}}
 
-" neomake (check that c++ compiler supports c++14
+" neomake settings
 let g:neomake_cpp_enabled_makers=['gcc']
 let g:neomake_c_enabled_makers=['gcc']
-let g:neomake_cpp_clang_args=["-std=c++14", "-stdlib=libc++", "-Wextra", "-Wall", "-fsyntax-only"]
-let g:neomake_cpp_gcc_args=["-std=c++14", "-stdlib=libc++", "-Wextra", "-Wall", "-fsyntax-only"]
-let g:neomake_c_clang_args=["-Wextra", "-Wall", "-fsyntax-only"]
-let g:neomake_c_gcc_args=["-Wextra", "-Wall", "-fsyntax-only"]
-let g:neomake_python_enabled_makers=['flake8']
+" let g:neomake_cpp_clang_args=["-std=c++14", "-stdlib=libc++", "-Wextra", "-Wall", "-fsyntax-only"]
+" let g:neomake_cpp_gcc_args=["-std=c++14", "-stdlib=libc++", "-Wextra", "-Wall", "-fsyntax-only"]
+" let g:neomake_c_clang_args=["-Wextra", "-Wall", "-fsyntax-only"]
+" let g:neomake_c_gcc_args=["-Wextra", "-Wall", "-fsyntax-only"]
+let g:neomake_python_enabled_makers=['pylint']
 
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
