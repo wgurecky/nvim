@@ -93,7 +93,7 @@ let g:clang_library_path='/lib/libclang.so'
 let g:clang_complete_auto=0
 let g:clang_complete_select=0
 let g:clang_omnicppcomplete_compliance=0
-let g:cland_make_default_keymappings=0
+let g:clang_make_default_keymappings=0
 
 " Vimtex settings
 " Note; <leader>ll builds and <leader>le shows compile errors
