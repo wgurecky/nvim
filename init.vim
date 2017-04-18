@@ -49,6 +49,14 @@ inoremap jj <ESC>
 " syntax highlight
 syntax on
 
+" remap arrow keys to window resize
+if bufwinnr(1)
+    map <Up> <C-W>2-
+    map <Down> <C-W>2+
+    map <Left> <C-W>2<
+    map <Right> <C-W>2>
+endif
+
 " netrw tree style by default
 let g:netrw_liststyle=3
 let g:netrw_winsize=20
@@ -80,12 +88,12 @@ Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
 Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/Shougo/deoplete.nvim.git', { 'do': ':UpdateRemotePlugins' }
-Plug 'https://github.com/benekastah/neomake.git', { 'for': 'cpp,c,python' }
+Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
+Plug 'https://github.com/w0rp/ale.git', {'for': ['cpp', 'c', 'python', 'fortran']}
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
-Plug 'Rip-Rip/clang_complete'
+Plug 'Rip-Rip/clang_complete', {'for': ['cpp', 'c'] }
 Plug 'lervag/vimtex'
-Plug 'zchee/deoplete-jedi'
-Plug 'nvie/vim-flake8'
+Plug 'zchee/deoplete-jedi', {'for': 'python' }
 call plug#end()
 
 " Clang complete settings
@@ -93,7 +101,7 @@ let g:clang_library_path='/lib/libclang.so'
 let g:clang_complete_auto=0
 let g:clang_complete_select=0
 let g:clang_omnicppcomplete_compliance=0
-let g:cland_make_default_keymappings=0
+let g:clang_make_default_keymappings=0
 
 " Vimtex settings
 " Note; <leader>ll builds and <leader>le shows compile errors
@@ -121,27 +129,10 @@ let g:UltiSnipsExpandTrigger="<c-@>"
 
 " Airline settings
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
 
 " deoplete settings
 let g:deoplete#enable_at_startup=1
-" let g:deoplete#sources = {}
-" let g:deoplete#sources.c = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
-" let g:deoplete#sources.cpp = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
-" let g:deoplete#sources.python = ['omni', 'jedi', 'ultisnips', 'file']
-" let g:deoplete#sources.tex = ['omni', 'file']
-" let g:deoplete#omni#input_patterns = {}
-" let g:deoplete#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-" let g:deoplete#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-" let g:deoplete#omni#input_patterns.tex = '\\(?:'
-"     \ .  '\w*cite\w*(?:\s*\[[^]]*\]){0,2}\s*{[^}]*'
-"     \ . '|\w*ref(?:\s*\{[^}]*|range\s*\{[^,}]*(?:}{)?)'
-"     \ . '|hyperref\s*\[[^]]*'
-"     \ . '|includegraphics\*?(?:\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-"     \ . '|(?:include(?:only)?|input)\s*\{[^}]*'
-"     \ . '|\w*(gls|Gls|GLS)(pl)?\w*(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-"     \ . '|includepdf(\s*\[[^]]*\])?\s*\{[^}]*'
-"     \ . '|includestandalone(\s*\[[^]]*\])?\s*\{[^}]*'
-"     \ .')'
 
 " deoplete tab complete
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" :
@@ -152,14 +143,19 @@ function! s:check_back_space() "{{{
     return !col || getline('.')[col - 1] =~ '\s'
 endfunction "}}}
 
-" neomake (check that c++ compiler supports c++14
-let g:neomake_cpp_enabled_makers=['gcc']
-let g:neomake_c_enabled_makers=['gcc']
-let g:neomake_cpp_clang_args=["-std=c++14", "-stdlib=libc++", "-Wextra", "-Wall", "-fsyntax-only"]
-let g:neomake_cpp_gcc_args=["-std=c++14", "-stdlib=libc++", "-Wextra", "-Wall", "-fsyntax-only"]
-let g:neomake_c_clang_args=["-Wextra", "-Wall", "-fsyntax-only"]
-let g:neomake_c_gcc_args=["-Wextra", "-Wall", "-fsyntax-only"]
-let g:neomake_python_enabled_makers=['flake8']
+" ale settings
+let g:ale_linters = {
+    \ 'python': ['pylint'],
+    \ 'cpp': ['gcc'],
+    \ 'c': ['gcc'],
+    \ 'fortran': ['gcc'],
+    \ }
+let g:ale_lint_on_save = 1
+
+" vim-dispatch settings
+" Run :Make! to launch background async project build.
+" Results are available via :Copen
+" Ensure makeprg is set properly before running
 
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
