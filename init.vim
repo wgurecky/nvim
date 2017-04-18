@@ -49,6 +49,14 @@ inoremap jj <ESC>
 " syntax highlight
 syntax on
 
+" remap arrow keys to window resize
+if bufwinnr(1)
+    map <Up> <C-W>2-
+    map <Down> <C-W>2+
+    map <Left> <C-W>2<
+    map <Right> <C-W>2>
+endif
+
 " netrw tree style by default
 let g:netrw_liststyle=3
 let g:netrw_winsize=20
@@ -125,24 +133,6 @@ let g:airline_powerline_fonts = 1
 
 " deoplete settings
 let g:deoplete#enable_at_startup=1
-" let g:deoplete#sources = {}
-" let g:deoplete#sources.c = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
-" let g:deoplete#sources.cpp = ['omni', 'buffer', 'member', 'ultisnips', 'tag', 'file']
-" let g:deoplete#sources.python = ['omni', 'jedi', 'ultisnips', 'file']
-" let g:deoplete#sources.tex = ['omni', 'file']
-" let g:deoplete#omni#input_patterns = {}
-" let g:deoplete#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-" let g:deoplete#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-" let g:deoplete#omni#input_patterns.tex = '\\(?:'
-"     \ .  '\w*cite\w*(?:\s*\[[^]]*\]){0,2}\s*{[^}]*'
-"     \ . '|\w*ref(?:\s*\{[^}]*|range\s*\{[^,}]*(?:}{)?)'
-"     \ . '|hyperref\s*\[[^]]*'
-"     \ . '|includegraphics\*?(?:\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-"     \ . '|(?:include(?:only)?|input)\s*\{[^}]*'
-"     \ . '|\w*(gls|Gls|GLS)(pl)?\w*(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-"     \ . '|includepdf(\s*\[[^]]*\])?\s*\{[^}]*'
-"     \ . '|includestandalone(\s*\[[^]]*\])?\s*\{[^}]*'
-"     \ .')'
 
 " deoplete tab complete
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" :
