@@ -57,6 +57,9 @@ if bufwinnr(1)
     map <Right> <C-W>2>
 endif
 
+" incremental command live feedback
+set inccommand=nosplit
+
 " netrw tree style by default
 let g:netrw_liststyle=3
 let g:netrw_winsize=20
