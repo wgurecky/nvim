@@ -153,6 +153,9 @@ let g:ale_lint_on_save = 1
 " For project wide search/replace
 " Run :Ack {pattern} [{dir}]
 " :cdo s/foo/bar/gc | update
+if !executable('ack')
+    let g:ackprg = '~/.config/nvim/bin/ack'
+endif
 
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
