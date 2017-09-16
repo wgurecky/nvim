@@ -71,12 +71,9 @@ let g:netrw_winsize=20
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
     silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
                 \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall | source ~/.config/nvim/init.vim
+    autocmd VimEnter * PlugInstall --sync | source ~/.config/nvim/init.vim
 endif
 
-" Notes. vim-flake8 requires the python package flake8 to be
-" installed.  TODO: fix ultisnips auto complete issue.  Is
-" ultisnips compatible with deoplete?
 call plug#begin('~/.nvim/plugged')
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
@@ -90,13 +87,14 @@ Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
 Plug 'https://github.com/vim-airline/vim-airline.git'
-Plug 'https://github.com/Shougo/deoplete.nvim.git', { 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
 Plug 'https://github.com/w0rp/ale.git', {'for': ['cpp', 'c', 'python', 'fortran']}
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'Rip-Rip/clang_complete', {'for': ['cpp', 'c'] }
 Plug 'lervag/vimtex'
-Plug 'zchee/deoplete-jedi', {'for': 'python' }
+Plug 'tell-k/vim-autopep8', {'for': 'python' }
+Plug 'roxma/nvim-completion-manager'
+Plug 'mileszs/ack.vim'
 call plug#end()
 
 " Clang complete settings
@@ -125,31 +123,23 @@ nmap ga <Plug>(EasyAlign)
 
 " ctlp settings
 let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_cmd = 'CtrlPMixed'
 
 " ultisnips settings (auto integration with deoplete)
-let g:UltiSnipsExpandTrigger="<c-@>"
+let g:UltiSnipsExpandTrigger="<c-j>"
 
 " Airline settings
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
-" deoplete settings
-let g:deoplete#enable_at_startup=1
-
-" deoplete tab complete
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ deoplete#mappings#manual_complete()
-function! s:check_back_space() "{{{
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1] =~ '\s'
-endfunction "}}}
+" auto tab complete
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " ale settings
 let g:ale_linters = {
     \ 'python': ['pylint'],
-    \ 'cpp': ['gcc'],
+    \ 'cpp': ['gcc', 'clangtidy'],
     \ 'c': ['gcc'],
     \ 'fortran': ['gcc'],
     \ }
@@ -159,6 +149,10 @@ let g:ale_lint_on_save = 1
 " Run :Make! to launch background async project build.
 " Results are available via :Copen
 " Ensure makeprg is set properly before running
+
+" For project wide search/replace
+" Run :Ack {pattern} [{dir}]
+" :cdo s/foo/bar/gc | update
 
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
