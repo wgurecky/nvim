@@ -12,7 +12,7 @@ set relativenumber  " Relative line numbers rock
 set ruler           " Show the line and column number of the cursor position,
                     " separated by a comma.
 
-set background=dark " When set to "dark", Vim will try to use colors that look good on dark backdrop
+set background=light " When set to "dark", Vim will try to use colors that look good on dark backdrop
 
 set shiftwidth=4    " Number of spaces to use for each step of (auto)indent.
 
@@ -43,8 +43,10 @@ tnoremap <Esc> <C-\><C-n>
 " fast find/replace word under cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
 
-" fast dub j escape
+" fast escape
 inoremap jj <ESC>
+imap jw <ESC>
+imap jk <ESC>
 
 " syntax highlight
 syntax on
@@ -98,7 +100,13 @@ Plug 'mileszs/ack.vim'
 call plug#end()
 
 " Clang complete settings
-let g:clang_library_path='/lib/libclang.so'
+if !empty(glob('/lib/libclang.so'))
+    let g:clang_library_path='/lib/libclang.so'
+elseif !empty(glob('/usr/lib/llvm-4.0/lib/libclang.so'))
+    let g:clang_library_path='/usr/lib/llvm-4.0/lib/libclang.so'
+elseif !empty(glob('/usr/lib/llvm-3.5/lib/libclang.so'))
+    let g:clang_library_path='/usr/lib/llvm-3.5/lib/libclang.so'
+endif
 let g:clang_complete_auto=0
 let g:clang_complete_select=0
 let g:clang_omnicppcomplete_compliance=0
@@ -126,7 +134,7 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPMixed'
 
 " ultisnips settings (auto integration with deoplete)
-let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsExpandTrigger="<c-e>"
 
 " Airline settings
 let g:airline#extensions#tabline#enabled = 1
