@@ -77,6 +77,7 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.nvim/plugged')
+Plug 'iCyMind/NeoSolarized'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
 Plug 'https://github.com/junegunn/vim-easy-align.git'
@@ -151,7 +152,7 @@ let g:ale_linters = {
     \ 'c': ['gcc'],
     \ 'fortran': ['gcc'],
     \ }
-let g:ale_lint_on_save = 1
+" let g:ale_lint_on_save = 1
 
 " vim-dispatch settings
 " Run :Make! to launch background async project build.
@@ -206,6 +207,9 @@ function! FindTopLevelProjectDir()
     let toplevelpath = '/' . join(gitdirsplit[:-2],'/')
     return toplevelpath
 endfunction
+
+" Colorscheme
+colorscheme NeoSolarized
 
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
