@@ -12,6 +12,7 @@ set relativenumber  " Relative line numbers rock
 set ruler           " Show the line and column number of the cursor position,
                     " separated by a comma.
 
+set termguicolors
 set background=light " When set to "dark", Vim will try to use colors that look good on dark backdrop
 
 set shiftwidth=4    " Number of spaces to use for each step of (auto)indent.
@@ -78,6 +79,8 @@ endif
 
 call plug#begin('~/.nvim/plugged')
 Plug 'iCyMind/NeoSolarized'
+Plug 'lifepillar/vim-solarized8'
+Plug 'frankier/neovim-colors-solarized-truecolor-only'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
 Plug 'https://github.com/junegunn/vim-easy-align.git'
@@ -90,6 +93,7 @@ Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
 Plug 'https://github.com/vim-airline/vim-airline.git'
+Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
 Plug 'https://github.com/w0rp/ale.git', {'for': ['cpp', 'c', 'python', 'fortran']}
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
@@ -138,6 +142,7 @@ let g:ctrlp_cmd = 'CtrlPMixed'
 let g:UltiSnipsExpandTrigger="<c-e>"
 
 " Airline settings
+let g:airline_theme='solarized'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
@@ -209,7 +214,11 @@ function! FindTopLevelProjectDir()
 endfunction
 
 " Colorscheme
+" colorscheme solarized8_light
+" colorscheme solarized
 colorscheme NeoSolarized
+let g:solarized_termtrans=1
+hi Normal guibg=NONE ctermbg=NONE
 
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
