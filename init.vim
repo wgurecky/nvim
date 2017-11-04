@@ -172,6 +172,10 @@ if !executable('ack')
     let g:ackprg = '~/.config/nvim/bin/ack'
 endif
 
+" automatically set project base directory ack search on `:ag `
+" requires the projec to have a `.git` file in the base dir
+cnoreabbrev ag Gcd <bar> Ack!
+
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
 " ========================================================== "
