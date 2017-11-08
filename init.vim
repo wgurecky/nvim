@@ -78,9 +78,14 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.nvim/plugged')
+" A S T H E T I C S
 Plug 'iCyMind/NeoSolarized'
 Plug 'lifepillar/vim-solarized8'
 Plug 'frankier/neovim-colors-solarized-truecolor-only'
+Plug 'https://github.com/vim-airline/vim-airline.git'
+Plug 'https://github.com/vim-airline/vim-airline-themes.git'
+" common plugins
+Plug 'mileszs/ack.vim'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
 Plug 'https://github.com/junegunn/vim-easy-align.git'
@@ -92,16 +97,17 @@ Plug 'https://github.com/vim-scripts/taglist.vim'
 Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
-Plug 'https://github.com/vim-airline/vim-airline.git'
-Plug 'https://github.com/vim-airline/vim-airline-themes.git'
+" dev tools
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
 Plug 'https://github.com/w0rp/ale.git', {'for': ['cpp', 'c', 'python', 'fortran']}
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
-Plug 'Rip-Rip/clang_complete', {'for': ['cpp', 'c'] }
-Plug 'lervag/vimtex'
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
-Plug 'roxma/nvim-completion-manager'
-Plug 'mileszs/ack.vim'
+Plug 'lervag/vimtex'
+" code completion
+" Plug 'roxma/nvim-completion-manager'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-jedi'
+Plug 'Rip-Rip/clang_complete', {'for': ['cpp', 'c'] }
 call plug#end()
 
 " Clang complete settings
@@ -147,9 +153,20 @@ let g:airline_theme='solarized'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
-" auto tab complete
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" ncm auto tab complete
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
+inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ deoplete#mappings#manual_complete()
+function! s:check_back_space() abort "{{{
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction"}}}
 
 " ale settings
 let g:ale_linters = {
