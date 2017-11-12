@@ -188,6 +188,14 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
+" remove trailing whitespace from current line
+function! DelWhitespaceLine()
+    :.,s/\s\+$//g
+endfunction
+" retain current cursor position
+command! UnfuckLine execute "normal! ma" | execute DelWhitespaceLine() | execute "normal! `a"
+nnoremap <leader>e :UnfuckLine<CR>
+
 " remove all trailing whitspace and replace tabs with spaces
 function! DelWhitespace()
     execute ":retab"
