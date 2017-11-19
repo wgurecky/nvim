@@ -86,6 +86,7 @@ Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 " common plugins
 Plug 'mileszs/ack.vim'
+Plug 'mhinz/vim-grepper'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
 Plug 'https://github.com/junegunn/vim-easy-align.git'
@@ -136,6 +137,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 set autochdir                " automatically change directory
 let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.pyc$','\.png$']
+nmap <C-o> :NERDTreeToggle<CR>
 
 " Easy align settings
 xmap ga <Plug>(EasyAlign)
@@ -192,6 +194,14 @@ endif
 " automatically set project base directory ack search on `:ag `
 " requires the projec to have a `.git` file in the base dir
 cnoreabbrev ag Gcd <bar> Ack!
+
+" vim-grepper settings
+let g:grepper = {}
+let g:grepper.tools = ['git', 'ack']
+let g:grepper.git = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
+" Project wide search with <leader>*
+nnoremap <leader>* :Grepper -tool git -cword -noprompt<cr>
+cnoreabbrev vg Grepper -tool git<cr>
 
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
