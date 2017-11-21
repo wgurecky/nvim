@@ -12,9 +12,6 @@ set relativenumber  " Relative line numbers rock
 set ruler           " Show the line and column number of the cursor position,
                     " separated by a comma.
 
-set termguicolors
-set background=light " When set to "dark", Vim will try to use colors that look good on dark backdrop
-
 set shiftwidth=4    " Number of spaces to use for each step of (auto)indent.
 
 set expandtab       " Use the appropriate number of spaces to insert a <Tab>.
@@ -32,6 +29,10 @@ set incsearch       " While typing a search command, show immediately where the
 
 set autoindent      " Copy indent from current line when starting a new line
 
+" Colors.  TODO: Auto detect term bg color from Xresources?
+set termguicolors
+set background=light
+
 " auto detect filetype
 filetype plugin on
 
@@ -40,6 +41,9 @@ nmap <Space> i_<Esc>r
 
 " normal esc from terminal window
 tnoremap <Esc> <C-\><C-n>
+
+" faster buffer lookup & switching with <C-e># or <C-e><buff_name>
+nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
 
 " fast find/replace word under cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
@@ -94,7 +98,7 @@ Plug 'https://github.com/kien/ctrlp.vim'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git'
 Plug 'https://github.com/SirVer/ultisnips.git'
 Plug 'https://github.com/honza/vim-snippets.git'
-Plug 'https://github.com/vim-scripts/taglist.vim'
+Plug 'https://github.com/majutsushi/tagbar.git'
 Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
@@ -202,6 +206,9 @@ let g:grepper.git = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-tople
 " Project wide search with <leader>*
 nnoremap <leader>* :Grepper -tool git -cword -noprompt<cr>
 cnoreabbrev vg Grepper -tool git<cr>
+
+" tagbar
+nmap <F8> :TagbarToggle<CR>
 
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
