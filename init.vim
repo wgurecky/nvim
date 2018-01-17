@@ -166,6 +166,11 @@ let g:airline_powerline_fonts = 1
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources = {}
+let g:deoplete#sources._ = ['file', 'ultisnips', 'buffer']
+let g:deoplete#sources.python = ['jedi', 'ultisnips', 'file', 'buffer']
+call deoplete#custom#set('jedi', 'rank', 9999)
+call deoplete#custom#set('buffer', 'rank', 100)
 inoremap <silent><expr> <TAB>
     \ pumvisible() ? "\<C-n>" :
     \ <SID>check_back_space() ? "\<TAB>" :
