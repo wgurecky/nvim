@@ -91,6 +91,7 @@ Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 " common plugins
 Plug 'mileszs/ack.vim'
 Plug 'mhinz/vim-grepper'
+Plug 'yssl/QFEnter'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
 Plug 'https://github.com/junegunn/vim-easy-align.git'
