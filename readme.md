@@ -14,7 +14,6 @@ Depends
 - [ack]
 - [jedi]
 - [pylint]
-- [proselint]
 
 [ack]: https://beyondgrep.com/
 [jedi]: https://github.com/davidhalter/jedi
@@ -24,6 +23,8 @@ Optional
 ---------
 
 - [clang-tidy]
+- [proselint]
+- [write-good]
 
 [clang-tidy]: https://clang.llvm.org/extra/clang-tidy/
 
@@ -33,7 +34,7 @@ Config
 C++ / C
 -------
 
-This neovim configuration assumes that a C/C++ project will be built out of the src tree and is a git repository:
+This neovim configuration assumes that a C/C++ project is built out of the src tree and is a git repository:
 
 ```
 PROJECT_BASE
@@ -52,7 +53,7 @@ PROJECT_BASE
 
 ### Build
 
-In order to compile the project (async make) `makeprg` should be pointed at a folder which includes the project's make file.  Ex:
+To compile the project (async make) `makeprg` should point at a folder which includes the project's make file.  Ex:
 
     :set makeprg=make\ -C\ ~/path/to/project/build
 
@@ -80,7 +81,7 @@ CXX="$HOME/.nvim/plugged/clang_complete/bin/cc_args.py clang++" cmake ..
 make
 ```
 
-In case this does not work, the YCM-Generator package can generate a custom `.ycm_extra_conf.py` which one can easily modify to create a project specific `.clang_complete` (just copy the relevant info from the `flags` list to a `.clang_complete` file in the root project dir):
+In case this does not work, the YCM-Generator package can generate a custom `.ycm_extra_conf.py` which one can used to create a project specific `.clang_complete` (copy the relevant info from the `flags` list to a `.clang_complete` file in the root project directory):
 
 ```
 $HOME/.nvim/plugged/YCM-Generator/config_gen.py -m make .
@@ -102,13 +103,23 @@ Install pylint, for ex:
 
     pip install pylint
 
+### Breakpoints in Python
+
+In normal mode `<leader> b` inserts a breakpoint on the line above the current cursor position.
+
+Prose
+------
+
+### Linting
+
 Install proselint:
 
     pip install proselint
 
-[proselint] is a prose checking tool for markdown and latex files.  Helps avoid engrish.
+[proselint] is a prose checking tool for markdown and latex files.
 
 [proselint]: https://github.com/amperser/proselint
+[write-good]: https://github.com/btford/write-good
 
 Notes
 =====
@@ -116,20 +127,19 @@ Notes
 Code folding
 ------------
 
-Code folding settings are provided in the `./ftplugin` directory.  By default, folding by indentation level is ON.  `za` toggles folding for the current indent level.  `zR` and `zM` unfolds and folds all respectively.
-
-Breakpoints in Python
-----------------------
-
-In normal mode `<leader> b` inserts a breakpoint on the line above the current cursor position.
+The `./ftplugin` directory provides code folding settings.
+By default, folding by indentation level is ON.  `za` toggles folding for the current indent level.  `zR` and `zM` unfolds and folds all respectively.
 
 
 Project Wide Find/Replace
 --------------------------
 
-The `ack.vim` plugin requires `ack` to function.  One installed, a project wide search replace can be performed:
+To search and replace a word inside all files in a directory:
 
     :Ack {pattern} [{dir}]
     :cdo s/foo/bar/gc | update
 
-Note:  The `ack` executable is sometimes in a weird spot depending on your linux distro.  In arch by default it resides in `/usr/bin/vendor_perl/ack`
+To search and replace all instances of a word inside a project that is a git repository use:
+
+    :vg <pattern>
+    :cdo s/foo/bar/gc | update

@@ -195,8 +195,8 @@ let g:ale_linters = {
     \ 'cpp': ['gcc', 'clangtidy'],
     \ 'c': ['gcc'],
     \ 'fortran': ['gcc'],
-    \ 'tex': ['proselint'],
-    \ 'markdown': ['proselint'],
+    \ 'tex': ['proselint', 'write-good'],
+    \ 'markdown': ['proselint', 'write-good'],
     \ }
 " let g:ale_lint_on_save = 1
 " to check which linters are active run: :ALEinfo
