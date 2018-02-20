@@ -105,7 +105,7 @@ Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
 " dev tools
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
-Plug 'https://github.com/w0rp/ale.git', {'for': ['cpp', 'c', 'python', 'fortran']}
+Plug 'https://github.com/w0rp/ale.git', {'for': ['cpp', 'c', 'python', 'fortran', 'markdown', 'tex']}
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex'
@@ -167,10 +167,13 @@ let g:airline_powerline_fonts = 1
 " deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources = {}
-let g:deoplete#sources._ = ['file', 'ultisnips', 'buffer']
+let g:deoplete#sources._ = ['file', 'ultisnips', 'buffer', 'omni']
 let g:deoplete#sources.python = ['jedi', 'ultisnips', 'file', 'buffer']
+let g:deoplete#sources.tex = ['ultisnips', 'file', 'buffer', 'omni']
 call deoplete#custom#set('jedi', 'rank', 9999)
 call deoplete#custom#set('buffer', 'rank', 100)
+
+" deoplete tab completion
 inoremap <silent><expr> <TAB>
     \ pumvisible() ? "\<C-n>" :
     \ <SID>check_back_space() ? "\<TAB>" :
@@ -180,14 +183,23 @@ function! s:check_back_space() abort "{{{
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction"}}}
 
+" deoplete vimtex integration
+if !exists('g:deoplete#omni#input_patterns')
+    let g:deoplete#omni#input_patterns = {}
+endif
+let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+
 " ale settings
 let g:ale_linters = {
     \ 'python': ['pylint'],
     \ 'cpp': ['gcc', 'clangtidy'],
     \ 'c': ['gcc'],
     \ 'fortran': ['gcc'],
+    \ 'tex': ['proselint'],
+    \ 'markdown': ['proselint'],
     \ }
 " let g:ale_lint_on_save = 1
+" to check which linters are active run: :ALEinfo
 
 " vim-dispatch settings
 " Run :Make! to launch background async project build.
