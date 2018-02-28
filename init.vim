@@ -132,6 +132,12 @@ let g:clang_make_default_keymappings=0
 " Vimtex settings
 " Note; <leader>ll builds and <leader>le shows compile errors
 " Note; install xdotool package for live previews in zathura
+let g:remoteSession = ($SSH_TTY != "")
+if  g:remoteSession
+    " Do not preview pdf over ssh connection.
+    " Use sshfs+zathura to view remote pdf
+    let g:vimtex_view_enabled=0
+endif
 " let g:vimtex_view_method='general'
 let g:vimtex_view_method='zathura'
 
