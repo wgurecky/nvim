@@ -165,6 +165,7 @@ let g:UltiSnipsExpandTrigger="<c-e>"
 let g:airline_theme='solarized'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
 
 " ncm auto tab complete
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
