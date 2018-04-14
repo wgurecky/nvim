@@ -177,8 +177,8 @@ let g:deoplete#sources = {}
 let g:deoplete#sources._ = ['file', 'ultisnips', 'buffer', 'omni']
 let g:deoplete#sources.python = ['jedi', 'ultisnips', 'file', 'buffer']
 let g:deoplete#sources.tex = ['ultisnips', 'file', 'buffer', 'omni']
-call deoplete#custom#set('jedi', 'rank', 9999)
-call deoplete#custom#set('buffer', 'rank', 100)
+call deoplete#custom#source('jedi', 'rank', 9999)
+call deoplete#custom#source('buffer', 'rank', 100)
 
 " deoplete tab completion
 inoremap <silent><expr> <TAB>
