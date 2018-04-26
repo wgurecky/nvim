@@ -105,29 +105,17 @@ Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
 " dev tools
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
-Plug 'https://github.com/w0rp/ale.git', {'for': ['cpp', 'c', 'python', 'fortran', 'markdown', 'tex']}
+Plug 'https://github.com/w0rp/ale.git', {'for': ['fortran', 'markdown', 'tex']}
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex'
 " code completion
-" Plug 'roxma/nvim-completion-manager'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
-Plug 'Rip-Rip/clang_complete', {'for': ['cpp', 'c'] }
 call plug#end()
-
-" Clang complete settings
-if !empty(glob('/lib/libclang.so'))
-    let g:clang_library_path='/lib/libclang.so'
-elseif !empty(glob('/usr/lib/llvm-4.0/lib/libclang.so'))
-    let g:clang_library_path='/usr/lib/llvm-4.0/lib/libclang.so'
-elseif !empty(glob('/usr/lib/llvm-3.5/lib/libclang.so'))
-    let g:clang_library_path='/usr/lib/llvm-3.5/lib/libclang.so'
-endif
-let g:clang_complete_auto=0
-let g:clang_complete_select=0
-let g:clang_omnicppcomplete_compliance=0
-let g:clang_make_default_keymappings=0
 
 " Vimtex settings
 " Note; <leader>ll builds and <leader>le shows compile errors
@@ -167,18 +155,25 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 
-" ncm auto tab complete
+" NCM auto tab complete
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+" LanguageClient auto completion for cpp and python
+let g:LanguageClient_autoStart = 1
+" ensure clangd >= 6.0.0 and python-language-server are installed
+" Note clangd can read compile_commands.json from CMake
+let g:LanguageClient_serverCommands = {
+    \ 'python': ['pyls'],
+    \ 'cpp': ['clangd'],
+    \ 'c': ['clangd'],
+    \ }
+" open help doc with 'K' close help window with command :pc
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+
 " deoplete
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources = {}
-let g:deoplete#sources._ = ['file', 'ultisnips', 'buffer', 'omni']
-let g:deoplete#sources.python = ['jedi', 'ultisnips', 'file', 'buffer']
-let g:deoplete#sources.tex = ['ultisnips', 'file', 'buffer', 'omni']
-call deoplete#custom#source('jedi', 'rank', 9999)
-call deoplete#custom#source('buffer', 'rank', 100)
 
 " deoplete tab completion
 inoremap <silent><expr> <TAB>
@@ -198,9 +193,9 @@ let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
 
 " ale settings
 let g:ale_linters = {
-    \ 'python': ['pylint'],
-    \ 'cpp': ['gcc', 'clangtidy'],
-    \ 'c': ['gcc'],
+    \ 'python': [],
+    \ 'cpp': [],
+    \ 'c': [],
     \ 'fortran': ['gcc'],
     \ 'tex': ['proselint', 'write-good'],
     \ 'markdown': ['proselint', 'write-good'],
