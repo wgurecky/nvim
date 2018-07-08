@@ -12,12 +12,15 @@ Depends
 - clang
 - gcc
 - [ack]
+- [python-language-server]
 - [jedi]
 - [pylint]
+
 
 [ack]: https://beyondgrep.com/
 [jedi]: https://github.com/davidhalter/jedi
 [pylint]: https://www.pylint.org/
+[python-language-server]: https://github.com/palantir/python-language-server
 
 Optional
 ---------
@@ -57,7 +60,7 @@ To compile the project (async make) `makeprg` should point at a folder which inc
 
     :set makeprg=make\ -C\ ~/path/to/project/build
 
-A function present in the included `init.vim` attempts to set `makeprg` automatically.  The function might not always produce the expected result.  Check that `makeprg` is set correctly by issuing:
+A function present in the included `init.vim` attempts to set `makeprg` automatically.  The function might not always produce the expected result.  Check that `makeprg` is set by issuing:
 
     :set makeprg
 
@@ -87,6 +90,10 @@ In case this does not work, the YCM-Generator package can generate a custom `.yc
 $HOME/.nvim/plugged/YCM-Generator/config_gen.py -m make .
 ```
 
+[Clangd] provides autocompletion for C/C++ projects.  Some linux distributions have a `clang-tools` package that contains Clangd.
+
+[Clangd]: https://clang.llvm.org/extra/clangd.html
+
 Python
 ------
 
@@ -95,7 +102,9 @@ Place `flake8` file in `~/.config/.` to ignore some minor PEP8 violation warning
 
 ### Auto Completion
 
-Auto complete for python requires `jedi` to be installed.
+Auto complete for python requires the `python-language-server` and `jedi` to be installed:
+
+    pip install python-language-server jedi
 
 ### Linting
 
