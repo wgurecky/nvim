@@ -84,19 +84,14 @@ endif
 call plug#begin('~/.nvim/plugged')
 " A S T H E T I C S
 Plug 'iCyMind/NeoSolarized'
-Plug 'lifepillar/vim-solarized8'
-Plug 'frankier/neovim-colors-solarized-truecolor-only'
 Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 " common plugins
-Plug 'mileszs/ack.vim'
-Plug 'mhinz/vim-grepper'
 Plug 'yssl/QFEnter'
 Plug 'unblevable/quick-scope'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
 Plug 'https://github.com/junegunn/vim-easy-align.git'
-Plug 'https://github.com/kien/ctrlp.vim'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git'
 Plug 'https://github.com/SirVer/ultisnips.git'
 Plug 'https://github.com/honza/vim-snippets.git'
@@ -104,6 +99,11 @@ Plug 'https://github.com/majutsushi/tagbar.git'
 Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
+" find/search
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'mileszs/ack.vim'
+Plug 'mhinz/vim-grepper'
 " dev tools
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
 Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran', 'markdown', 'tex']}
@@ -143,9 +143,10 @@ nmap <C-o> :NERDTreeToggle<CR>
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
-" ctlp settings
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlPMixed'
+" fzf.vim settings
+nnoremap <C-b> :Buffers<CR>
+nnoremap <C-p> :GFiles<CR>
+nnoremap <C-g>g :Ag<CR>
 
 " Airline settings
 let g:airline_theme='solarized'
@@ -194,10 +195,6 @@ function! s:check_back_space() abort "{{{
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction"}}}
-
-" NCM auto tab complete
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " LanguageClient auto completion for cpp and python
 let g:LanguageClient_autoStart = 1
@@ -250,6 +247,7 @@ let g:grepper.tools = ['git', 'ack']
 let g:grepper.git = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
 " Project wide search with <leader>*
 nnoremap <leader>* :Grepper -tool git -cword -noprompt<cr>
+" Project wide search with :vg <cr>
 cnoreabbrev vg Grepper -tool git<cr>
 
 " tagbar
@@ -307,8 +305,6 @@ function! FindTopLevelProjectDir()
 endfunction
 
 " Colorscheme
-" colorscheme solarized8_light
-" colorscheme solarized
 colorscheme NeoSolarized
 let g:solarized_termtrans=1
 hi Normal guibg=NONE ctermbg=NONE
@@ -316,3 +312,20 @@ hi Normal guibg=NONE ctermbg=NONE
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
 " autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
+"
+
+" customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
