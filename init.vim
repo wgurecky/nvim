@@ -143,6 +143,10 @@ nmap <C-o> :NERDTreeToggle<CR>
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
+" QFEnter settings
+let g:qfenter_keymap.hopen = ['<Leader><Space>', '<C-x>']
+let g:qfenter_keymap.vopen = ['<Leader><CR>', '<C-v>']
+
 " fzf.vim settings
 nnoremap <C-b> :Buffers<CR>
 nnoremap <C-p> :GFiles<CR>
