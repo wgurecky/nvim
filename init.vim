@@ -84,18 +84,14 @@ endif
 call plug#begin('~/.nvim/plugged')
 " A S T H E T I C S
 Plug 'iCyMind/NeoSolarized'
-Plug 'lifepillar/vim-solarized8'
-Plug 'frankier/neovim-colors-solarized-truecolor-only'
 Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 " common plugins
-Plug 'mileszs/ack.vim'
-Plug 'mhinz/vim-grepper'
 Plug 'yssl/QFEnter'
+Plug 'unblevable/quick-scope'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
 Plug 'https://github.com/junegunn/vim-easy-align.git'
-Plug 'https://github.com/kien/ctrlp.vim'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git'
 Plug 'https://github.com/SirVer/ultisnips.git'
 Plug 'https://github.com/honza/vim-snippets.git'
@@ -103,31 +99,24 @@ Plug 'https://github.com/majutsushi/tagbar.git'
 Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
+" find/search
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'mileszs/ack.vim'
+Plug 'mhinz/vim-grepper'
 " dev tools
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
-Plug 'https://github.com/w0rp/ale.git', {'for': ['cpp', 'c', 'python', 'fortran', 'markdown', 'tex']}
+Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran', 'markdown', 'tex']}
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex'
 " code completion
-" Plug 'roxma/nvim-completion-manager'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
-Plug 'Rip-Rip/clang_complete', {'for': ['cpp', 'c'] }
 call plug#end()
-
-" Clang complete settings
-if !empty(glob('/lib/libclang.so'))
-    let g:clang_library_path='/lib/libclang.so'
-elseif !empty(glob('/usr/lib/llvm-4.0/lib/libclang.so'))
-    let g:clang_library_path='/usr/lib/llvm-4.0/lib/libclang.so'
-elseif !empty(glob('/usr/lib/llvm-3.5/lib/libclang.so'))
-    let g:clang_library_path='/usr/lib/llvm-3.5/lib/libclang.so'
-endif
-let g:clang_complete_auto=0
-let g:clang_complete_select=0
-let g:clang_omnicppcomplete_compliance=0
-let g:clang_make_default_keymappings=0
 
 " Vimtex settings
 " Note; <leader>ll builds and <leader>le shows compile errors
@@ -154,12 +143,10 @@ nmap <C-o> :NERDTreeToggle<CR>
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
-" ctlp settings
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlPMixed'
-
-" ultisnips settings (auto integration with deoplete)
-let g:UltiSnipsExpandTrigger="<c-e>"
+" fzf.vim settings
+nnoremap <C-b> :Buffers<CR>
+nnoremap <C-p> :GFiles<CR>
+nnoremap <C-g>g :Ag<CR>
 
 " Airline settings
 let g:airline_theme='solarized'
@@ -167,18 +154,37 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 
-" ncm auto tab complete
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" quick-scope
+let g:qs_highlight_on_keys = ['f', 'F']
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
+" let g:deoplete#auto_refresh_delay = 20
+" let g:deoplete#auto_complete_delay = 20
+let g:deoplete#auto_complete_start_length = 2
+let g:deoplete#enable_refresh_always = 0
+
+set completeopt-=preview
+
+" deoplete sources
+if !exists('g:deoplete#omni#input_patterns')
+    let g:deoplete#omni#input_patterns = {}
+endif
 let g:deoplete#sources = {}
-let g:deoplete#sources._ = ['file', 'ultisnips', 'buffer', 'omni']
-let g:deoplete#sources.python = ['jedi', 'ultisnips', 'file', 'buffer']
-let g:deoplete#sources.tex = ['ultisnips', 'file', 'buffer', 'omni']
-call deoplete#custom#source('jedi', 'rank', 9999)
+let g:deoplete#sources._ = ['file', 'omni']
+let g:deoplete#sources.cpp = ['LanguageClient', 'omni', 'file']
+let g:deoplete#sources.python = ['LanguageClient', 'omni', 'file']
+let g:deoplete#sources.python3 = ['LanguageClient', 'omni', 'file']
+let g:deoplete#sources.rust = ['LanguageClient', 'file']
+let g:deoplete#sources.c = ['LanguageClient', 'file']
+let g:deoplete#sources.vim = ['vim', 'buffer']
+let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+
+" source ranks
+call deoplete#custom#source('LanguageClient', 'rank', 9999)
 call deoplete#custom#source('buffer', 'rank', 100)
+call deoplete#custom#source('file', 'rank', 100)
+call deoplete#custom#source('omni', 'rank', 100)
 
 " deoplete tab completion
 inoremap <silent><expr> <TAB>
@@ -190,16 +196,24 @@ function! s:check_back_space() abort "{{{
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction"}}}
 
-" deoplete vimtex integration
-if !exists('g:deoplete#omni#input_patterns')
-    let g:deoplete#omni#input_patterns = {}
-endif
-let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+" LanguageClient auto completion for cpp and python
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_diagnosticsEnable = 0
+" Ensure clangd >= 6.0.0 and python-language-server are installed
+" Note clangd can read compile_commands.json from CMake
+let g:LanguageClient_serverCommands = {
+    \ 'python': ['pyls'],
+    \ 'cpp': ['clangd'],
+    \ 'c': ['clangd'],
+    \ }
+" open help doc with 'K' close help window with command :pc
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 
-" ale settings
+" ale syntax checker settings (deprecated for python, cpp due to LanguageClient
 let g:ale_linters = {
     \ 'python': ['pylint'],
-    \ 'cpp': ['gcc', 'clangtidy'],
+    \ 'cpp': ['clangtidy'],
     \ 'c': ['gcc'],
     \ 'fortran': ['gcc'],
     \ 'tex': ['proselint', 'write-good'],
@@ -220,6 +234,9 @@ if !executable('ack')
     let g:ackprg = '~/.config/nvim/bin/ack'
 endif
 
+" ultisnips settings (auto integration with deoplete)
+let g:UltiSnipsExpandTrigger="<C-j>"
+
 " automatically set project base directory ack search on `:ag `
 " requires the projec to have a `.git` file in the base dir
 cnoreabbrev ag Gcd <bar> Ack!
@@ -230,6 +247,7 @@ let g:grepper.tools = ['git', 'ack']
 let g:grepper.git = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
 " Project wide search with <leader>*
 nnoremap <leader>* :Grepper -tool git -cword -noprompt<cr>
+" Project wide search with :vg <cr>
 cnoreabbrev vg Grepper -tool git<cr>
 
 " tagbar
@@ -287,8 +305,6 @@ function! FindTopLevelProjectDir()
 endfunction
 
 " Colorscheme
-" colorscheme solarized8_light
-" colorscheme solarized
 colorscheme NeoSolarized
 let g:solarized_termtrans=1
 hi Normal guibg=NONE ctermbg=NONE
@@ -296,3 +312,20 @@ hi Normal guibg=NONE ctermbg=NONE
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
 " autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
+"
+
+" customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
