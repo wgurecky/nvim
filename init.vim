@@ -115,7 +115,13 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+Plug 'ncm2/ncm2-vim'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-ultisnips'
 call plug#end()
 
 " Vimtex settings
@@ -162,44 +168,13 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F']
 
-" deoplete
-let g:deoplete#enable_at_startup = 1
-" let g:deoplete#auto_refresh_delay = 20
-" let g:deoplete#auto_complete_delay = 20
-let g:deoplete#auto_complete_start_length = 2
-let g:deoplete#enable_refresh_always = 0
+" ncm2
+autocmd BufEnter * call ncm2#enable_for_buffer()
+set completeopt=noinsert,menuone,noselect
+set shortmess+=c
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-set completeopt-=preview
-
-" deoplete sources
-if !exists('g:deoplete#omni#input_patterns')
-    let g:deoplete#omni#input_patterns = {}
-endif
-let g:deoplete#sources = {}
-let g:deoplete#sources._ = ['file', 'omni']
-let g:deoplete#sources.cpp = ['LanguageClient', 'omni', 'file']
-let g:deoplete#sources.python = ['LanguageClient', 'omni', 'file']
-let g:deoplete#sources.python3 = ['LanguageClient', 'omni', 'file']
-let g:deoplete#sources.rust = ['LanguageClient', 'file']
-let g:deoplete#sources.c = ['LanguageClient', 'file']
-let g:deoplete#sources.vim = ['vim', 'buffer']
-let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
-
-" source ranks
-call deoplete#custom#source('LanguageClient', 'rank', 9999)
-call deoplete#custom#source('buffer', 'rank', 100)
-call deoplete#custom#source('file', 'rank', 100)
-call deoplete#custom#source('omni', 'rank', 100)
-
-" deoplete tab completion
-inoremap <silent><expr> <TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ deoplete#mappings#manual_complete()
-function! s:check_back_space() abort "{{{
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-endfunction"}}}
 
 " LanguageClient auto completion for cpp and python
 let g:LanguageClient_autoStart = 1
