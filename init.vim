@@ -216,6 +216,8 @@ endif
 
 " ultisnips settings (auto integration with deoplete)
 let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger='<c-j>'
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 " automatically set project base directory ack search on `:ag `
 " requires the projec to have a `.git` file in the base dir
