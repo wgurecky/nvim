@@ -43,7 +43,10 @@ nmap <Space> i_<Esc>r
 tnoremap <Esc> <C-\><C-n>
 
 " faster buffer lookup & switching with <C-e># or <C-e><buff_name>
+" and cycle buffers with <C-h> and <C-l>
 nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
+nnoremap <C-h> :bprevious<CR>
+nnoremap <C-l> :bnext<CR>
 
 " fast find/replace word under cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
