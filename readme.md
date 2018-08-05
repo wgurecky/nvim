@@ -133,15 +133,8 @@ Install proselint:
 Notes
 =====
 
-Code folding
-------------
-
-The `./ftplugin` directory provides code folding settings.
-By default, folding by indentation level is ON.  `za` toggles folding for the current indent level.  `zR` and `zM` unfolds and folds all respectively.
-
-
-Project Wide Find/Replace
---------------------------
+Find/Replace Mappings and Shortcuts
+-----------------------------------
 
 To search and replace a word inside all files in a directory:
 
@@ -152,3 +145,20 @@ To search and replace all instances of a word inside a project that is a git rep
 
     :vg <pattern>
     :cdo s/foo/bar/gc | update
+
+To search and replace all instances of the current word under the cursor in the current git repo do:
+
+    <leader>*
+    :cdo s/foo/bar/gc | update
+
+Where `<leader>` is set to `\` by default.
+
+To find replace the current word under the cursor in the current file use:
+
+    <leader>s
+
+Code folding
+------------
+
+The `./ftplugin` directory provides code folding settings.
+By default, folding by indentation level is on.  `za` toggles folding for the current indent level.  `zR` and `zM` unfolds and folds all respectively.
