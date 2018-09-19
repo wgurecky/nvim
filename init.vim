@@ -90,8 +90,8 @@ Plug 'iCyMind/NeoSolarized'
 Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 " common plugins
+" Plug 'unblevable/quick-scope'
 Plug 'yssl/QFEnter'
-Plug 'unblevable/quick-scope'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
 Plug 'https://github.com/junegunn/vim-easy-align.git'
@@ -169,7 +169,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 
 " quick-scope
-let g:qs_highlight_on_keys = ['f', 'F']
+" let g:qs_highlight_on_keys = ['f', 'F']
 
 " ncm2
 autocmd BufEnter * call ncm2#enable_for_buffer()
