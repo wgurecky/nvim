@@ -37,7 +37,7 @@ set background=light
 filetype plugin on
 
 " allow easy insertion of one character with spacebar
-nmap <Space> i_<Esc>r
+nnoremap <Space> :exec "normal i".nr2char(getchar())."\e"<CR>
 
 " normal esc from terminal window
 tnoremap <Esc> <C-\><C-n>
@@ -112,7 +112,7 @@ Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran
 Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran', 'markdown', 'tex']}
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
-Plug 'lervag/vimtex'
+Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
@@ -178,6 +178,23 @@ set shortmess+=c
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+" vimtex ncm2 (https://github.com/ncm2/ncm2/issues/29#issuecomment-405159823)
+au Syntax tex call ncm2#register_source({
+    \ 'name' : 'vimtex',
+    \ 'priority': 1,
+    \ 'subscope_enable': 1,
+    \ 'complete_length': 1,
+    \ 'scope': ['tex'],
+    \ 'matcher': {'name': 'combine',
+    \           'matchers': [
+    \               {'name': 'abbrfuzzy', 'key': 'menu'},
+    \               {'name': 'prefix', 'key': 'word'},
+    \           ]},
+    \ 'mark': 'tex',
+    \ 'word_pattern': '\w+',
+    \ 'complete_pattern': g:vimtex#re#ncm,
+    \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+    \ })
 
 " LanguageClient auto completion for cpp and python
 let g:LanguageClient_autoStart = 1
@@ -194,6 +211,7 @@ nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 
 " ale syntax checker settings (deprecated for python, cpp due to LanguageClient
+" to check which linters are active run: :ALEinfo
 let g:ale_linters = {
     \ 'python': ['pylint'],
     \ 'cpp': ['clangtidy'],
@@ -202,8 +220,7 @@ let g:ale_linters = {
     \ 'tex': ['proselint', 'write-good'],
     \ 'markdown': ['proselint', 'write-good'],
     \ }
-" let g:ale_lint_on_save = 1
-" to check which linters are active run: :ALEinfo
+" let g:ale_lint_on_save = 0
 
 " vim-dispatch settings
 " Run :Make! to launch background async project build.
