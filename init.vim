@@ -37,6 +37,7 @@ set background=light
 filetype plugin on
 
 " allow easy insertion of one character with spacebar
+" source: http://vim.wikia.com/wiki/Insert_a_single_character
 nnoremap <Space> :exec "normal i".nr2char(getchar())."\e"<CR>
 
 " normal esc from terminal window
@@ -110,21 +111,10 @@ Plug 'mhinz/vim-grepper'
 " dev tools
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
 Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran', 'markdown', 'tex']}
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2-vim'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-ultisnips'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 call plug#end()
 
 " Vimtex settings
@@ -171,46 +161,29 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " quick-scope
 " let g:qs_highlight_on_keys = ['f', 'F']
 
-" ncm2
-autocmd BufEnter * call ncm2#enable_for_buffer()
-set completeopt=noinsert,menuone,noselect
-set shortmess+=c
+" coc
+" use <tab> for trigger completion and navigate to next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-" vimtex ncm2 (https://github.com/ncm2/ncm2/issues/29#issuecomment-405159823)
-au Syntax tex call ncm2#register_source({
-    \ 'name' : 'vimtex',
-    \ 'priority': 1,
-    \ 'subscope_enable': 1,
-    \ 'complete_length': 1,
-    \ 'scope': ['tex'],
-    \ 'matcher': {'name': 'combine',
-    \           'matchers': [
-    \               {'name': 'abbrfuzzy', 'key': 'menu'},
-    \               {'name': 'prefix', 'key': 'word'},
-    \           ]},
-    \ 'mark': 'tex',
-    \ 'word_pattern': '\w+',
-    \ 'complete_pattern': g:vimtex#re#ncm,
-    \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
-    \ })
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-" LanguageClient auto completion for cpp and python
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_diagnosticsEnable = 0
-" Ensure clangd >= 6.0.0 and python-language-server are installed
-" Note clangd can read compile_commands.json from CMake
-let g:LanguageClient_serverCommands = {
-    \ 'python': ['pyls'],
-    \ 'cpp': ['clangd'],
-    \ 'c': ['clangd'],
-    \ }
-" open help doc with 'K' close help window with command :pc
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 
-" ale syntax checker settings (deprecated for python, cpp due to LanguageClient
+" ale syntax checker settings
 " to check which linters are active run: :ALEinfo
 let g:ale_linters = {
     \ 'python': ['pylint'],

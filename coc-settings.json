@@ -1,0 +1,16 @@
+{
+  "languageserver": {
+    "pyls": {
+      "command": "pyls",
+      "rootPatterns": [".git/"],
+      "filetypes": ["python", "py"]
+    },
+    "clangd": {
+      "command": "clangd",
+      "rootPatterns": [".git/"],
+      "filetypes": ["c", "cpp"]
+    }
+  },
+  "coc.preferences.diagnostic.enable": false,
+  "coc.preferences.diagnostic.locationlist": false
+}
