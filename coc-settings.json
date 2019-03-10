@@ -5,6 +5,11 @@
       "rootPatterns": [".git/"],
       "filetypes": ["python", "py"]
     },
+    "fortls": {
+      "command": "fortls",
+      "rootPatterns": [".git/"],
+      "filetypes": ["fortran", "f90"]
+    },
     "clangd": {
       "command": "clangd",
       "rootPatterns": [".git/"],

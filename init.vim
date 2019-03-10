@@ -162,6 +162,12 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " let g:qs_highlight_on_keys = ['f', 'F']
 
 " coc
+" auto install coc extensions on first-run
+if empty(glob("~/.config/coc/extensions/node_modules/coc-json"))
+    autocmd VimEnter * CocInstall coc-json
+    autocmd VimEnter * CocInstall coc-ultisnips
+endif
+
 " use <tab> for trigger completion and navigate to next complete item
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -178,6 +184,16 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Use K for show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
 
 " Using CocList
 " Show all diagnostics
