@@ -2,7 +2,7 @@ snippet personal "personal python project preamble" b
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 #==============================================================================
-# Copyright (c) 2017, William Gurecky
+# Copyright (c) 2019, William Gurecky
 # All rights reserved.
 #
 # DESCRIPTION: $0
@@ -33,4 +33,22 @@ snippet dox "basic fn dox block" b
 """!
 @brief $0
 """
+endsnippet
+
+
+snippet "if __na" "dummy main block" b
+if __name__ == "__main__":
+    pass
+endsnippet
+
+
+snippet "from __fu" "futuer imports" b
+from __future__ import print_function, division, absolute_import
+endsnippet
+
+
+snippet parse "arg parser block" b
+parser = argparse.ArgumentParser(description='')
+parser.add_argument('-i', type=str, help="input file")
+args = parser.parse_args()
 endsnippet

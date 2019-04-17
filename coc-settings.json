@@ -11,7 +11,7 @@
       "filetypes": ["fortran", "f90"]
     },
     "clangd": {
-      "command": "clangd",
+      "command": "clangd-6.0",
       "rootPatterns": [".git/"],
       "filetypes": ["c", "cpp"]
     }

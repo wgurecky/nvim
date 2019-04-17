@@ -75,6 +75,12 @@ set inccommand=nosplit
 let g:netrw_liststyle=3
 let g:netrw_winsize=20
 
+" python provider
+" let g:python3_host_prog=system('which python3')
+" let g:python2_host_prog=system('which python2')
+let g:python3_host_prog='/home/wll/miniconda3/bin/python'
+let g:python2_host_prog='/home/wll/miniconda2/bin/python'
+
 " ========================================================== "
 "                    PLUGIN SETTINGS                         "
 " ========================================================== "
@@ -203,9 +209,9 @@ nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 " to check which linters are active run: :ALEinfo
 let g:ale_linters = {
     \ 'python': ['pylint'],
-    \ 'cpp': ['clangtidy'],
+    \ 'cpp': ['clang-tidy'],
     \ 'c': ['gcc'],
-    \ 'fortran': ['gcc'],
+    \ 'fortran': ['gfortran'],
     \ 'tex': ['proselint', 'write-good'],
     \ 'markdown': ['proselint', 'write-good'],
     \ }
