@@ -78,8 +78,8 @@ let g:netrw_winsize=20
 " python provider
 " let g:python3_host_prog=system('which python3')
 " let g:python2_host_prog=system('which python2')
-let g:python3_host_prog='/home/wll/miniconda3/bin/python'
-let g:python2_host_prog='/home/wll/miniconda2/bin/python'
+" let g:python3_host_prog='/home/wll/miniconda3/bin/python'
+" let g:python2_host_prog='/home/wll/miniconda2/bin/python'
 
 " ========================================================== "
 "                    PLUGIN SETTINGS                         "
@@ -120,7 +120,7 @@ Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran'
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 call plug#end()
 
 " Vimtex settings
@@ -208,14 +208,14 @@ nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 " ale syntax checker settings
 " to check which linters are active run: :ALEinfo
 let g:ale_linters = {
-    \ 'python': ['pylint'],
+    \ 'python': ['pylint', 'mypy'],
     \ 'cpp': ['clang-tidy'],
     \ 'c': ['gcc'],
     \ 'fortran': ['gfortran'],
     \ 'tex': ['proselint', 'write-good'],
     \ 'markdown': ['proselint', 'write-good'],
     \ }
-" let g:ale_lint_on_save = 0
+let g:ale_lint_on_save = 0
 
 " vim-dispatch settings
 " Run :Make! to launch background async project build.
