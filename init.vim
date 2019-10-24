@@ -68,6 +68,14 @@ if bufwinnr(1)
     map <Right> <C-W>2>
 endif
 
+" remap ctrl+hkjl to jump windows in normal mode
+if bufwinnr(1)
+    nmap <C-h> <C-W>h
+    nmap <C-j> <C-W>j
+    nmap <C-k> <C-W>k
+    nmap <C-l> <C-W>l
+endif
+
 " incremental command live feedback
 set inccommand=nosplit
 
@@ -201,6 +209,9 @@ endfunction
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
 
+" Remap for rename current word
+nmap <leader>r <Plug>(coc-rename)
+
 " Using CocList
 " Show all diagnostics
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
@@ -215,7 +226,7 @@ let g:ale_linters = {
     \ 'tex': ['proselint', 'write-good'],
     \ 'markdown': ['proselint', 'write-good'],
     \ }
-let g:ale_lint_on_save = 0
+let g:ale_lint_on_save = 1
 
 " vim-dispatch settings
 " Run :Make! to launch background async project build.
