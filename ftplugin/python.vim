@@ -8,3 +8,5 @@ set foldnestmax=10
 set nofoldenable
 set foldlevel=1
 
+" rename me to self
+map <F3> :%s/\<me\>/self/g<CR>
