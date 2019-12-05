@@ -128,7 +128,7 @@ Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran'
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
-Plug 'neovim/nvim-lsp'
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 call plug#end()
 
 " Vimtex settings
@@ -175,9 +175,46 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " quick-scope
 " let g:qs_highlight_on_keys = ['f', 'F']
 
-" tab auto completion
+" coc
+" auto install coc extensions on first-run
+if empty(glob("~/.config/coc/extensions/node_modules/coc-json"))
+    autocmd VimEnter * CocInstall coc-json
+    autocmd VimEnter * CocInstall coc-ultisnips
+endif
+
+" use <tab> for trigger completion and navigate to next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+
+" Remap for rename current word
+nmap <leader>r <Plug>(coc-rename)
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 
 " ale syntax checker settings
 " to check which linters are active run: :ALEinfo
@@ -227,6 +264,16 @@ nmap <F8> :TagbarToggle<CR>
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
 " ========================================================== "
+
+" comment blocks of code
+autocmd FileType c,cpp,java,scala let b:comment_leader = '// '
+autocmd FileType sh,ruby,python   let b:comment_leader = '# '
+autocmd FileType conf,fstab       let b:comment_leader = '# '
+autocmd FileType tex              let b:comment_leader = '% '
+autocmd FileType vim              let b:comment_leader = '" '
+autocmd FileType fortran          let b:comment_leader = '! '
+noremap <silent> <leader>cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
+noremap <silent> <leader>cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
 
 " show extra whitespace
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -300,26 +347,3 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
-
-" ========================================================== "
-"                         LSP CONFIG                         "
-" ========================================================== "
-" nvim lsp language server setup
-"silent LspInstall pyls
-"silent LspInstall clangd
-"silent LspInstall bashls
-
-autocmd Filetype python,c,cpp,bash setl omnifunc=lsp#omnifunc
-nnoremap <silent> ;dc :call lsp#text_document_declaration()<CR>
-nnoremap <silent> ;df :call lsp#text_document_definition()<CR>
-nnoremap <silent> ;h  :call lsp#text_document_hover()<CR>
-nnoremap <silent> ;i  :call lsp#text_document_implementation()<CR>
-nnoremap <silent> ;s  :call lsp#text_document_signature_help()<CR>
-nnoremap <silent> ;td :call lsp#text_document_type_definition()<CR>
-
-" Python
-call lsp#add_filetype_config({
-      \ 'filetype': 'python',
-      \ 'name': 'pyls',
-      \ 'cmd': 'pyls'
-      \ })
