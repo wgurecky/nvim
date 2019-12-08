@@ -10,3 +10,13 @@ set foldlevel=1
 
 " rename me to self
 map <F3> :%s/\<me\>/self/g<CR>
+
+" convert doxygen to reST, sphinx-compat doc style
+function! Undoxygen()
+    :%s/@param\s\(\w\+\)/:param \1:/g
+    :%s/@returns\?/:return:/g
+    :%s/@brief \?//g
+    :%s/@note/.. note::/g
+    :%s/"""!/"""/g
+endfunction
+command! Undox execute Undoxygen()
