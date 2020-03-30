@@ -23,3 +23,10 @@ function! Undoxygen()
     :%s/"""!/"""/g
 endfunction
 command! Undox execute Undoxygen()
+
+" convert doxygen to reST, sphinx-compat doc style
+function! SphinxSpace()
+    :%s/\(\s\+\):param/\r\1:param/g
+    :%s/\(\s\+\):return/\r\1:return/g
+endfunction
+command! SSpace execute SphinxSpace()

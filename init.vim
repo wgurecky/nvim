@@ -105,7 +105,7 @@ Plug 'iCyMind/NeoSolarized'
 Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 " common plugins
-" Plug 'unblevable/quick-scope'
+Plug 'unblevable/quick-scope'
 Plug 'yssl/QFEnter'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/wgurecky/vimSum.git'
@@ -174,7 +174,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 
 " quick-scope
-" let g:qs_highlight_on_keys = ['f', 'F']
+let g:qs_highlight_on_keys = ['f', 'F']
 
 " coc
 " auto install coc extensions on first-run
@@ -294,6 +294,7 @@ function! g:BuildInSubDir(buildsubdir)
     " Sets makeprg base dir
     let toplevelpath = FindTopLevelProjectDir()
     let builddir = toplevelpath . a:buildsubdir
+    echo builddir
     let makeprgcmd = 'make -C ' . builddir
     if builddir !=? "//build"
         let &makeprg=makeprgcmd
@@ -319,7 +320,7 @@ hi Normal guibg=NONE ctermbg=NONE
 
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
-" autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
+autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
 "
 
 " customize fzf colors to match your color scheme
