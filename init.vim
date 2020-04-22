@@ -76,6 +76,13 @@ if bufwinnr(1)
     nmap <C-l> <C-W>l
 endif
 
+" quick change from horizontal to vert split
+map <leader>th <C-w>t<C-w>H
+map <leader>tk <C-w>t<C-w>K
+
+" default splits to bottom right
+set splitbelow splitright
+
 " incremental command live feedback
 set inccommand=nosplit
 
@@ -108,7 +115,7 @@ Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 Plug 'unblevable/quick-scope'
 Plug 'yssl/QFEnter'
 Plug 'https://github.com/scrooloose/nerdtree.git'
-Plug 'https://github.com/wgurecky/vimSum.git'
+Plug 'https://github.com/wgurecky/vimSum.git', { 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/junegunn/vim-easy-align.git'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git'
 Plug 'https://github.com/SirVer/ultisnips.git'
