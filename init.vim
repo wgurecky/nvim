@@ -94,7 +94,7 @@ Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 " Plug 'unblevable/quick-scope'
 Plug 'yssl/QFEnter'
 Plug 'https://github.com/scrooloose/nerdtree.git'
-Plug 'https://github.com/wgurecky/vimSum.git'
+Plug 'https://github.com/wgurecky/vimSum.git', { 'do' : 'vim +UpdateRemotePlugins +qall' }
 Plug 'https://github.com/junegunn/vim-easy-align.git'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git'
 Plug 'https://github.com/SirVer/ultisnips.git'
@@ -114,7 +114,7 @@ Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran'
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 call plug#end()
 
 " Vimtex settings
@@ -142,6 +142,13 @@ nmap <C-o> :NERDTreeToggle<CR>
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
+" aliases for vimSum
+xnoremap <leader>s :VisSum<CR>
+xnoremap <leader>a :VisMean<CR>
+cnoreabbrev vm VisMult
+cnoreabbrev vs VisMath
+let g:vimSumVerbose = 1
+
 " QFEnter settings
 let g:qfenter_keymap = {}
 let g:qfenter_keymap.hopen = ['<Leader><Space>', '<C-x>']
@@ -166,6 +173,9 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 if empty(glob("~/.config/coc/extensions/node_modules/coc-json"))
     autocmd VimEnter * CocInstall coc-json
     autocmd VimEnter * CocInstall coc-ultisnips
+endif
+if empty(glob("~/.config/coc/extensions/node_modules/coc-vimtex"))
+    autocmd VimEnter * CocInstall coc-vimtex
 endif
 
 " use <tab> for trigger completion and navigate to next complete item
@@ -205,7 +215,7 @@ let g:ale_linters = {
     \ 'python': ['pylint'],
     \ 'cpp': ['clangtidy'],
     \ 'c': ['gcc'],
-    \ 'fortran': ['gcc'],
+    \ 'fortran': ['gfortran'],
     \ 'tex': ['proselint', 'write-good'],
     \ 'markdown': ['proselint', 'write-good'],
     \ }
