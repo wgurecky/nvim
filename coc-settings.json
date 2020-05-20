@@ -16,6 +16,6 @@
       "filetypes": ["c", "cpp"]
     }
   },
-  "coc.preferences.diagnostic.enable": false,
-  "coc.preferences.diagnostic.locationlist": false
+  "diagnostic.enable": false,
+  "diagnostic.locationlist": false
 }
