@@ -135,8 +135,9 @@ Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran'
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'lifepillar/vim-mucomplete'
+Plug 'neovim/nvim-lsp'
+Plug 'haorenW1025/completion-nvim'
+Plug 'haorenW1025/diagnostic-nvim'
 call plug#end()
 
 " Vimtex settings
@@ -183,42 +184,56 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F']
 
-" coc
-" auto install coc extensions on first-run
-if empty(glob("~/.config/coc/extensions/node_modules/coc-json"))
-    autocmd VimEnter * CocInstall coc-json
-    autocmd VimEnter * CocInstall coc-ultisnips
-endif
+" nvim-lsp
+autocmd BufEnter * lua require'completion'.on_attach()
+autocmd BufEnter * lua require'diagnostic'.on_attach()
+lua << EOF
+-- python language server settings
+require'nvim_lsp'.pyls.setup{}
+-- fortran language server settings
+require'nvim_lsp'.fortls.setup{}
+-- cpp language server settings
+require'nvim_lsp'.clangd.setup{}
+EOF
 
-" use <tab> for trigger completion and navigate to next complete item
-set completeopt+=menuone
+" nvim-lsp mappings
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
-" Use K for show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if &filetype == 'vim'
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
+" disable virtual diagnostic text
+let g:diagnostic_enable_virtual_text = 1
+let g:diagnostic_show_sign = 0
+
+" completion settings
+set completeopt=menuone,noinsert,noselect
+
+" enable snippet support
+let g:completion_enable_snippet = 'UltiSnips'
+
+" tab for completion
+function! s:check_back_space() abort
+let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ completion#trigger_completion()
 
-" Remap for rename current word
-nmap <leader>r <Plug>(coc-rename)
-
-" Using CocList
-" Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-
-" ale syntax checker settings
+" ale syntax checker settings for filetypes which do not have a lang server
 " to check which linters are active run: :ALEinfo
 let g:ale_linters = {
-    \ 'python': ['pylint', 'mypy'],
-    \ 'cpp': ['clang-tidy'],
-    \ 'c': ['gcc'],
+    \ 'python': ['pylint'],
+    \ 'cpp': ['clangd'],
+    \ 'c': ['clangd'],
     \ 'fortran': ['gfortran'],
     \ 'tex': ['proselint', 'write-good'],
     \ 'markdown': ['proselint', 'write-good'],
@@ -328,7 +343,6 @@ hi Normal guibg=NONE ctermbg=NONE
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
 autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
-"
 
 " customize fzf colors to match your color scheme
 let g:fzf_colors =
