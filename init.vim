@@ -35,6 +35,7 @@ set background=light
 
 " auto detect filetype
 filetype plugin on
+set omnifunc=syntaxcomplete#Complete
 
 " allow easy insertion of one character with spacebar
 " source: http://vim.wikia.com/wiki/Insert_a_single_character
@@ -208,14 +209,32 @@ nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 " disable virtual diagnostic text
-let g:diagnostic_enable_virtual_text = 1
-let g:diagnostic_show_sign = 0
+let g:diagnostic_enable_virtual_text = 0
+let g:diagnostic_show_sign = 1
 
 " completion settings
 set completeopt=menuone,noinsert,noselect
-
-" enable snippet support
+set shortmess+=c
+let g:completion_enable_auto_popup = 1
 let g:completion_enable_snippet = 'UltiSnips'
+let g:completion_enable_fuzzy_match = 1
+
+" completion chain
+let g:completion_chain_complete_list = {
+    \ 'vim': [
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'lua': [
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'default': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \]
+\}
 
 " tab for completion
 function! s:check_back_space() abort
