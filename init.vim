@@ -225,6 +225,14 @@ let g:completion_chain_complete_list = {
     \    {'mode': '<c-p>'},
     \    {'mode': '<c-n>'}
     \],
+    \ 'markdown': [
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'text': [
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
     \ 'lua': [
     \    {'mode': '<c-p>'},
     \    {'mode': '<c-n>'}

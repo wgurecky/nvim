@@ -3,13 +3,16 @@ About
 
 Wgurecky's neovim configuration files.  Useful for c, cpp, python, and latex files.
 
+This config depends on neovim's new lsp (language server protocol) integration.
+
 
 Depends
 =======
 
-- python3-neovim
-- python2-neovim
+- [nvim-lsp]
+- [pynvim]
 - clang
+- clangd
 - gcc
 - [ack]
 - [python-language-server]
@@ -17,6 +20,8 @@ Depends
 - [pylint]
 
 
+[nvim-lsp]: https://github.com/neovim/nvim-lsp
+[pynvim]: https://github.com/neovim/pynvim
 [ack]: https://beyondgrep.com/
 [jedi]: https://github.com/davidhalter/jedi
 [pylint]: https://www.pylint.org/
@@ -30,6 +35,19 @@ Optional
 - [write-good]
 
 [clang-tidy]: https://clang.llvm.org/extra/clang-tidy/
+
+
+Install
+=====
+
+Clone this repo into your `~/.config` dir:
+
+    cd ~/.config && git clone https://github.com/wgurecky/nvim
+
+On neovim startup vim-plug should try to download automatically, if not install vim-plug from https://github.com/junegunn/vim-plug
+
+Next, run `:PlugInstall` to install all required vim plugins
+
 
 Config
 =======
@@ -56,13 +74,13 @@ PROJECT_BASE
 
 ### Build
 
-To compile the project (async make) `makeprg` should point at a folder which includes the project's make file.  Ex:
-
-    :set makeprg=make\ -C\ ~/path/to/project/build
-
 A function present in the included `init.vim` attempts to set `makeprg` automatically.  The function might not always produce the expected result.  Check that `makeprg` is set by issuing:
 
     :set makeprg
+
+To manually set makeprg:
+
+    :set makeprg=make\ -C\ ~/path/to/project/build
 
 Once `makeprg` is verified, run:
 
