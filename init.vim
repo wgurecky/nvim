@@ -35,15 +35,20 @@ set background=light
 
 " auto detect filetype
 filetype plugin on
+set omnifunc=syntaxcomplete#Complete
 
 " allow easy insertion of one character with spacebar
-nmap <Space> i_<Esc>r
+" source: http://vim.wikia.com/wiki/Insert_a_single_character
+nnoremap <Space> :exec "normal i".nr2char(getchar())."\e"<CR>
 
 " normal esc from terminal window
 tnoremap <Esc> <C-\><C-n>
 
 " faster buffer lookup & switching with <C-e># or <C-e><buff_name>
+" and cycle buffers with <C-h> and <C-l>
 nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
+nnoremap <C-h> :bprevious<CR>
+nnoremap <C-l> :bnext<CR>
 
 " fast find/replace word under cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
@@ -64,12 +69,33 @@ if bufwinnr(1)
     map <Right> <C-W>2>
 endif
 
+" remap ctrl+hkjl to jump windows in normal mode
+if bufwinnr(1)
+    nmap <C-h> <C-W>h
+    nmap <C-j> <C-W>j
+    nmap <C-k> <C-W>k
+    nmap <C-l> <C-W>l
+endif
+
+" quick change from horizontal to vert split
+map <leader>th <C-w>t<C-w>H
+map <leader>tk <C-w>t<C-w>K
+
+" default splits to bottom right
+set splitbelow splitright
+
 " incremental command live feedback
 set inccommand=nosplit
 
 " netrw tree style by default
 let g:netrw_liststyle=3
 let g:netrw_winsize=20
+
+" python provider
+" let g:python3_host_prog=system('which python3')
+" let g:python2_host_prog=system('which python2')
+" let g:python3_host_prog='/home/wll/miniconda3/bin/python'
+" let g:python2_host_prog='/home/wll/miniconda2/bin/python'
 
 " ========================================================== "
 "                    PLUGIN SETTINGS                         "
@@ -87,10 +113,10 @@ Plug 'iCyMind/NeoSolarized'
 Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 " common plugins
-Plug 'yssl/QFEnter'
 Plug 'unblevable/quick-scope'
+Plug 'yssl/QFEnter'
 Plug 'https://github.com/scrooloose/nerdtree.git'
-Plug 'https://github.com/wgurecky/vimSum.git'
+Plug 'https://github.com/wgurecky/vimSum.git', { 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/junegunn/vim-easy-align.git'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git'
 Plug 'https://github.com/SirVer/ultisnips.git'
@@ -107,15 +133,12 @@ Plug 'mhinz/vim-grepper'
 " dev tools
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
 Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran', 'markdown', 'tex']}
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
-Plug 'lervag/vimtex'
+Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'neovim/nvim-lsp'
+Plug 'haorenW1025/completion-nvim'
+Plug 'haorenW1025/diagnostic-nvim'
 call plug#end()
 
 " Vimtex settings
@@ -162,70 +185,90 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F']
 
-" deoplete
-let g:deoplete#enable_at_startup = 1
-" let g:deoplete#auto_refresh_delay = 20
-" let g:deoplete#auto_complete_delay = 20
-let g:deoplete#auto_complete_start_length = 2
-let g:deoplete#enable_refresh_always = 0
+" nvim-lsp
+autocmd BufEnter * lua require'completion'.on_attach()
+autocmd BufEnter * lua require'diagnostic'.on_attach()
+lua << EOF
+-- python language server settings
+require'nvim_lsp'.pyls.setup{}
+-- fortran language server settings
+require'nvim_lsp'.fortls.setup{}
+-- cpp language server settings
+require'nvim_lsp'.clangd.setup{}
+EOF
 
-set completeopt-=preview
+" nvim-lsp mappings
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
-" deoplete sources
-if !exists('g:deoplete#omni#input_patterns')
-    let g:deoplete#omni#input_patterns = {}
-endif
-let g:deoplete#sources = {}
-let g:deoplete#sources._ = ['file', 'omni']
-let g:deoplete#sources.cpp = ['LanguageClient', 'omni', 'file']
-let g:deoplete#sources.python = ['LanguageClient', 'omni', 'file']
-let g:deoplete#sources.python3 = ['LanguageClient', 'omni', 'file']
-let g:deoplete#sources.rust = ['LanguageClient', 'file']
-let g:deoplete#sources.c = ['LanguageClient', 'file']
-let g:deoplete#sources.vim = ['vim', 'buffer']
-let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+" disable virtual diagnostic text
+let g:diagnostic_enable_virtual_text = 0
+let g:diagnostic_show_sign = 1
 
-" source ranks
-call deoplete#custom#source('LanguageClient', 'rank', 9999)
-call deoplete#custom#source('buffer', 'rank', 100)
-call deoplete#custom#source('file', 'rank', 100)
-call deoplete#custom#source('omni', 'rank', 100)
+" completion settings
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
+let g:completion_enable_auto_popup = 1
+let g:completion_enable_snippet = 'UltiSnips'
+let g:completion_enable_fuzzy_match = 1
 
-" deoplete tab completion
-inoremap <silent><expr> <TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ deoplete#mappings#manual_complete()
-function! s:check_back_space() abort "{{{
-    let col = col('.') - 1
+" completion chain
+let g:completion_chain_complete_list = {
+    \ 'default': [
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'python': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'cpp': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'c': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'fortran': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \]
+\}
+
+" tab for completion
+function! s:check_back_space() abort
+let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
-endfunction"}}}
+endfunction
 
-" LanguageClient auto completion for cpp and python
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_diagnosticsEnable = 0
-" Ensure clangd >= 6.0.0 and python-language-server are installed
-" Note clangd can read compile_commands.json from CMake
-let g:LanguageClient_serverCommands = {
-    \ 'python': ['pyls'],
-    \ 'cpp': ['clangd'],
-    \ 'c': ['clangd'],
-    \ }
-" open help doc with 'K' close help window with command :pc
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ completion#trigger_completion()
 
-" ale syntax checker settings (deprecated for python, cpp due to LanguageClient
+" ale syntax checker settings for filetypes which do not have a lang server
+" to check which linters are active run: :ALEinfo
 let g:ale_linters = {
     \ 'python': ['pylint'],
-    \ 'cpp': ['clangtidy'],
-    \ 'c': ['gcc'],
-    \ 'fortran': ['gcc'],
+    \ 'cpp': ['clangd'],
+    \ 'c': ['clangd'],
+    \ 'fortran': ['gfortran'],
     \ 'tex': ['proselint', 'write-good'],
     \ 'markdown': ['proselint', 'write-good'],
     \ }
-" let g:ale_lint_on_save = 1
-" to check which linters are active run: :ALEinfo
+let g:ale_lint_on_save = 1
 
 " vim-dispatch settings
 " Run :Make! to launch background async project build.
@@ -241,6 +284,8 @@ endif
 
 " ultisnips settings (auto integration with deoplete)
 let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger='<c-j>'
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 " automatically set project base directory ack search on `:ag `
 " requires the projec to have a `.git` file in the base dir
@@ -261,6 +306,16 @@ nmap <F8> :TagbarToggle<CR>
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
 " ========================================================== "
+
+" comment blocks of code
+autocmd FileType c,cpp,java,scala let b:comment_leader = '// '
+autocmd FileType sh,ruby,python   let b:comment_leader = '# '
+autocmd FileType conf,fstab       let b:comment_leader = '# '
+autocmd FileType tex              let b:comment_leader = '% '
+autocmd FileType vim              let b:comment_leader = '" '
+autocmd FileType fortran          let b:comment_leader = '! '
+noremap <silent> <leader>cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
+noremap <silent> <leader>cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
 
 " show extra whitespace
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -291,6 +346,7 @@ function! g:BuildInSubDir(buildsubdir)
     " Sets makeprg base dir
     let toplevelpath = FindTopLevelProjectDir()
     let builddir = toplevelpath . a:buildsubdir
+    echo builddir
     let makeprgcmd = 'make -C ' . builddir
     if builddir !=? "//build"
         let &makeprg=makeprgcmd
@@ -316,8 +372,7 @@ hi Normal guibg=NONE ctermbg=NONE
 
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
-" autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
-"
+autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
 
 " customize fzf colors to match your color scheme
 let g:fzf_colors =
