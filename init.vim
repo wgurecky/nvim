@@ -221,23 +221,26 @@ let g:completion_enable_fuzzy_match = 1
 
 " completion chain
 let g:completion_chain_complete_list = {
-    \ 'vim': [
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'markdown': [
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'text': [
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'lua': [
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
     \ 'default': [
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'python': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'cpp': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'c': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'fortran': [
     \    {'complete_items': ['lsp', 'snippet']},
     \    {'mode': '<c-p>'},
     \    {'mode': '<c-n>'}
