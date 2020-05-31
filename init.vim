@@ -186,6 +186,7 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:qs_highlight_on_keys = ['f', 'F']
 
 " nvim-lsp
+let g:lsp_diagnostics_enable = 0
 autocmd BufEnter * lua require'completion'.on_attach()
 autocmd BufEnter * lua require'diagnostic'.on_attach()
 lua << EOF
