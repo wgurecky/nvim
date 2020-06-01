@@ -186,9 +186,6 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:qs_highlight_on_keys = ['f', 'F']
 
 " nvim-lsp
-let g:lsp_diagnostics_enable = 0
-autocmd BufEnter * lua require'completion'.on_attach()
-autocmd BufEnter * lua require'diagnostic'.on_attach()
 lua << EOF
 -- python language server settings
 require'nvim_lsp'.pyls.setup{}
@@ -196,7 +193,11 @@ require'nvim_lsp'.pyls.setup{}
 require'nvim_lsp'.fortls.setup{}
 -- cpp language server settings
 require'nvim_lsp'.clangd.setup{}
+-- disable lsp diagnostics
+vim.lsp.callbacks["textDocument/publishDiagnostics"] = function() end
 EOF
+autocmd BufEnter * lua require'completion'.on_attach()
+" autocmd BufEnter * lua require'diagnostic'.on_attach()
 
 " nvim-lsp mappings
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
@@ -210,8 +211,8 @@ nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 " disable virtual diagnostic text
-let g:diagnostic_enable_virtual_text = 0
-let g:diagnostic_show_sign = 1
+" let g:diagnostic_enable_virtual_text = 0
+" let g:diagnostic_show_sign = 1
 
 " completion settings
 set completeopt=menuone,noinsert,noselect
@@ -219,6 +220,9 @@ set shortmess+=c
 let g:completion_enable_auto_popup = 1
 let g:completion_enable_snippet = 'UltiSnips'
 let g:completion_enable_fuzzy_match = 1
+let g:completion_enable_auto_hover = 0
+let g:completion_enable_auto_signature = 0
+let g:completion_max_items = 10
 
 " completion chain
 let g:completion_chain_complete_list = {
