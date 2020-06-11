@@ -219,10 +219,10 @@ set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 let g:completion_enable_auto_popup = 1
 let g:completion_enable_snippet = 'UltiSnips'
-let g:completion_enable_fuzzy_match = 1
 let g:completion_enable_auto_hover = 0
 let g:completion_enable_auto_signature = 0
 let g:completion_max_items = 10
+let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 
 " completion chain
 let g:completion_chain_complete_list = {
