@@ -186,17 +186,42 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:qs_highlight_on_keys = ['f', 'F']
 
 " nvim-lsp
-let g:lsp_diagnostics_enable = 0
-autocmd BufEnter * lua require'completion'.on_attach()
-autocmd BufEnter * lua require'diagnostic'.on_attach()
 lua << EOF
+local nvim_lsp = require'nvim_lsp'
+local util = require'nvim_lsp/util'
+local on_attach_vim = function()
+  require'completion'.on_attach()
+end
 -- python language server settings
-require'nvim_lsp'.pyls.setup{}
+nvim_lsp.pyls.setup{on_attach=on_attach_vim}
 -- fortran language server settings
-require'nvim_lsp'.fortls.setup{}
+nvim_lsp.fortls.setup{
+    cmd = {
+        'fortls',
+        '--symbol_skip_mem',
+        '--incrmental_sync',
+        '--autocomplete_no_prefix',
+        '--autocomplete_name_only',
+        '--debug_log',
+    },
+    settings = {
+        ["fortran-ls"] = {
+            variableHover = false
+        },
+    },
+    root_dir = util.path.dirname,
+    on_attach=on_attach_vim
+}
 -- cpp language server settings
-require'nvim_lsp'.clangd.setup{}
+nvim_lsp.clangd.setup{
+    cmd = {'clangd-6.0'},
+    on_attach=on_attach_vim
+}
+-- disable all lsp diagnostics
+vim.lsp.callbacks["textDocument/publishDiagnostics"] = function() end
 EOF
+" autocmd BufEnter * lua require'completion'.on_attach()
+" autocmd BufEnter * lua require'diagnostic'.on_attach()
 
 " nvim-lsp mappings
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
@@ -210,43 +235,56 @@ nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 " disable virtual diagnostic text
-let g:diagnostic_enable_virtual_text = 0
-let g:diagnostic_show_sign = 1
+" let g:diagnostic_enable_virtual_text = 0
+" let g:diagnostic_show_sign = 1
+
+" alias to check loaded lsp client status
+cnoreabbrev lspstat lua print(vim.inspect(vim.lsp.buf_get_clients()))
+
+" completion chain
+let g:completion_chain_complete_list = {
+    \ 'python': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': 'file'},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'cpp': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': 'file'},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'c': [
+    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': 'file'},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'fortran': [
+    \    {'complete_items': ['lsp']},
+    \    {'mode': 'file'},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'default': [
+    \    {'mode': 'file'},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \]
+\}
 
 " completion settings
 set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 let g:completion_enable_auto_popup = 1
 let g:completion_enable_snippet = 'UltiSnips'
-let g:completion_enable_fuzzy_match = 1
-
-" completion chain
-let g:completion_chain_complete_list = {
-    \ 'default': [
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'python': [
-    \    {'complete_items': ['lsp', 'snippet']},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'cpp': [
-    \    {'complete_items': ['lsp', 'snippet']},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'c': [
-    \    {'complete_items': ['lsp', 'snippet']},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'fortran': [
-    \    {'complete_items': ['lsp', 'snippet']},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \]
-\}
+let g:completion_enable_auto_signature = 1
+let g:completion_enable_auto_hover = 0
+let g:completion_max_items = 10
+" let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
+let g:completion_matching_strategy_list = ['exact', 'substring']
+let g:completion_auto_change_source = 1
 
 " tab for completion
 function! s:check_back_space() abort
