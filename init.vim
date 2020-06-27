@@ -29,10 +29,6 @@ set incsearch       " While typing a search command, show immediately where the
 
 set autoindent      " Copy indent from current line when starting a new line
 
-" Colors.  TODO: Auto detect term bg color from Xresources?
-set termguicolors
-set background=light
-
 " auto detect filetype
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
@@ -141,17 +137,30 @@ Plug 'haorenW1025/completion-nvim'
 Plug 'haorenW1025/diagnostic-nvim'
 call plug#end()
 
-" Vimtex settings
-" Note; <leader>ll builds and <leader>le shows compile errors
-" Note; install xdotool package for live previews in zathura
+" Local vs remote logic.  Some colorscheme features do not
+" reliably work over ssh.
 let g:remoteSession = ($SSH_TTY != "")
 if  g:remoteSession
     " Do not preview pdf over ssh connection.
     " Use sshfs+zathura to view remote pdf
     let g:vimtex_view_enabled=0
+else
+    set termguicolors
+    " Colorscheme
+    let g:airline_theme='solarized'
+    colorscheme NeoSolarized
+    let g:solarized_termtrans=1
+    hi Normal guibg=NONE ctermbg=NONE
 endif
-" let g:vimtex_view_method='general'
+
+" Vimtex settings
+" Note; <leader>ll builds and <leader>le shows compile errors
+" Note; install xdotool package for live previews in zathura
 let g:vimtex_view_method='zathura'
+" let g:vimtex_view_method='general'
+
+" Colors.  TODO: Auto detect term bg color from Xresources?
+set background=light
 
 " Nerdtree settings
 " launch nerdtree on entry if no file is specified
@@ -177,7 +186,6 @@ nnoremap <C-p> :GFiles<CR>
 nnoremap <C-g>g :Ag<CR>
 
 " Airline settings
-let g:airline_theme='solarized'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
@@ -403,11 +411,6 @@ function! FindTopLevelProjectDir()
     let toplevelpath = '/' . join(gitdirsplit[:-2],'/')
     return toplevelpath
 endfunction
-
-" Colorscheme
-colorscheme NeoSolarized
-let g:solarized_termtrans=1
-hi Normal guibg=NONE ctermbg=NONE
 
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
