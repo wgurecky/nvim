@@ -133,8 +133,8 @@ Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
 Plug 'neovim/nvim-lsp'
-Plug 'haorenW1025/completion-nvim'
-Plug 'haorenW1025/diagnostic-nvim'
+Plug 'nvim-lua/completion-nvim'
+Plug 'nvim-lua/diagnostic-nvim'
 call plug#end()
 
 " Local vs remote logic.  Some colorscheme features do not
