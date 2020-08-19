@@ -193,6 +193,33 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F']
 
+" automatically set makeprg (required for large c++ and c projects)
+function! g:BuildInSubDir(buildsubdir)
+    " Sets makeprg base dir
+    let toplevelpath = FindTopLevelProjectDir()
+    let builddir = toplevelpath . a:buildsubdir
+    echo builddir
+    let makeprgcmd = 'make -C ' . builddir
+    if builddir !=? "//build"
+        let &makeprg=makeprgcmd
+    endif
+endfunction
+
+function! FindTopLevelProjectDir(...)
+    " Searches for a .git directory upward till root.
+    let isittopdir = finddir('.git')
+    if isittopdir ==? ".git"
+        return getcwd()
+    endif
+    let gitdir = finddir('.git', ';')
+    let gitdirsplit = split(gitdir, '/')
+    let toplevelpath = '/' . join(gitdirsplit[:-2],'/')
+    return toplevelpath
+endfunction
+
+" get top level proj dir
+let g:top_level_dir = FindTopLevelProjectDir()
+
 " nvim-lsp
 lua << EOF
 local nvim_lsp = require'nvim_lsp'
@@ -206,10 +233,7 @@ nvim_lsp.pyls.setup{on_attach=on_attach_vim}
 nvim_lsp.fortls.setup{
     cmd = {
         'fortls',
-        '--symbol_skip_mem',
         '--incrmental_sync',
-        '--autocomplete_no_prefix',
-        '--autocomplete_name_only',
         '--debug_log',
     },
     settings = {
@@ -217,7 +241,7 @@ nvim_lsp.fortls.setup{
             variableHover = false
         },
     },
-    root_dir = util.path.dirname,
+    root_dir = vim.fn.FindTopLevelProjectDir,
     on_attach=on_attach_vim
 }
 -- cpp language server settings
@@ -387,30 +411,6 @@ function! DelWhitespace()
     :%s/\s\+$//g
 endfunction
 command! Unfuck execute DelWhitespace()
-
-" automatically set makeprg (required for large c++ and c projects)
-function! g:BuildInSubDir(buildsubdir)
-    " Sets makeprg base dir
-    let toplevelpath = FindTopLevelProjectDir()
-    let builddir = toplevelpath . a:buildsubdir
-    echo builddir
-    let makeprgcmd = 'make -C ' . builddir
-    if builddir !=? "//build"
-        let &makeprg=makeprgcmd
-    endif
-endfunction
-
-function! FindTopLevelProjectDir()
-    " Searches for a .git directory upward till root.
-    let isittopdir = finddir('.git')
-    if isittopdir ==? ".git"
-        return getcwd()
-    endif
-    let gitdir = finddir('.git', ';')
-    let gitdirsplit = split(gitdir, '/')
-    let toplevelpath = '/' . join(gitdirsplit[:-2],'/')
-    return toplevelpath
-endfunction
 
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
