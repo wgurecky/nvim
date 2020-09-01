@@ -233,6 +233,7 @@ nvim_lsp.pyls.setup{on_attach=on_attach_vim}
 nvim_lsp.fortls.setup{
     cmd = {
         'fortls',
+        '--autocomplete_name_only',
         '--incrmental_sync',
         '--debug_log',
     },
