@@ -217,6 +217,16 @@ function! FindTopLevelProjectDir(...)
     return toplevelpath
 endfunction
 
+function! FindClangExe(...)
+    " Find clangd exec name
+    let check_clang_out = system("which clangd")
+    if v:shell_error == 0
+        return 'clangd'
+    else
+        return 'clangd-6.0'
+    endif
+endfunction
+
 " get top level proj dir
 let g:top_level_dir = FindTopLevelProjectDir()
 
@@ -247,7 +257,7 @@ nvim_lsp.fortls.setup{
 }
 -- cpp language server settings
 nvim_lsp.clangd.setup{
-    cmd = {'clangd-6.0'},
+    cmd = {vim.fn.FindClangExe()},
     on_attach=on_attach_vim
 }
 -- disable all lsp diagnostics
