@@ -134,7 +134,7 @@ Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
 Plug 'neovim/nvim-lsp'
 Plug 'nvim-lua/completion-nvim'
-Plug 'nvim-lua/diagnostic-nvim'
+" Plug 'nvim-lua/diagnostic-nvim'
 call plug#end()
 
 " Local vs remote logic.  Some colorscheme features do not
@@ -232,15 +232,14 @@ let g:top_level_dir = FindTopLevelProjectDir()
 
 " nvim-lsp
 lua << EOF
-local nvim_lsp = require'nvim_lsp'
-local util = require'nvim_lsp/util'
+local lspconfig = require'lspconfig'
 local on_attach_vim = function()
   require'completion'.on_attach()
 end
 -- python language server settings
-nvim_lsp.pyls.setup{on_attach=on_attach_vim}
+lspconfig.pyls.setup{on_attach=on_attach_vim}
 -- fortran language server settings
-nvim_lsp.fortls.setup{
+lspconfig.fortls.setup{
     cmd = {
         'fortls',
         '--autocomplete_name_only',
@@ -256,7 +255,7 @@ nvim_lsp.fortls.setup{
     on_attach=on_attach_vim
 }
 -- cpp language server settings
-nvim_lsp.clangd.setup{
+lspconfig.clangd.setup{
     cmd = {vim.fn.FindClangExe()},
     on_attach=on_attach_vim
 }
