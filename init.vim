@@ -29,10 +29,6 @@ set incsearch       " While typing a search command, show immediately where the
 
 set autoindent      " Copy indent from current line when starting a new line
 
-" Colors.  TODO: Auto detect term bg color from Xresources?
-set termguicolors
-set background=light
-
 " auto detect filetype
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
@@ -136,22 +132,35 @@ Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran'
 Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
-Plug 'neovim/nvim-lsp'
-Plug 'haorenW1025/completion-nvim'
-Plug 'haorenW1025/diagnostic-nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/completion-nvim'
+" Plug 'nvim-lua/diagnostic-nvim'
 call plug#end()
 
-" Vimtex settings
-" Note; <leader>ll builds and <leader>le shows compile errors
-" Note; install xdotool package for live previews in zathura
+" Local vs remote logic.  Some colorscheme features do not
+" reliably work over ssh.
 let g:remoteSession = ($SSH_TTY != "")
 if  g:remoteSession
     " Do not preview pdf over ssh connection.
     " Use sshfs+zathura to view remote pdf
     let g:vimtex_view_enabled=0
+else
+    set termguicolors
+    " Colorscheme
+    let g:airline_theme='solarized'
+    colorscheme NeoSolarized
+    let g:solarized_termtrans=1
+    hi Normal guibg=NONE ctermbg=NONE
 endif
-" let g:vimtex_view_method='general'
+
+" Vimtex settings
+" Note; <leader>ll builds and <leader>le shows compile errors
+" Note; install xdotool package for live previews in zathura
 let g:vimtex_view_method='zathura'
+" let g:vimtex_view_method='general'
+
+" Colors.  TODO: Auto detect term bg color from Xresources?
+set background=light
 
 " Nerdtree settings
 " launch nerdtree on entry if no file is specified
@@ -177,7 +186,6 @@ nnoremap <C-p> :GFiles<CR>
 nnoremap <C-g>g :Ag<CR>
 
 " Airline settings
-let g:airline_theme='solarized'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
@@ -185,18 +193,76 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F']
 
-" nvim-lsp
+" automatically set makeprg (required for large c++ and c projects)
+function! g:BuildInSubDir(buildsubdir)
+    " Sets makeprg base dir
+    let toplevelpath = FindTopLevelProjectDir()
+    let builddir = toplevelpath . a:buildsubdir
+    echo builddir
+    let makeprgcmd = 'make -C ' . builddir
+    if builddir !=? "//build"
+        let &makeprg=makeprgcmd
+    endif
+endfunction
+
+function! FindTopLevelProjectDir(...)
+    " Searches for a .git directory upward till root.
+    let isittopdir = finddir('.git')
+    if isittopdir ==? ".git"
+        return getcwd()
+    endif
+    let gitdir = finddir('.git', ';')
+    let gitdirsplit = split(gitdir, '/')
+    let toplevelpath = '/' . join(gitdirsplit[:-2],'/')
+    return toplevelpath
+endfunction
+
+function! FindClangExe(...)
+    " Find clangd exec name
+    let check_clang_out = system("which clangd")
+    if v:shell_error == 0
+        return 'clangd'
+    else
+        return 'clangd-6.0'
+    endif
+endfunction
+
+" get top level proj dir
+let g:top_level_dir = FindTopLevelProjectDir()
+
+" nvim-lspconfig
 lua << EOF
+local lspconfig = require'lspconfig'
+local on_attach_vim = function()
+  require'completion'.on_attach()
+end
 -- python language server settings
-require'nvim_lsp'.pyls.setup{}
+lspconfig.pyls.setup{on_attach=on_attach_vim}
 -- fortran language server settings
-require'nvim_lsp'.fortls.setup{}
+lspconfig.fortls.setup{
+    cmd = {
+        'fortls',
+        '--autocomplete_name_only',
+        '--incrmental_sync',
+        '--debug_log',
+    },
+    settings = {
+        ["fortran-ls"] = {
+            variableHover = false
+        },
+    },
+    root_dir = vim.fn.FindTopLevelProjectDir,
+    on_attach=on_attach_vim
+}
 -- cpp language server settings
-require'nvim_lsp'.clangd.setup{}
--- disable lsp diagnostics
+lspconfig.clangd.setup{
+    cmd = {vim.fn.FindClangExe()},
+    on_attach=on_attach_vim
+}
+-- disable all lsp diagnostics
 vim.lsp.callbacks["textDocument/publishDiagnostics"] = function() end
 EOF
-autocmd BufEnter * lua require'completion'.on_attach()
+" autocmd BufEnter * lua require'completion'.on_attach()
 " autocmd BufEnter * lua require'diagnostic'.on_attach()
 
 " nvim-lsp mappings
@@ -204,7 +270,7 @@ nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> <c-l> <cmd>lua vim.lsp.buf.signature_help()<CR>
 nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
@@ -214,43 +280,53 @@ nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 " let g:diagnostic_enable_virtual_text = 0
 " let g:diagnostic_show_sign = 1
 
-" completion settings
-set completeopt=menuone,noinsert,noselect
-set shortmess+=c
-let g:completion_enable_auto_popup = 1
-let g:completion_enable_snippet = 'UltiSnips'
-let g:completion_enable_auto_hover = 0
-let g:completion_enable_auto_signature = 0
-let g:completion_max_items = 10
-let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
+" alias to check loaded lsp client status
+cnoreabbrev lspstat lua print(vim.inspect(vim.lsp.buf_get_clients()))
 
 " completion chain
 let g:completion_chain_complete_list = {
-    \ 'default': [
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
     \ 'python': [
     \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': 'file'},
     \    {'mode': '<c-p>'},
     \    {'mode': '<c-n>'}
     \],
     \ 'cpp': [
     \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': 'file'},
     \    {'mode': '<c-p>'},
     \    {'mode': '<c-n>'}
     \],
     \ 'c': [
     \    {'complete_items': ['lsp', 'snippet']},
+    \    {'mode': 'file'},
     \    {'mode': '<c-p>'},
     \    {'mode': '<c-n>'}
     \],
     \ 'fortran': [
-    \    {'complete_items': ['lsp', 'snippet']},
+    \    {'complete_items': ['lsp']},
+    \    {'mode': 'file'},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \],
+    \ 'default': [
+    \    {'mode': 'file'},
     \    {'mode': '<c-p>'},
     \    {'mode': '<c-n>'}
     \]
 \}
+
+" completion settings
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
+let g:completion_enable_auto_popup = 1
+let g:completion_enable_snippet = 'UltiSnips'
+let g:completion_enable_auto_signature = 1
+let g:completion_enable_auto_hover = 0
+let g:completion_max_items = 10
+" let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
+let g:completion_matching_strategy_list = ['exact', 'substring']
+let g:completion_auto_change_source = 1
 
 " tab for completion
 function! s:check_back_space() abort
@@ -345,35 +421,6 @@ function! DelWhitespace()
     :%s/\s\+$//g
 endfunction
 command! Unfuck execute DelWhitespace()
-
-" automatically set makeprg (required for large c++ and c projects)
-function! g:BuildInSubDir(buildsubdir)
-    " Sets makeprg base dir
-    let toplevelpath = FindTopLevelProjectDir()
-    let builddir = toplevelpath . a:buildsubdir
-    echo builddir
-    let makeprgcmd = 'make -C ' . builddir
-    if builddir !=? "//build"
-        let &makeprg=makeprgcmd
-    endif
-endfunction
-
-function! FindTopLevelProjectDir()
-    " Searches for a .git directory upward till root.
-    let isittopdir = finddir('.git')
-    if isittopdir ==? ".git"
-        return getcwd()
-    endif
-    let gitdir = finddir('.git', ';')
-    let gitdirsplit = split(gitdir, '/')
-    let toplevelpath = '/' . join(gitdirsplit[:-2],'/')
-    return toplevelpath
-endfunction
-
-" Colorscheme
-colorscheme NeoSolarized
-let g:solarized_termtrans=1
-hi Normal guibg=NONE ctermbg=NONE
 
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
