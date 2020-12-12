@@ -356,6 +356,11 @@ let g:ale_lint_on_save = 1
 " Results are available via :Copen
 " Ensure makeprg is set properly before running
 
+" ultisnips settings (auto integration with deoplete)
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger='<c-j>'
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
 " For project wide search/replace
 " Run :Ack {pattern} [{dir}]
 " :cdo s/foo/bar/gc | update
@@ -363,23 +368,30 @@ if !executable('ack')
     let g:ackprg = '~/.config/nvim/bin/ack'
 endif
 
-" ultisnips settings (auto integration with deoplete)
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger='<c-j>'
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-
 " automatically set project base directory ack search on `:ag `
 " requires the projec to have a `.git` file in the base dir
 cnoreabbrev ag Gcd <bar> Ack!
 
+" set default grepprg to ripgrep if on $PATH
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+endif
+
 " vim-grepper settings
-let g:grepper = {}
-let g:grepper.tools = ['git', 'ack']
-let g:grepper.git = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
+let g:grepper = {
+    \ 'tools': ['rg', 'git', 'ack', 'grep', 'rgproj'],
+    \ 'rgproj': {
+    \   'grepprg':    'rg -n',
+    \ }}
+if executable('rg')
+    let g:grepper.rgproj = { 'grepprg': 'rg -n $*' }
+else
+    let g:grepper.rgproj = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
+endif
 " Project wide search with <leader>*
-nnoremap <leader>* :Grepper -tool git -cword -noprompt<cr>
+nnoremap <leader>* :Grepper -tool rgproj -cword -noprompt<cr>
 " Project wide search with :vg <cr>
-cnoreabbrev vg Grepper -tool git<cr>
+cnoreabbrev vg Grepper -tool rgproj <cr>
 
 " tagbar
 nmap <F8> :TagbarToggle<CR>

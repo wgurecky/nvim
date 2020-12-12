@@ -21,3 +21,11 @@ if cwd =~ "COBRA-TF"
   set tabstop=3
   set softtabstop=3
 endif
+
+
+" override grepper settings to allow for mixed case matches
+if executable('rg')
+    let g:grepper.rgproj = { 'grepprg': 'rg -ni $*' }
+else
+    let g:grepper.rgproj = { 'grepprg': 'git grep -ni $* -- `git rev-parse --show-toplevel`' }
+endif
