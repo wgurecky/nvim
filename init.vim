@@ -126,6 +126,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'mileszs/ack.vim'
 Plug 'mhinz/vim-grepper'
+Plug 'ojroques/nvim-lspfuzzy', {'branch': 'main'}
 " dev tools
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
 Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran', 'markdown', 'tex']}
@@ -169,7 +170,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 set autochdir                " automatically change directory
 let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.pyc$','\.png$']
-nmap <C-o> :NERDTreeToggle<CR>
+nnoremap <leader>o :NERDTreeToggle<CR>
 
 " Easy align settings
 xmap ga <Plug>(EasyAlign)
@@ -227,10 +228,14 @@ function! FindClangExe(...)
     endif
 endfunction
 
+" flag for fzf plugin loaded
+let g:loaded_fzf_vim = 1
+
 " get top level proj dir
 let g:top_level_dir = FindTopLevelProjectDir()
 
 " nvim-lspconfig
+autocmd BufEnter * lua require'completion'.on_attach()
 lua << EOF
 local lspconfig = require'lspconfig'
 local on_attach_vim = function()
@@ -261,18 +266,33 @@ lspconfig.clangd.setup{
 }
 -- disable all lsp diagnostics
 vim.lsp.callbacks["textDocument/publishDiagnostics"] = function() end
+-- enable lsp goto definition and goto references prev in fzf win
+-- require('lspfuzzy').setup{}
+require('lspfuzzy').setup {
+    methods = 'all',         -- either 'all' or a list of LSP methods (see below)
+    fzf_options = {},        -- options passed to FZF
+    fzf_action = {           -- additional FZF commands
+    ['ctrl-t'] = 'tabedit',  -- go to location in a new tab
+    ['ctrl-v'] = 'vsplit',   -- go to location in a vertical split
+    ['ctrl-x'] = 'split',    -- go to location in a horizontal split
+    },
+    fzf_modifier = ':~:.',   -- format FZF entries, see |filename-modifiers|
+    fzf_trim = true,         -- trim FZF entries
+}
 EOF
-" autocmd BufEnter * lua require'completion'.on_attach()
 " autocmd BufEnter * lua require'diagnostic'.on_attach()
 
 " nvim-lsp mappings
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+" note: <C-o> go back previous pos, <C-i> forward to last pos
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> <c-s> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> gI    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> gT   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
