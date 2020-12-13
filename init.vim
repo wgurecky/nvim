@@ -7,7 +7,8 @@ let s:editor_root=expand("~/.nvim")
 "                     VIM SETTINGS                           "
 " ========================================================== "
 "
-set relativenumber  " Relative line numbers rock
+set number relativenumber  " hybrid numbers
+set nu rnu
 
 set ruler           " Show the line and column number of the cursor position,
                     " separated by a comma.
