@@ -84,9 +84,12 @@ set splitbelow splitright
 " incremental command live feedback
 set inccommand=nosplit
 
-" netrw tree style by default
+" netrw settings
+let g:netrw_altv=1
+let g:netrw_browse_split=2
 let g:netrw_liststyle=3
-let g:netrw_winsize=20
+let g:netrw_banner=0
+let g:netrw_winsize=18
 
 " python provider
 " let g:python3_host_prog=system('which python3')
@@ -171,7 +174,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 set autochdir                " automatically change directory
 let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.pyc$','\.png$']
-nnoremap <leader>o :NERDTreeToggle<CR>
+nnoremap <leader>e :NERDTreeToggle<CR>
 
 " Easy align settings
 xmap ga <Plug>(EasyAlign)
@@ -228,9 +231,6 @@ function! FindClangExe(...)
         return 'clangd-6.0'
     endif
 endfunction
-
-" flag for fzf plugin loaded
-let g:loaded_fzf_vim = 1
 
 " get top level proj dir
 let g:top_level_dir = FindTopLevelProjectDir()
@@ -446,7 +446,7 @@ function! DelWhitespaceLine()
 endfunction
 " retain current cursor position
 command! UnfuckLine execute "normal! ma" | execute DelWhitespaceLine() | execute "normal! `a"
-nnoremap <leader>e :UnfuckLine<CR>
+nnoremap <leader>u :UnfuckLine<CR>
 
 " remove all trailing whitspace and replace tabs with spaces
 function! DelWhitespace()
