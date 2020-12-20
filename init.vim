@@ -7,7 +7,8 @@ let s:editor_root=expand("~/.nvim")
 "                     VIM SETTINGS                           "
 " ========================================================== "
 "
-set relativenumber  " Relative line numbers rock
+set number relativenumber  " hybrid numbers
+set nu rnu
 
 set ruler           " Show the line and column number of the cursor position,
                     " separated by a comma.
@@ -83,9 +84,12 @@ set splitbelow splitright
 " incremental command live feedback
 set inccommand=nosplit
 
-" netrw tree style by default
+" netrw settings
+let g:netrw_altv=1
+let g:netrw_browse_split=2
 let g:netrw_liststyle=3
-let g:netrw_winsize=20
+let g:netrw_banner=0
+let g:netrw_winsize=18
 
 " python provider
 " let g:python3_host_prog=system('which python3')
@@ -126,6 +130,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'mileszs/ack.vim'
 Plug 'mhinz/vim-grepper'
+Plug 'ojroques/nvim-lspfuzzy', {'branch': 'main'}
 " dev tools
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
 Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran', 'markdown', 'tex']}
@@ -169,7 +174,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 set autochdir                " automatically change directory
 let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.pyc$','\.png$']
-nmap <C-o> :NERDTreeToggle<CR>
+nnoremap <leader>e :NERDTreeToggle<CR>
 
 " Easy align settings
 xmap ga <Plug>(EasyAlign)
@@ -231,6 +236,7 @@ endfunction
 let g:top_level_dir = FindTopLevelProjectDir()
 
 " nvim-lspconfig
+autocmd BufEnter * lua require'completion'.on_attach()
 lua << EOF
 local lspconfig = require'lspconfig'
 local on_attach_vim = function()
@@ -261,18 +267,33 @@ lspconfig.clangd.setup{
 }
 -- disable all lsp diagnostics
 vim.lsp.callbacks["textDocument/publishDiagnostics"] = function() end
+-- enable lsp goto definition and goto references prev in fzf win
+-- require('lspfuzzy').setup{}
+require('lspfuzzy').setup {
+    methods = 'all',         -- either 'all' or a list of LSP methods (see below)
+    fzf_options = {},        -- options passed to FZF
+    fzf_action = {           -- additional FZF commands
+    ['ctrl-t'] = 'tabedit',  -- go to location in a new tab
+    ['ctrl-v'] = 'vsplit',   -- go to location in a vertical split
+    ['ctrl-x'] = 'split',    -- go to location in a horizontal split
+    },
+    fzf_modifier = ':~:.',   -- format FZF entries, see |filename-modifiers|
+    fzf_trim = true,         -- trim FZF entries
+}
 EOF
-" autocmd BufEnter * lua require'completion'.on_attach()
 " autocmd BufEnter * lua require'diagnostic'.on_attach()
 
 " nvim-lsp mappings
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+" note: <C-o> go back previous pos, <C-i> forward to last pos
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> <c-s> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> gI    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> gT   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
@@ -356,6 +377,11 @@ let g:ale_lint_on_save = 1
 " Results are available via :Copen
 " Ensure makeprg is set properly before running
 
+" ultisnips settings (auto integration with deoplete)
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger='<c-j>'
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
 " For project wide search/replace
 " Run :Ack {pattern} [{dir}]
 " :cdo s/foo/bar/gc | update
@@ -363,23 +389,30 @@ if !executable('ack')
     let g:ackprg = '~/.config/nvim/bin/ack'
 endif
 
-" ultisnips settings (auto integration with deoplete)
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger='<c-j>'
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-
 " automatically set project base directory ack search on `:ag `
 " requires the projec to have a `.git` file in the base dir
 cnoreabbrev ag Gcd <bar> Ack!
 
+" set default grepprg to ripgrep if on $PATH
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+endif
+
 " vim-grepper settings
-let g:grepper = {}
-let g:grepper.tools = ['git', 'ack']
-let g:grepper.git = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
+let g:grepper = {
+    \ 'tools': ['rg', 'git', 'ack', 'grep', 'rgproj'],
+    \ 'rgproj': {
+    \   'grepprg':    'rg -n',
+    \ }}
+if executable('rg')
+    let g:grepper.rgproj = { 'grepprg': 'rg -n $*' }
+else
+    let g:grepper.rgproj = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
+endif
 " Project wide search with <leader>*
-nnoremap <leader>* :Grepper -tool git -cword -noprompt<cr>
+nnoremap <leader>* :Grepper -tool rgproj -cword -noprompt<cr>
 " Project wide search with :vg <cr>
-cnoreabbrev vg Grepper -tool git<cr>
+cnoreabbrev vg Grepper -tool rgproj <cr>
 
 " tagbar
 nmap <F8> :TagbarToggle<CR>
@@ -413,7 +446,7 @@ function! DelWhitespaceLine()
 endfunction
 " retain current cursor position
 command! UnfuckLine execute "normal! ma" | execute DelWhitespaceLine() | execute "normal! `a"
-nnoremap <leader>e :UnfuckLine<CR>
+nnoremap <leader>u :UnfuckLine<CR>
 
 " remove all trailing whitspace and replace tabs with spaces
 function! DelWhitespace()
