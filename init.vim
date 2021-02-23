@@ -404,7 +404,7 @@ let g:grepper = {
     \   'grepprg':    'rg -n',
     \ }}
 if executable('rg')
-    let g:grepper.rgproj = { 'grepprg': 'rg -n $*' }
+    let g:grepper.rgproj = { 'grepprg': 'rg -n $* -- `git rev-parse --show-toplevel`' }
 else
     let g:grepper.rgproj = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
 endif
