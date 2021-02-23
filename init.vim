@@ -401,7 +401,7 @@ endif
 let g:grepper = {
     \ 'tools': ['rg', 'git', 'ack', 'grep', 'rgproj'],
     \ 'rgproj': {
-    \   'grepprg':    'rg -n',
+    \   'grepprg':    'rg -n $* -- `git rev-parse --show-toplevel`',
     \ }}
 if executable('rg')
     let g:grepper.rgproj = { 'grepprg': 'rg -n $* -- `git rev-parse --show-toplevel`' }
