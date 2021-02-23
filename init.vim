@@ -250,7 +250,6 @@ lspconfig.fortls.setup{
         'fortls',
         '--autocomplete_name_only',
         '--incrmental_sync',
-        '--debug_log',
     },
     settings = {
         ["fortran-ls"] = {
