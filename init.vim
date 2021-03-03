@@ -249,8 +249,7 @@ lspconfig.fortls.setup{
     cmd = {
         'fortls',
         '--autocomplete_name_only',
-        '--incrmental_sync',
-        '--debug_log',
+        '--incrmental_sync'
     },
     settings = {
         ["fortran-ls"] = {
@@ -266,7 +265,12 @@ lspconfig.clangd.setup{
     on_attach=on_attach_vim
 }
 -- disable all lsp diagnostics
-vim.lsp.callbacks["textDocument/publishDiagnostics"] = function() end
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics, {
+        virtual_text = false,
+        signs = true,
+    }
+)
 -- enable lsp goto definition and goto references prev in fzf win
 -- require('lspfuzzy').setup{}
 require('lspfuzzy').setup {
@@ -402,10 +406,10 @@ endif
 let g:grepper = {
     \ 'tools': ['rg', 'git', 'ack', 'grep', 'rgproj'],
     \ 'rgproj': {
-    \   'grepprg':    'rg -n',
+    \   'grepprg':    'rg -n $* -- `git rev-parse --show-toplevel`',
     \ }}
 if executable('rg')
-    let g:grepper.rgproj = { 'grepprg': 'rg -n $*' }
+    let g:grepper.rgproj = { 'grepprg': 'rg -n $* -- `git rev-parse --show-toplevel`' }
 else
     let g:grepper.rgproj = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
 endif

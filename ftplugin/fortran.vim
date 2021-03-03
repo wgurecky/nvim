@@ -25,7 +25,7 @@ endif
 
 " override grepper settings to allow for mixed case matches
 if executable('rg')
-    let g:grepper.rgproj = { 'grepprg': 'rg -ni $*' }
+    let g:grepper.rgproj = { 'grepprg': 'rg -ni $* -- `git rev-parse --show-toplevel`' }
 else
     let g:grepper.rgproj = { 'grepprg': 'git grep -ni $* -- `git rev-parse --show-toplevel`' }
 endif
