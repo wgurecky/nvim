@@ -138,7 +138,8 @@ Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
+Plug 'hrsh7th/nvim-compe'
+" Plug 'nvim-lua/completion-nvim'
 " Plug 'nvim-lua/diagnostic-nvim'
 call plug#end()
 
@@ -236,14 +237,38 @@ endfunction
 let g:top_level_dir = FindTopLevelProjectDir()
 
 " nvim-lspconfig
-autocmd BufEnter * lua require'completion'.on_attach()
 lua << EOF
 local lspconfig = require'lspconfig'
-local on_attach_vim = function()
-  require'completion'.on_attach()
-end
+-- nvim-compe setup
+require'compe'.setup {
+    enabled = true;
+    autocomplete = true;
+    debug = false;
+    min_length = 1;
+    preselect = 'enable';
+    throttle_time = 80;
+    source_timeout = 200;
+    incomplete_delay = 400;
+    max_abbr_width = 100;
+    max_kind_width = 100;
+    max_menu_width = 100;
+    documentation = true;
+    source = {
+        path = true;
+        buffer = true;
+        calc = true;
+        nvim_lsp = true;
+        nvim_lua = true;
+        treesitter = true;
+        spell = true;
+        tags = true;
+        ultisnips = true,
+        vsnip = false;
+        snippets_nvim = false;
+    };
+}
 -- python language server settings
-lspconfig.pyls.setup{on_attach=on_attach_vim}
+lspconfig.pyls.setup{}
 -- fortran language server settings
 lspconfig.fortls.setup{
     cmd = {
@@ -257,12 +282,10 @@ lspconfig.fortls.setup{
         },
     },
     root_dir = vim.fn.FindTopLevelProjectDir,
-    on_attach=on_attach_vim
 }
 -- cpp language server settings
 lspconfig.clangd.setup{
     cmd = {vim.fn.FindClangExe()},
-    on_attach=on_attach_vim
 }
 -- disable all lsp diagnostics
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -285,7 +308,6 @@ require('lspfuzzy').setup {
     fzf_trim = true,         -- trim FZF entries
 }
 EOF
-" autocmd BufEnter * lua require'diagnostic'.on_attach()
 
 " nvim-lsp mappings
 " note: <C-o> go back previous pos, <C-i> forward to last pos
@@ -301,68 +323,51 @@ nnoremap <silent> gT   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
-" disable virtual diagnostic text
-" let g:diagnostic_enable_virtual_text = 0
-" let g:diagnostic_show_sign = 1
-
 " alias to check loaded lsp client status
 cnoreabbrev lspstat lua print(vim.inspect(vim.lsp.buf_get_clients()))
 
-" completion chain
-let g:completion_chain_complete_list = {
-    \ 'python': [
-    \    {'complete_items': ['lsp', 'snippet']},
-    \    {'mode': 'file'},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'cpp': [
-    \    {'complete_items': ['lsp', 'snippet']},
-    \    {'mode': 'file'},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'c': [
-    \    {'complete_items': ['lsp', 'snippet']},
-    \    {'mode': 'file'},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'fortran': [
-    \    {'complete_items': ['lsp']},
-    \    {'mode': 'file'},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \],
-    \ 'default': [
-    \    {'mode': 'file'},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \]
-\}
-
-" completion settings
+" tab complete settings
 set completeopt=menuone,noinsert,noselect
 set shortmess+=c
-let g:completion_enable_auto_popup = 1
-let g:completion_enable_snippet = 'UltiSnips'
-let g:completion_enable_auto_signature = 1
-let g:completion_enable_auto_hover = 0
-let g:completion_max_items = 10
-" let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
-let g:completion_matching_strategy_list = ['exact', 'substring']
-let g:completion_auto_change_source = 1
+lua << EOF
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
 
-" tab for completion
-function! s:check_back_space() abort
-let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
+local check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+        return true
+    else
+        return false
+    end
+end
 
-inoremap <silent><expr> <TAB>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<TAB>" :
-  \ completion#trigger_completion()
+-- Use (s-)tab to:
+--- move to prev/next item in completion menuone
+--- jump to prev/next snippet's placeholder
+_G.tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-n>"
+  elseif check_back_space() then
+    return t "<Tab>"
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+_G.s_tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-p>"
+  else
+    return t "<S-Tab>"
+  end
+end
+
+vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+EOF
 
 " ale syntax checker settings for filetypes which do not have a lang server
 " to check which linters are active run: :ALEinfo
