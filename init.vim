@@ -130,7 +130,11 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'mileszs/ack.vim'
 Plug 'mhinz/vim-grepper'
-Plug 'ojroques/nvim-lspfuzzy', {'branch': 'main'}
+" Plug 'ojroques/nvim-lspfuzzy', {'branch': 'main'}
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-telescope/telescope.nvim'
 " dev tools
 Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
 Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran', 'markdown', 'tex']}
@@ -287,27 +291,30 @@ lspconfig.fortls.setup{
 lspconfig.clangd.setup{
     cmd = {vim.fn.FindClangExe()},
 }
--- disable all lsp diagnostics
+-- disable all lsp diagnostic virtual text to reduce noise
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     vim.lsp.diagnostic.on_publish_diagnostics, {
         virtual_text = false,
         signs = true,
     }
 )
--- enable lsp goto definition and goto references prev in fzf win
--- require('lspfuzzy').setup{}
-require('lspfuzzy').setup {
-    methods = 'all',         -- either 'all' or a list of LSP methods (see below)
-    fzf_options = {},        -- options passed to FZF
-    fzf_action = {           -- additional FZF commands
-    ['ctrl-t'] = 'tabedit',  -- go to location in a new tab
-    ['ctrl-v'] = 'vsplit',   -- go to location in a vertical split
-    ['ctrl-x'] = 'split',    -- go to location in a horizontal split
-    },
-    fzf_modifier = ':~:.',   -- format FZF entries, see |filename-modifiers|
-    fzf_trim = true,         -- trim FZF entries
+-- telescope.nvim setup
+local actions = require('telescope.actions')
+require'telescope'.setup{
 }
 EOF
+
+" telescope mappings
+nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<CR>
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<CR>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<CR>
+nnoremap <leader>fd <cmd>lua require('telescope.builtin').lsp_definitions()<CR>
+nnoremap <leader>fr <cmd>lua require('telescope.builtin').lsp_references()<CR>
+nnoremap <leader>fi <cmd>lua require('telescope.builtin').lsp_document_diagnostics()<CR>
+
+" On hover show diagnostic (if any) or use <leader>di to force diagnostic popup
+autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
+nnoremap <leader>di  <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
 
 " nvim-lsp mappings
 " note: <C-o> go back previous pos, <C-i> forward to last pos
