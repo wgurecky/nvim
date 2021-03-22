@@ -37,7 +37,7 @@ Optional
 - [proselint]
 - [write-good]
 
-[ripgre]: https://github.com/BurntSushi/ripgrep
+[ripgrep]: https://github.com/BurntSushi/ripgrep
 [clang-tidy]: https://clang.llvm.org/extra/clang-tidy/
 
 
