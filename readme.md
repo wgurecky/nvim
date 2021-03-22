@@ -9,7 +9,7 @@ This config depends on neovim's new lsp (language server protocol) integration.
 Depends
 =======
 
-- [nvim-lsp]
+- neovim with built in lsp (neovim >=v0.5) formerly [nvim-lsp]
 - [pynvim]
 - clang
 - clangd
@@ -19,7 +19,9 @@ Depends
 - [jedi]
 - [pylint]
 
+Neovim plugins are not listed here.  [vim-plug] handles installation and updates of all neovim plugins.
 
+[vim-plug]: https://github.com/junegunn/vim-plug
 [nvim-lsp]: https://github.com/neovim/nvim-lsp
 [pynvim]: https://github.com/neovim/pynvim
 [ack]: https://beyondgrep.com/
@@ -30,10 +32,12 @@ Depends
 Optional
 ---------
 
+- [ripgrep]
 - [clang-tidy]
 - [proselint]
 - [write-good]
 
+[ripgrep]: https://github.com/BurntSushi/ripgrep
 [clang-tidy]: https://clang.llvm.org/extra/clang-tidy/
 
 
@@ -133,7 +137,11 @@ Prose
 
 ### Linting
 
-Install proselint:
+Install [write-good] (optional):
+
+    npm install write-good
+
+Install [proselint] (optional):
 
     pip install proselint
 
