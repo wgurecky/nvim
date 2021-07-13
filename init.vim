@@ -272,7 +272,7 @@ require'compe'.setup {
     };
 }
 -- python language server settings
-lspconfig.pyls.setup{}
+lspconfig.pylsp.setup{cmd = {'pylsp'}}
 -- fortran language server settings
 lspconfig.fortls.setup{
     cmd = {
