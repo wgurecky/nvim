@@ -116,7 +116,7 @@ Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 Plug 'unblevable/quick-scope'
 Plug 'yssl/QFEnter'
 Plug 'https://github.com/scrooloose/nerdtree.git'
-Plug 'https://github.com/wgurecky/vimSum.git', { 'do': ':UpdateRemotePlugins' }
+Plug 'https://github.com/wgurecky/vimSum.git', { 'on': ['VisMath', 'VisSum', 'VisMean'], 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/junegunn/vim-easy-align.git'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git'
 Plug 'https://github.com/SirVer/ultisnips.git'
