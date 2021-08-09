@@ -110,12 +110,13 @@ endif
 call plug#begin('~/.nvim/plugged')
 " A S T H E T I C S
 Plug 'iCyMind/NeoSolarized'
-Plug 'https://github.com/vim-airline/vim-airline.git'
-Plug 'https://github.com/vim-airline/vim-airline-themes.git'
+Plug 'hoob3rt/lualine.nvim'
+Plug 'kdheepak/tabline.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
 " common plugins
 Plug 'unblevable/quick-scope'
 Plug 'yssl/QFEnter'
-Plug 'https://github.com/scrooloose/nerdtree.git'
+Plug 'kyazdani42/nvim-tree.lua'
 Plug 'https://github.com/wgurecky/vimSum.git', { 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/junegunn/vim-easy-align.git'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git'
@@ -157,7 +158,6 @@ if  g:remoteSession
 else
     set termguicolors
     " Colorscheme
-    let g:airline_theme='solarized'
     colorscheme NeoSolarized
     let g:solarized_termtrans=1
     hi Normal guibg=NONE ctermbg=NONE
@@ -172,14 +172,15 @@ let g:vimtex_view_method='zathura'
 " Colors.  TODO: Auto detect term bg color from Xresources?
 set background=light
 
-" Nerdtree settings
-" launch nerdtree on entry if no file is specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-set autochdir                " automatically change directory
-let NERDTreeChDirMode=2
-let NERDTreeIgnore = ['\.pyc$','\.png$']
-nnoremap <leader>e :NERDTreeToggle<CR>
+" NvimTree settings
+nnoremap <leader>e :NvimTreeToggle<CR>
+let g:nvim_tree_auto_open = 1
+let g:nvim_tree_show_icons = {
+    \ 'git': 1,
+    \ 'folders': 0,
+    \ 'files': 0,
+    \ 'folder_arrows': 0,
+    \ }
 
 " Easy align settings
 xmap ga <Plug>(EasyAlign)
@@ -194,11 +195,6 @@ let g:qfenter_keymap.vopen = ['<Leader><CR>', '<C-v>']
 nnoremap <C-b> :Buffers<CR>
 nnoremap <C-p> :GFiles<CR>
 nnoremap <C-g>g :Ag<CR>
-
-" Airline settings
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
 
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F']
@@ -300,7 +296,18 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 )
 -- telescope.nvim setup
 local actions = require('telescope.actions')
-require'telescope'.setup{
+require'telescope'.setup{}
+--- lualine settings
+require'lualine'.setup{
+    options = {
+        theme = 'solarized_light',
+        icons_enabled = false,
+        }
+}
+--- tabline settings
+require("tabline").setup{
+    enable = true,
+    tabline_show_devicons = false,
 }
 EOF
 
@@ -431,7 +438,7 @@ nnoremap <leader>* :Grepper -tool rgproj -cword -noprompt<cr>
 cnoreabbrev vg Grepper -tool rgproj <cr>
 
 " tagbar
-nmap <F8> :TagbarToggle<CR>
+nnoremap <leader>tt :TagbarToggle<CR>
 
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
