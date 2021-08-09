@@ -117,7 +117,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'unblevable/quick-scope'
 Plug 'yssl/QFEnter'
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'https://github.com/wgurecky/vimSum.git', { 'do': ':UpdateRemotePlugins' }
+Plug 'https://github.com/wgurecky/vimSum.git', { 'on': ['VisMath', 'VisSum', 'VisMean'], 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/junegunn/vim-easy-align.git'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git'
 Plug 'https://github.com/SirVer/ultisnips.git'
