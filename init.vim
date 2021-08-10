@@ -42,10 +42,7 @@ nnoremap <Space> :exec "normal i".nr2char(getchar())."\e"<CR>
 tnoremap <Esc> <C-\><C-n>
 
 " faster buffer lookup & switching with <C-e># or <C-e><buff_name>
-" and cycle buffers with <C-h> and <C-l>
 nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
-nnoremap <C-h> :bprevious<CR>
-nnoremap <C-l> :bnext<CR>
 
 " fast find/replace word under cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
@@ -57,6 +54,10 @@ imap jk <ESC>
 
 " syntax highlight
 syntax on
+
+" fast switch between tabs created with :tabnew
+nnoremap <C-Left> :tabprevious<CR>
+nnoremap <C-Right> :tabnext<CR>
 
 " remap arrow keys to window resize
 if bufwinnr(1)
@@ -112,6 +113,8 @@ call plug#begin('~/.nvim/plugged')
 Plug 'iCyMind/NeoSolarized'
 Plug 'hoob3rt/lualine.nvim'
 Plug 'kdheepak/tabline.nvim'
+" NOTE: to use devicons install nerd font from
+" https://github.com/ryanoasis/nerd-fonts
 Plug 'kyazdani42/nvim-web-devicons'
 " common plugins
 Plug 'unblevable/quick-scope'
@@ -301,13 +304,13 @@ require'telescope'.setup{}
 require'lualine'.setup{
     options = {
         theme = 'solarized_light',
-        icons_enabled = false,
+        icons_enabled = true,
         }
 }
 --- tabline settings
 require("tabline").setup{
     enable = true,
-    tabline_show_devicons = false,
+    tabline_show_devicons = true,
 }
 EOF
 
