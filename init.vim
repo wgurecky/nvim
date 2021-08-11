@@ -195,7 +195,6 @@ let g:qfenter_keymap.hopen = ['<Leader><Space>', '<C-x>']
 let g:qfenter_keymap.vopen = ['<Leader><CR>', '<C-v>']
 
 " fzf.vim settings
-nnoremap <C-b> :Buffers<CR>
 nnoremap <C-p> :GFiles<CR>
 nnoremap <C-g>g :Ag<CR>
 
@@ -315,9 +314,10 @@ require("tabline").setup{
 EOF
 
 " telescope mappings
+nnoremap <C-b> <cmd>lua require('telescope.builtin').buffers()<CR>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<CR>
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<CR>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<CR>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<CR>
 nnoremap <leader>fd <cmd>lua require('telescope.builtin').lsp_definitions()<CR>
 nnoremap <leader>fr <cmd>lua require('telescope.builtin').lsp_references()<CR>
 nnoremap <leader>fi <cmd>lua require('telescope.builtin').lsp_document_diagnostics()<CR>
