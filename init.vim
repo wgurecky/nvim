@@ -241,6 +241,8 @@ let g:top_level_dir = FindTopLevelProjectDir()
 " nvim-lspconfig
 lua << EOF
 local lspconfig = require'lspconfig'
+-- nvim-tree setup
+require'nvim-tree'.setup {}
 -- nvim-compe setup
 require'compe'.setup {
     enabled = true;
