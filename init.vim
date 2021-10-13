@@ -123,8 +123,6 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'https://github.com/wgurecky/vimSum.git', { 'on': ['VisMath', 'VisSum', 'VisMean'], 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/junegunn/vim-easy-align.git'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git'
-Plug 'https://github.com/SirVer/ultisnips.git'
-Plug 'https://github.com/honza/vim-snippets.git'
 Plug 'https://github.com/majutsushi/tagbar.git'
 Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/tpope/vim-surround.git'
@@ -146,9 +144,12 @@ Plug 'tell-k/vim-autopep8', {'for': 'python' }
 Plug 'lervag/vimtex', {'for': 'tex'}
 " code completion
 Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-compe'
-" Plug 'nvim-lua/completion-nvim'
-" Plug 'nvim-lua/diagnostic-nvim'
+Plug 'hrsh7th/nvim-cmp'      " Completion engine
+Plug 'hrsh7th/cmp-nvim-lsp'  " LSP source for nvim-cmp
+Plug 'hrsh7th/cmp-path'      " File source for nvim-cmp
+Plug 'hrsh7th/cmp-buffer'    " Buffer source for nvim-cmp
+Plug 'saadparwaiz1/cmp_luasnip' " Snippets source for nvim-cmp
+Plug 'L3MON4D3/LuaSnip' " Snippets plugin
 call plug#end()
 
 " Local vs remote logic.  Some colorscheme features do not
@@ -243,36 +244,34 @@ lua << EOF
 local lspconfig = require'lspconfig'
 -- nvim-tree setup
 require'nvim-tree'.setup {}
--- nvim-compe setup
-require'compe'.setup {
-    enabled = true;
-    autocomplete = true;
-    debug = false;
-    min_length = 1;
-    preselect = 'enable';
-    throttle_time = 80;
-    source_timeout = 200;
-    incomplete_delay = 400;
-    max_abbr_width = 100;
-    max_kind_width = 100;
-    max_menu_width = 100;
-    documentation = true;
-    source = {
-        path = true;
-        buffer = true;
-        calc = true;
-        nvim_lsp = true;
-        nvim_lua = true;
-        treesitter = true;
-        spell = true;
-        tags = true;
-        ultisnips = true,
-        vsnip = false;
-        snippets_nvim = false;
-    };
+
+-- telescope.nvim setup
+local actions = require('telescope.actions')
+require'telescope'.setup{}
+
+--- lualine settings
+require'lualine'.setup{
+    options = {
+        theme = 'solarized_light',
+        icons_enabled = true,
+        }
 }
+
+--- tabline settings
+require("tabline").setup{
+    enable = true,
+    tabline_show_devicons = true,
+}
+
+-- Add additional capabilities supported by nvim-cmp
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+-- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 -- python language server settings
-lspconfig.jedi_language_server.setup{}
+lspconfig.jedi_language_server.setup{
+    capabilities = capabilities,
+}
 -- fortran language server settings
 lspconfig.fortls.setup{
     cmd = {
@@ -286,11 +285,69 @@ lspconfig.fortls.setup{
         },
     },
     root_dir = vim.fn.FindTopLevelProjectDir,
+    capabilities = capabilities,
 }
 -- cpp language server settings
 lspconfig.clangd.setup{
     cmd = {vim.fn.FindClangExe()},
+    capabilities = capabilities,
 }
+
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = 'menuone,noselect'
+
+-- luasnip setup
+local luasnip = require 'luasnip'
+require("luasnip/loaders/from_vscode").load(
+    {paths={'~/.config/nvim/my_lsp_snips'}}
+)
+
+-- nvim-cmp setup
+local cmp = require 'cmp'
+cmp.setup {
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    },
+    ['<Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end,
+    ['<S-Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end,
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+  },
+}
+
 -- disable all lsp diagnostic virtual text to reduce noise
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -298,21 +355,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
         signs = true,
     }
 )
--- telescope.nvim setup
-local actions = require('telescope.actions')
-require'telescope'.setup{}
---- lualine settings
-require'lualine'.setup{
-    options = {
-        theme = 'solarized_light',
-        icons_enabled = true,
-        }
-}
---- tabline settings
-require("tabline").setup{
-    enable = true,
-    tabline_show_devicons = true,
-}
 EOF
 
 " telescope mappings
@@ -345,49 +387,6 @@ nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 " alias to check loaded lsp client status
 cnoreabbrev lspstat lua print(vim.inspect(vim.lsp.buf_get_clients()))
 
-" tab complete settings
-set completeopt=menuone,noinsert,noselect
-set shortmess+=c
-lua << EOF
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local check_back_space = function()
-    local col = vim.fn.col('.') - 1
-    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        return true
-    else
-        return false
-    end
-end
-
--- Use (s-)tab to:
---- move to prev/next item in completion menuone
---- jump to prev/next snippet's placeholder
-_G.tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-n>"
-  elseif check_back_space() then
-    return t "<Tab>"
-  else
-    return vim.fn['compe#complete']()
-  end
-end
-_G.s_tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-p>"
-  else
-    return t "<S-Tab>"
-  end
-end
-
-vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-EOF
-
 " ale syntax checker settings for filetypes which do not have a lang server
 " to check which linters are active run: :ALEinfo
 let g:ale_linters = {
@@ -404,11 +403,6 @@ let g:ale_lint_on_save = 1
 " Run :Make! to launch background async project build.
 " Results are available via :Copen
 " Ensure makeprg is set properly before running
-
-" ultisnips settings (auto integration with deoplete)
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger='<c-j>'
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 " For project wide search/replace
 " Run :Ack {pattern} [{dir}]

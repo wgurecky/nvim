@@ -1,0 +1,14 @@
+{
+    "PDB set trace": {
+        "prefix": "pdb",
+        "body": "__import__('pdb').set_trace()$0"
+    },
+    "main": {
+        "prefix": "__name__",
+        "body": "__name__ == \"__main__\":\n\tpass$0"
+    },
+    "parser": {
+        "prefix": "parse",
+        "body": "parser = argparse.ArgumentParser(description='')\nparser.add_argument('-i', type=str, help=\"input file\")\nargs = parser.parse_args()"
+    }
+}
