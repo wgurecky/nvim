@@ -269,9 +269,8 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 -- python language server settings
-lspconfig.jedi_language_server.setup{
-    capabilities = capabilities,
-}
+-- lspconfig.jedi_language_server.setup{capabilities = capabilities}
+lspconfig.pyright.setup{capabilities = capabilities}
 -- fortran language server settings
 lspconfig.fortls.setup{
     cmd = {
