@@ -269,8 +269,8 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 -- python language server settings
--- lspconfig.jedi_language_server.setup{capabilities = capabilities}
-lspconfig.pyright.setup{capabilities = capabilities}
+lspconfig.jedi_language_server.setup{capabilities = capabilities}
+-- lspconfig.pyright.setup{capabilities = capabilities}
 -- fortran language server settings
 lspconfig.fortls.setup{
     cmd = {
@@ -293,7 +293,7 @@ lspconfig.clangd.setup{
 }
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
+vim.o.completeopt = 'menu,menuone,noselect'
 
 -- luasnip setup
 local luasnip = require 'luasnip'
@@ -318,7 +318,7 @@ cmp.setup {
     ['<C-e>'] = cmp.mapping.close(),
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+      select = false,
     },
     ['<Tab>'] = function(fallback)
       if cmp.visible() then
