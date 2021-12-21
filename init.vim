@@ -366,8 +366,8 @@ nnoremap <leader>fr <cmd>lua require('telescope.builtin').lsp_references()<CR>
 nnoremap <leader>fi <cmd>lua require('telescope.builtin').lsp_document_diagnostics()<CR>
 
 " On hover show diagnostic (if any) or use <leader>di to force diagnostic popup
-autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
-nnoremap <leader>di  <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+autocmd CursorHold * lua vim.diagnostic.open_float()
+nnoremap <leader>di  <cmd>lua vim.diagnostic.open_float()<CR>
 
 " nvim-lsp mappings
 " note: <C-o> go back previous pos, <C-i> forward to last pos
