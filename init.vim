@@ -152,6 +152,15 @@ Plug 'saadparwaiz1/cmp_luasnip' " Snippets source for nvim-cmp
 Plug 'L3MON4D3/LuaSnip' " Snippets plugin
 call plug#end()
 
+" Auto-recompile plugins on plugins.lua change
+augroup packer_user_config
+  autocmd!
+  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+augroup end
+
+" Load lua config
+lua require('init')
+
 " Local vs remote logic.  Some colorscheme features do not
 " reliably work over ssh.
 let g:remoteSession = ($SSH_TTY != "")
