@@ -11,6 +11,49 @@ return require('packer').startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
+  -- A S T H E T I C S
+  use 'iCyMind/NeoSolarized'
+  use 'hoob3rt/lualine.nvim'
+  use 'kdheepak/tabline.nvim'
+  use 'kyazdani42/nvim-web-devicons'
+
+  -- Common plugins
+  use 'unblevable/quick-scope'
+  use 'yssl/QFEnter'
+  use 'kyazdani42/nvim-tree.lua'
+  use 'junegunn/vim-easy-align'
+  use 'terryma/vim-multiple-cursors'
+  use 'majutsushi/tagbar'
+  use 'tpope/vim-fugitive'
+  use 'tpope/vim-surround'
+  use 'tpope/vim-repeat'
+  use { 'wgurecky/vimSum', run = ':UpdateRemotePlugins', cmd = {'VisMath', 'VisSum', 'VisMean', 'VisMult'} }
+
+  -- find and search
+  use { "junegunn/fzf", run = ":call fzf#install()" }
+  use 'junegunn/fzf.vim'
+  use 'mileszs/ack.vim'
+  use 'mhinz/vim-grepper'
+
+  -- neovim extras
+  use 'nvim-lua/plenary.nvim'
+  use 'nvim-treesitter/nvim-treesitter'
+  use 'nvim-telescope/telescope.nvim'
+
+  -- dev tools
+  use 'tpope/vim-dispatch'
+  use 'w0rp/ale'
+  use 'lervag/vimtex'
+
+  -- code auto completion
+  use 'neovim/nvim-lspconfig'
+  use 'hrsh7th/nvim-cmp'
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-buffer'
+  use 'saadparwaiz1/cmp_luasnip'
+  use 'L3MON4D3/LuaSnip'
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then

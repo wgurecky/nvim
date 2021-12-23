@@ -1,8 +1,5 @@
 " ~/.config/nvim/init.vim
 
-" set plugin base dir
-let s:editor_root=expand("~/.nvim")
-
 " ========================================================== "
 "                     VIM SETTINGS                           "
 " ========================================================== "
@@ -98,119 +95,12 @@ let g:netrw_winsize=18
 " let g:python3_host_prog='/home/wll/miniconda3/bin/python'
 " let g:python2_host_prog='/home/wll/miniconda2/bin/python'
 
-" ========================================================== "
-"                    PLUGIN SETTINGS                         "
-" ========================================================== "
-
-if empty(glob('~/.config/nvim/autoload/plug.vim'))
-    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source ~/.config/nvim/init.vim
-endif
-
-call plug#begin('~/.nvim/plugged')
-" A S T H E T I C S
-Plug 'iCyMind/NeoSolarized'
-Plug 'hoob3rt/lualine.nvim'
-Plug 'kdheepak/tabline.nvim'
-" NOTE: to use devicons install nerd font from
-" https://github.com/ryanoasis/nerd-fonts
-Plug 'kyazdani42/nvim-web-devicons'
-" common plugins
-Plug 'unblevable/quick-scope'
-Plug 'yssl/QFEnter'
-Plug 'kyazdani42/nvim-tree.lua'
-Plug 'https://github.com/wgurecky/vimSum.git', { 'on': ['VisMath', 'VisSum', 'VisMean'], 'do': ':UpdateRemotePlugins' }
-Plug 'https://github.com/junegunn/vim-easy-align.git'
-Plug 'https://github.com/terryma/vim-multiple-cursors.git'
-Plug 'https://github.com/majutsushi/tagbar.git'
-Plug 'https://github.com/tpope/vim-fugitive.git'
-Plug 'https://github.com/tpope/vim-surround.git'
-Plug 'https://github.com/tpope/vim-repeat.git'
-" find/search
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'mileszs/ack.vim'
-Plug 'mhinz/vim-grepper'
-" Plug 'ojroques/nvim-lspfuzzy', {'branch': 'main'}
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'nvim-telescope/telescope.nvim'
-" dev tools
-Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
-Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran', 'markdown', 'tex']}
-Plug 'tell-k/vim-autopep8', {'for': 'python' }
-Plug 'lervag/vimtex', {'for': 'tex'}
-" code completion
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-cmp'      " Completion engine
-Plug 'hrsh7th/cmp-nvim-lsp'  " LSP source for nvim-cmp
-Plug 'hrsh7th/cmp-path'      " File source for nvim-cmp
-Plug 'hrsh7th/cmp-buffer'    " Buffer source for nvim-cmp
-Plug 'saadparwaiz1/cmp_luasnip' " Snippets source for nvim-cmp
-Plug 'L3MON4D3/LuaSnip' " Snippets plugin
-call plug#end()
-
-" Auto-recompile plugins on plugins.lua change
-augroup packer_user_config
-  autocmd!
-  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-augroup end
-
-" Load lua config
-lua require('init')
-
-" Local vs remote logic.  Some colorscheme features do not
-" reliably work over ssh.
-let g:remoteSession = ($SSH_TTY != "")
-if  g:remoteSession
-    " Do not preview pdf over ssh connection.
-    " Use sshfs+zathura to view remote pdf
-    let g:vimtex_view_enabled=0
-else
-    set termguicolors
-    " Colorscheme
-    colorscheme NeoSolarized
-    let g:solarized_termtrans=1
-    hi Normal guibg=NONE ctermbg=NONE
-endif
-
-" Vimtex settings
-" Note; <leader>ll builds and <leader>le shows compile errors
-" Note; install xdotool package for live previews in zathura
-let g:vimtex_view_method='zathura'
-" let g:vimtex_view_method='general'
-
 " Colors.  TODO: Auto detect term bg color from Xresources?
 set background=light
 
-" NvimTree settings
-nnoremap <leader>e :NvimTreeToggle<CR>
-let g:nvim_tree_auto_open = 1
-let g:nvim_tree_show_icons = {
-    \ 'git': 1,
-    \ 'folders': 0,
-    \ 'files': 0,
-    \ 'folder_arrows': 0,
-    \ }
-
-" Easy align settings
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-
-" QFEnter settings
-let g:qfenter_keymap = {}
-let g:qfenter_keymap.hopen = ['<Leader><Space>', '<C-x>']
-let g:qfenter_keymap.vopen = ['<Leader><CR>', '<C-v>']
-
-" fzf.vim settings
-nnoremap <C-p> :GFiles<CR>
-nnoremap <C-g>g :Ag<CR>
-
-" quick-scope
-let g:qs_highlight_on_keys = ['f', 'F']
-
+" ========================================================== "
+"                    PLUGIN SETTINGS                         "
+" ========================================================== "
 " automatically set makeprg (required for large c++ and c projects)
 function! g:BuildInSubDir(buildsubdir)
     " Sets makeprg base dir
@@ -248,122 +138,46 @@ endfunction
 " get top level proj dir
 let g:top_level_dir = FindTopLevelProjectDir()
 
-" nvim-lspconfig
-lua << EOF
-local lspconfig = require'lspconfig'
--- nvim-tree setup
-require'nvim-tree'.setup {}
+" Load lua config
+lua require('init')
 
--- telescope.nvim setup
-local actions = require('telescope.actions')
-require'telescope'.setup{}
+" Auto-recompile plugins on plugins.lua change
+augroup packer_user_config
+  autocmd!
+  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+augroup end
 
---- lualine settings
-require'lualine'.setup{
-    options = {
-        theme = 'solarized_light',
-        icons_enabled = true,
-        }
-}
+" Vimtex settings
+" Note; <leader>ll builds and <leader>le shows compile errors
+" Note; install xdotool package for live previews in zathura
+" let g:vimtex_view_method='zathura'
+" let g:vimtex_view_method='general'
 
---- tabline settings
-require("tabline").setup{
-    enable = true,
-    tabline_show_devicons = true,
-}
+" NvimTree settings
+nnoremap <leader>e :NvimTreeToggle<CR>
+let g:nvim_tree_auto_open = 1
+let g:nvim_tree_show_icons = {
+    \ 'git': 1,
+    \ 'folders': 0,
+    \ 'files': 0,
+    \ 'folder_arrows': 0,
+    \ }
 
--- Add additional capabilities supported by nvim-cmp
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+" Easy align settings
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
--- Enable some language servers with the additional completion capabilities offered by nvim-cmp
--- python language server settings
-lspconfig.jedi_language_server.setup{capabilities = capabilities}
--- lspconfig.pyright.setup{capabilities = capabilities}
--- fortran language server settings
-lspconfig.fortls.setup{
-    cmd = {
-        'fortls',
-        '--autocomplete_name_only',
-        '--incrmental_sync'
-    },
-    settings = {
-        ["fortran-ls"] = {
-            variableHover = false
-        },
-    },
-    root_dir = vim.fn.FindTopLevelProjectDir,
-    capabilities = capabilities,
-}
--- cpp language server settings
-lspconfig.clangd.setup{
-    cmd = {vim.fn.FindClangExe()},
-    capabilities = capabilities,
-}
+" QFEnter settings
+let g:qfenter_keymap = {}
+let g:qfenter_keymap.hopen = ['<Leader><Space>', '<C-x>']
+let g:qfenter_keymap.vopen = ['<Leader><CR>', '<C-v>']
 
--- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menu,menuone,noselect'
+" fzf.vim settings
+nnoremap <C-p> :GFiles<CR>
+nnoremap <C-g>g :Ag<CR>
 
--- luasnip setup
-local luasnip = require 'luasnip'
-require("luasnip/loaders/from_vscode").load(
-    {paths={'~/.config/nvim/my_lsp_snips'}}
-)
-
--- nvim-cmp setup
-local cmp = require 'cmp'
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
-  },
-  mapping = {
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = false,
-    },
-    ['<Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end,
-    ['<S-Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end,
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'path' },
-    { name = 'buffer' },
-  },
-}
-
--- disable all lsp diagnostic virtual text to reduce noise
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-        virtual_text = false,
-        signs = true,
-    }
-)
-EOF
+" quick-scope
+let g:qs_highlight_on_keys = ['f', 'F']
 
 " telescope mappings
 nnoremap <C-b> <cmd>lua require('telescope.builtin').buffers()<CR>
@@ -488,6 +302,21 @@ command! Unfuck execute DelWhitespace()
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
 autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
+
+" Local vs remote logic.  Some colorscheme features do not
+" reliably work over ssh.
+let g:remoteSession = ($SSH_TTY != "")
+if  g:remoteSession
+    " Do not preview pdf over ssh connection.
+    " Use sshfs+zathura to view remote pdf
+    let g:vimtex_view_enabled=0
+else
+    set termguicolors
+    " Colorscheme
+    colorscheme NeoSolarized
+    let g:solarized_termtrans=1
+    hi Normal guibg=NONE ctermbg=NONE
+endif
 
 " customize fzf colors to match your color scheme
 let g:fzf_colors =
