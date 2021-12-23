@@ -95,9 +95,6 @@ let g:netrw_winsize=18
 " let g:python3_host_prog='/home/wll/miniconda3/bin/python'
 " let g:python2_host_prog='/home/wll/miniconda2/bin/python'
 
-" Colors.  TODO: Auto detect term bg color from Xresources?
-set background=light
-
 " ========================================================== "
 "                    PLUGIN SETTINGS                         "
 " ========================================================== "
@@ -303,6 +300,9 @@ command! Unfuck execute DelWhitespace()
 " Set in ftplugin files each desired filetype
 autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
 
+" Colors.  TODO: Auto detect term bg color from Xresources?
+set background=light
+
 " Local vs remote logic.  Some colorscheme features do not
 " reliably work over ssh.
 let g:remoteSession = ($SSH_TTY != "")
@@ -314,8 +314,8 @@ else
     set termguicolors
     " Colorscheme
     colorscheme NeoSolarized
-    let g:solarized_termtrans=1
-    hi Normal guibg=NONE ctermbg=NONE
+    " let g:solarized_termtrans=1
+    " hi Normal guibg=NONE ctermbg=NONE
 endif
 
 " customize fzf colors to match your color scheme

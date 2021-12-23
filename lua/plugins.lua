@@ -27,10 +27,10 @@ return require('packer').startup(function(use)
   use 'tpope/vim-fugitive'
   use 'tpope/vim-surround'
   use 'tpope/vim-repeat'
-  use { 'wgurecky/vimSum', run = ':UpdateRemotePlugins', cmd = {'VisMath', 'VisSum', 'VisMean', 'VisMult'} }
+  use {'wgurecky/vimSum', run = ':UpdateRemotePlugins', cmd = {'VisMath', 'VisSum', 'VisMean', 'VisMult'}}
 
   -- find and search
-  use { "junegunn/fzf", run = ":call fzf#install()" }
+  use {"junegunn/fzf", run = ":call fzf#install()"}
   use 'junegunn/fzf.vim'
   use 'mileszs/ack.vim'
   use 'mhinz/vim-grepper'
@@ -41,9 +41,9 @@ return require('packer').startup(function(use)
   use 'nvim-telescope/telescope.nvim'
 
   -- dev tools
-  use 'tpope/vim-dispatch'
-  use 'w0rp/ale'
-  use 'lervag/vimtex'
+  use {'tpope/vim-dispatch', ft = {'cpp', 'c', 'fortran'}}
+  use {'lervag/vimtex', ft = {'tex'}}
+  use {'w0rp/ale', ft = {'python', 'cpp', 'c', 'fortran'}}
 
   -- code auto completion
   use 'neovim/nvim-lspconfig'
