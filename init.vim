@@ -5,7 +5,6 @@
 " ========================================================== "
 "
 set number relativenumber  " hybrid numbers
-set nu rnu
 
 set ruler           " Show the line and column number of the cursor position,
                     " separated by a comma.
@@ -28,8 +27,8 @@ set incsearch       " While typing a search command, show immediately where the
 set autoindent      " Copy indent from current line when starting a new line
 
 " auto detect filetype
-filetype plugin on
-set omnifunc=syntaxcomplete#Complete
+" filetype plugin on
+" set omnifunc=syntaxcomplete#Complete
 
 " allow easy insertion of one character with spacebar
 " source: http://vim.wikia.com/wiki/Insert_a_single_character
@@ -50,7 +49,7 @@ imap jw <ESC>
 imap jk <ESC>
 
 " syntax highlight
-syntax on
+" syntax on
 
 " fast switch between tabs created with :tabnew
 nnoremap <C-Left> :tabprevious<CR>
@@ -124,16 +123,11 @@ endfunction
 
 function! FindClangExe(...)
     " Find clangd exec name
-    let check_clang_out = system("which clangd")
-    if v:shell_error == 0
-        return 'clangd'
-    else
-        return 'clangd-6.0'
-    endif
+    return 'clangd'
 endfunction
 
 " get top level proj dir
-let g:top_level_dir = FindTopLevelProjectDir()
+" let g:top_level_dir = FindTopLevelProjectDir()
 
 " Load lua config
 lua require('init')
@@ -169,18 +163,16 @@ let g:qfenter_keymap = {}
 let g:qfenter_keymap.hopen = ['<Leader><Space>', '<C-x>']
 let g:qfenter_keymap.vopen = ['<Leader><CR>', '<C-v>']
 
-" fzf.vim settings
-nnoremap <C-p> :GFiles<CR>
-nnoremap <C-g>g :Ag<CR>
-
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F']
 
 " telescope mappings
-nnoremap <C-b> <cmd>lua require('telescope.builtin').buffers()<CR>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<CR>
+nnoremap <C-b>      <cmd>lua require('telescope.builtin').buffers()<CR>
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<CR>
+nnoremap <C-p>      <cmd>lua require('telescope.builtin').find_files()<CR>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<CR>
+nnoremap <C-f>      <cmd>lua require('telescope.builtin').live_grep()<CR>
 nnoremap <leader>fd <cmd>lua require('telescope.builtin').lsp_definitions()<CR>
 nnoremap <leader>fr <cmd>lua require('telescope.builtin').lsp_references()<CR>
 nnoremap <leader>fi <cmd>lua require('telescope.builtin').lsp_document_diagnostics()<CR>
@@ -226,22 +218,22 @@ let g:ale_lint_on_save = 1
 " For project wide search/replace
 " Run :Ack {pattern} [{dir}]
 " :cdo s/foo/bar/gc | update
-if !executable('ack')
-    let g:ackprg = '~/.config/nvim/bin/ack'
-endif
+"if !executable('ack')
+"    let g:ackprg = '~/.config/nvim/bin/ack'
+"endif
 
 " automatically set project base directory ack search on `:ag `
 " requires the projec to have a `.git` file in the base dir
-cnoreabbrev ag Gcd <bar> Ack!
+" cnoreabbrev ag Gcd <bar> Ack!
 
 " set default grepprg to ripgrep if on $PATH
 if executable('rg')
-    set grepprg=rg\ --vimgrep
+  set grepprg=rg\ --vimgrep
 endif
 
 " vim-grepper settings
 let g:grepper = {
-    \ 'tools': ['rg', 'git', 'ack', 'grep', 'rgproj'],
+    \ 'tools': ['rg', 'git', 'grep', 'rgproj'],
     \ 'rgproj': {
     \   'grepprg':    'rg -n $* -- `git rev-parse --show-toplevel`',
     \ }}
@@ -298,38 +290,12 @@ command! Unfuck execute DelWhitespace()
 
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
-autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
+" autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
 
 " Colors.  TODO: Auto detect term bg color from Xresources?
+" Colorscheme
 set background=light
-
-" Local vs remote logic.  Some colorscheme features do not
-" reliably work over ssh.
-let g:remoteSession = ($SSH_TTY != "")
-if  g:remoteSession
-    " Do not preview pdf over ssh connection.
-    " Use sshfs+zathura to view remote pdf
-    let g:vimtex_view_enabled=0
-else
-    set termguicolors
-    " Colorscheme
-    colorscheme NeoSolarized
-    " let g:solarized_termtrans=1
-    " hi Normal guibg=NONE ctermbg=NONE
-endif
-
-" customize fzf colors to match your color scheme
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+set termguicolors
+colorscheme NeoSolarized
+" let g:solarized_termtrans=1
+" hi Normal guibg=NONE ctermbg=NONE

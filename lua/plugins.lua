@@ -7,7 +7,8 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- Plugins config
-return require('packer').startup(function(use)
+return require('packer').startup(
+{ function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
@@ -22,7 +23,7 @@ return require('packer').startup(function(use)
   use 'yssl/QFEnter'
   use 'kyazdani42/nvim-tree.lua'
   use 'junegunn/vim-easy-align'
-  use 'terryma/vim-multiple-cursors'
+  -- use 'terryma/vim-multiple-cursors'
   use 'majutsushi/tagbar'
   use 'tpope/vim-fugitive'
   use 'tpope/vim-surround'
@@ -31,8 +32,8 @@ return require('packer').startup(function(use)
 
   -- find and search
   use {"junegunn/fzf", run = ":call fzf#install()"}
-  use 'junegunn/fzf.vim'
-  use 'mileszs/ack.vim'
+  -- use 'junegunn/fzf.vim'
+  -- use 'mileszs/ack.vim'
   use 'mhinz/vim-grepper'
 
   -- neovim extras
@@ -41,7 +42,7 @@ return require('packer').startup(function(use)
   use 'nvim-telescope/telescope.nvim'
 
   -- dev tools
-  use {'tpope/vim-dispatch', ft = {'cpp', 'c', 'fortran'}}
+  use {'tpope/vim-dispatch', ft = {'cpp', 'c', 'fortran'}, cmd = {'Make'}}
   use {'lervag/vimtex', ft = {'tex'}}
   use {'w0rp/ale', ft = {'python', 'cpp', 'c', 'fortran'}}
 
@@ -59,4 +60,14 @@ return require('packer').startup(function(use)
   if packer_bootstrap then
     require('packer').sync()
   end
-end)
+
+  end,
+
+  -- Override packer settings defaults
+  config = {
+    {
+      git = { subcommands = {  submodules = 'submodule update --init --recursive' } }
+    }
+  }
+}
+)
