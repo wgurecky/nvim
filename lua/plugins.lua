@@ -24,7 +24,7 @@ return require('packer').startup(
   use 'kyazdani42/nvim-tree.lua'
   use 'junegunn/vim-easy-align'
   -- use 'terryma/vim-multiple-cursors'
-  use 'majutsushi/tagbar'
+  use {'majutsushi/tagbar', cmd = {'TagbarToggle'}}
   use 'tpope/vim-fugitive'
   use 'tpope/vim-surround'
   use 'tpope/vim-repeat'

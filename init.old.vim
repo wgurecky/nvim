@@ -82,11 +82,11 @@ set splitbelow splitright
 set inccommand=nosplit
 
 " netrw settings
-let g:netrw_altv=1
-let g:netrw_browse_split=2
-let g:netrw_liststyle=3
-let g:netrw_banner=0
-let g:netrw_winsize=18
+" let g:netrw_altv=1
+" let g:netrw_browse_split=2
+" let g:netrw_liststyle=3
+" let g:netrw_banner=0
+" let g:netrw_winsize=18
 
 " python provider
 " let g:python3_host_prog=system('which python3')
@@ -260,6 +260,7 @@ autocmd FileType sh,ruby,python   let b:comment_leader = '# '
 autocmd FileType conf,fstab       let b:comment_leader = '# '
 autocmd FileType tex              let b:comment_leader = '% '
 autocmd FileType vim              let b:comment_leader = '" '
+autocmd FileType lua              let b:comment_leader = '-- '
 autocmd FileType fortran          let b:comment_leader = '! '
 noremap <silent> <leader>cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
 noremap <silent> <leader>cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
