@@ -6,9 +6,32 @@ if fn.empty(fn.glob(install_path)) > 0 then
   packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
+-- Packer commands
+vim.cmd([[command! PackerInstall packadd packer.nvim | lua require('plugins').install()]])
+vim.cmd([[command! PackerUpdate packadd packer.nvim | lua require('plugins').update()]])
+vim.cmd([[command! PackerSync packadd packer.nvim | lua require('plugins').sync()]])
+vim.cmd([[command! PackerClean packadd packer.nvim | lua require('plugins').clean()]])
+vim.cmd([[command! PackerCompile packadd packer.nvim | lua require('plugins').compile()]])
+vim.cmd([[command! PackerStatus packadd packer.nvim | lua require('plugins').status()]])
+
 -- Plugins config
-return require('packer').startup(
-{ function(use)
+-- return require('packer').startup(function(use)
+local packer = nil
+local function init()
+  if packer == nil then
+    packer = require('packer')
+    packer.init {
+      git = {
+        cmd = 'git',
+        subcommands = {
+          submodules = 'submodule update --init --recursive'
+        }
+      }
+    }
+  end
+  local use = packer.use
+  packer.reset()
+
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
@@ -62,13 +85,13 @@ return require('packer').startup(
     require('packer').sync()
   end
 
-  end,
+end
 
-  -- Override packer settings defaults
-  config = {
-    {
-      git = { subcommands = {  submodules = 'submodule update --init --recursive' } }
-    }
-  }
-}
-)
+local plugins = setmetatable({}, {
+  __index = function(_, key)
+    init()
+    return packer[key]
+  end,
+})
+
+return plugins
