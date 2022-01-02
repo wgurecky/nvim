@@ -106,13 +106,21 @@ cmp.setup {
   },
 }
 
+-- null-ls for adapting lang linters into language servers
+local null_ls = require("null-ls")
+local null_ls_sources = {
+  null_ls.builtins.diagnostics.pylint,
+}
+null_ls.setup({sources = null_ls_sources})
+
 -- disable all lsp diagnostic virtual text to reduce noise
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-        virtual_text = false,
-        signs = true,
-    }
-)
+vim.diagnostic.config({virtual_text = false})
+-- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+--     vim.lsp.diagnostic.on_publish_diagnostics, {
+--         virtual_text = false,
+--         signs = true,
+--     }
+-- )
 
 -- Extra legacy vim plugin settings
 -- TODO: convert to lua settings
@@ -154,7 +162,7 @@ nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<CR>
 nnoremap <C-f>      <cmd>lua require('telescope.builtin').live_grep()<CR>
 nnoremap <leader>fd <cmd>lua require('telescope.builtin').lsp_definitions()<CR>
 nnoremap <leader>fr <cmd>lua require('telescope.builtin').lsp_references()<CR>
-nnoremap <leader>fi <cmd>lua require('telescope.builtin').lsp_document_diagnostics()<CR>
+nnoremap <leader>fi <cmd>lua require('telescope.builtin').diagnostics()<CR>
 
 " On hover show diagnostic (if any) or use <leader>di to force diagnostic popup
 autocmd CursorHold * lua vim.diagnostic.open_float()
@@ -179,15 +187,15 @@ cnoreabbrev lspstat lua print(vim.inspect(vim.lsp.buf_get_clients()))
 
 " ale syntax checker settings for filetypes which do not have a lang server
 " to check which linters are active run: :ALEinfo
-let g:ale_linters = {
-    \ 'python': ['pylint'],
-    \ 'cpp': ['clangd'],
-    \ 'c': ['clangd'],
-    \ 'fortran': ['gfortran'],
-    \ 'tex': ['proselint', 'write-good'],
-    \ 'markdown': ['proselint', 'write-good'],
-    \ }
-let g:ale_lint_on_save = 1
+" let g:ale_linters = {
+"    \ 'python': ['pylint'],
+"    \ 'cpp': ['clangd'],
+"    \ 'c': ['clangd'],
+"    \ 'fortran': ['gfortran'],
+"    \ 'tex': ['proselint', 'write-good'],
+"    \ 'markdown': ['proselint', 'write-good'],
+"    \ }
+"let g:ale_lint_on_save = 1
 
 " vim-dispatch settings
 " Run :Make! to launch background async project build.

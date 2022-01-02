@@ -44,7 +44,8 @@ return require('packer').startup(
   -- dev tools
   use {'tpope/vim-dispatch', ft = {'cpp', 'c', 'fortran'}, cmd = {'Make'}}
   use {'lervag/vimtex', ft = {'tex'}}
-  use {'w0rp/ale', ft = {'python', 'cpp', 'c', 'fortran'}}
+  -- use {'w0rp/ale', ft = {'python', 'cpp', 'c', 'fortran'}}
+  use {'jose-elias-alvarez/null-ls.nvim'}
 
   -- code auto completion
   use 'neovim/nvim-lspconfig'
