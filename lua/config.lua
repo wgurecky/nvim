@@ -22,6 +22,11 @@ require("tabline").setup{
     tabline_show_devicons = true,
 }
 
+--- Window switch swap-buffers settings
+require('swap-buffers').setup({
+  ignore_filetypes = {'NvimTree'}
+})
+
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
@@ -110,6 +115,7 @@ cmp.setup {
 local null_ls = require("null-ls")
 local null_ls_sources = {
   null_ls.builtins.diagnostics.pylint,
+  null_ls.builtins.diagnostics.flake8,
 }
 null_ls.setup({sources = null_ls_sources})
 
@@ -233,6 +239,12 @@ endif
 nnoremap <leader>* :Grepper -tool rgproj -cword -noprompt<cr>
 " Project wide search with :vg <cr>
 cnoreabbrev vg Grepper -tool rgproj <cr>
+
+" swap-buffers
+nnoremap <C-Left> <cmd>lua require('swap-buffers').swap_buffers('h')<CR>
+nnoremap <C-Down> <cmd>lua require('swap-buffers').swap_buffers('j')<CR>
+nnoremap <C-Up> <cmd>lua require('swap-buffers').swap_buffers('k')<CR>
+nnoremap <C-Right> <cmd>lua require('swap-buffers').swap_buffers('l')<CR>
 
 " tagbar
 nnoremap <leader>tt :TagbarToggle<CR>

@@ -42,6 +42,7 @@ local function init()
   use 'kyazdani42/nvim-web-devicons'
 
   -- Common plugins
+  use 'caenrique/swap-buffers.nvim'
   use 'unblevable/quick-scope'
   use 'yssl/QFEnter'
   use 'kyazdani42/nvim-tree.lua'
