@@ -1,14 +1,10 @@
 " ~/.config/nvim/init.vim
 
-" set plugin base dir
-let s:editor_root=expand("~/.nvim")
-
 " ========================================================== "
 "                     VIM SETTINGS                           "
 " ========================================================== "
 "
 set number relativenumber  " hybrid numbers
-set nu rnu
 
 set ruler           " Show the line and column number of the cursor position,
                     " separated by a comma.
@@ -31,8 +27,8 @@ set incsearch       " While typing a search command, show immediately where the
 set autoindent      " Copy indent from current line when starting a new line
 
 " auto detect filetype
-filetype plugin on
-set omnifunc=syntaxcomplete#Complete
+" filetype plugin on
+" set omnifunc=syntaxcomplete#Complete
 
 " allow easy insertion of one character with spacebar
 " source: http://vim.wikia.com/wiki/Insert_a_single_character
@@ -42,10 +38,7 @@ nnoremap <Space> :exec "normal i".nr2char(getchar())."\e"<CR>
 tnoremap <Esc> <C-\><C-n>
 
 " faster buffer lookup & switching with <C-e># or <C-e><buff_name>
-" and cycle buffers with <C-h> and <C-l>
 nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
-nnoremap <C-h> :bprevious<CR>
-nnoremap <C-l> :bnext<CR>
 
 " fast find/replace word under cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
@@ -56,7 +49,11 @@ imap jw <ESC>
 imap jk <ESC>
 
 " syntax highlight
-syntax on
+" syntax on
+
+" fast switch between tabs created with :tabnew
+nnoremap <C-Left> :tabprevious<CR>
+nnoremap <C-Right> :tabnext<CR>
 
 " remap arrow keys to window resize
 if bufwinnr(1)
@@ -85,11 +82,11 @@ set splitbelow splitright
 set inccommand=nosplit
 
 " netrw settings
-let g:netrw_altv=1
-let g:netrw_browse_split=2
-let g:netrw_liststyle=3
-let g:netrw_banner=0
-let g:netrw_winsize=18
+" let g:netrw_altv=1
+" let g:netrw_browse_split=2
+" let g:netrw_liststyle=3
+" let g:netrw_banner=0
+" let g:netrw_winsize=18
 
 " python provider
 " let g:python3_host_prog=system('which python3')
@@ -100,109 +97,6 @@ let g:netrw_winsize=18
 " ========================================================== "
 "                    PLUGIN SETTINGS                         "
 " ========================================================== "
-
-if empty(glob('~/.config/nvim/autoload/plug.vim'))
-    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source ~/.config/nvim/init.vim
-endif
-
-call plug#begin('~/.nvim/plugged')
-" A S T H E T I C S
-Plug 'iCyMind/NeoSolarized'
-Plug 'https://github.com/vim-airline/vim-airline.git'
-Plug 'https://github.com/vim-airline/vim-airline-themes.git'
-" common plugins
-Plug 'unblevable/quick-scope'
-Plug 'yssl/QFEnter'
-Plug 'https://github.com/scrooloose/nerdtree.git'
-Plug 'https://github.com/wgurecky/vimSum.git', { 'do': ':UpdateRemotePlugins' }
-Plug 'https://github.com/junegunn/vim-easy-align.git'
-Plug 'https://github.com/terryma/vim-multiple-cursors.git'
-Plug 'https://github.com/SirVer/ultisnips.git'
-Plug 'https://github.com/honza/vim-snippets.git'
-Plug 'https://github.com/majutsushi/tagbar.git'
-Plug 'https://github.com/tpope/vim-fugitive.git'
-Plug 'https://github.com/tpope/vim-surround.git'
-Plug 'https://github.com/tpope/vim-repeat.git'
-" find/search
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'mileszs/ack.vim'
-Plug 'mhinz/vim-grepper'
-" Plug 'ojroques/nvim-lspfuzzy', {'branch': 'main'}
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'nvim-telescope/telescope.nvim'
-" dev tools
-Plug 'https://github.com/tpope/vim-dispatch.git', { 'for': ['cpp', 'c', 'fortran'] }
-Plug 'https://github.com/w0rp/ale.git', {'for': ['python', 'cpp', 'c', 'fortran', 'markdown', 'tex']}
-Plug 'tell-k/vim-autopep8', {'for': 'python' }
-Plug 'lervag/vimtex', {'for': 'tex'}
-" code completion
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-compe'
-" Plug 'nvim-lua/completion-nvim'
-" Plug 'nvim-lua/diagnostic-nvim'
-call plug#end()
-
-" Local vs remote logic.  Some colorscheme features do not
-" reliably work over ssh.
-let g:remoteSession = ($SSH_TTY != "")
-if  g:remoteSession
-    " Do not preview pdf over ssh connection.
-    " Use sshfs+zathura to view remote pdf
-    let g:vimtex_view_enabled=0
-else
-    set termguicolors
-    " Colorscheme
-    let g:airline_theme='solarized'
-    colorscheme NeoSolarized
-    let g:solarized_termtrans=1
-    hi Normal guibg=NONE ctermbg=NONE
-endif
-
-" Vimtex settings
-" Note; <leader>ll builds and <leader>le shows compile errors
-" Note; install xdotool package for live previews in zathura
-let g:vimtex_view_method='zathura'
-" let g:vimtex_view_method='general'
-
-" Colors.  TODO: Auto detect term bg color from Xresources?
-set background=light
-
-" Nerdtree settings
-" launch nerdtree on entry if no file is specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-set autochdir                " automatically change directory
-let NERDTreeChDirMode=2
-let NERDTreeIgnore = ['\.pyc$','\.png$']
-nnoremap <leader>e :NERDTreeToggle<CR>
-
-" Easy align settings
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-
-" QFEnter settings
-let g:qfenter_keymap = {}
-let g:qfenter_keymap.hopen = ['<Leader><Space>', '<C-x>']
-let g:qfenter_keymap.vopen = ['<Leader><CR>', '<C-v>']
-
-" fzf.vim settings
-nnoremap <C-b> :Buffers<CR>
-nnoremap <C-p> :GFiles<CR>
-nnoremap <C-g>g :Ag<CR>
-
-" Airline settings
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
-
-" quick-scope
-let g:qs_highlight_on_keys = ['f', 'F']
-
 " automatically set makeprg (required for large c++ and c projects)
 function! g:BuildInSubDir(buildsubdir)
     " Sets makeprg base dir
@@ -229,92 +123,63 @@ endfunction
 
 function! FindClangExe(...)
     " Find clangd exec name
-    let check_clang_out = system("which clangd")
-    if v:shell_error == 0
-        return 'clangd'
-    else
-        return 'clangd-6.0'
-    endif
+    return 'clangd'
 endfunction
 
 " get top level proj dir
-let g:top_level_dir = FindTopLevelProjectDir()
+" let g:top_level_dir = FindTopLevelProjectDir()
 
-" nvim-lspconfig
-lua << EOF
-local lspconfig = require'lspconfig'
--- nvim-compe setup
-require'compe'.setup {
-    enabled = true;
-    autocomplete = true;
-    debug = false;
-    min_length = 1;
-    preselect = 'enable';
-    throttle_time = 80;
-    source_timeout = 200;
-    incomplete_delay = 400;
-    max_abbr_width = 100;
-    max_kind_width = 100;
-    max_menu_width = 100;
-    documentation = true;
-    source = {
-        path = true;
-        buffer = true;
-        calc = true;
-        nvim_lsp = true;
-        nvim_lua = true;
-        treesitter = true;
-        spell = true;
-        tags = true;
-        ultisnips = true,
-        vsnip = false;
-        snippets_nvim = false;
-    };
-}
--- python language server settings
-lspconfig.pyls.setup{}
--- fortran language server settings
-lspconfig.fortls.setup{
-    cmd = {
-        'fortls',
-        '--autocomplete_name_only',
-        '--incrmental_sync'
-    },
-    settings = {
-        ["fortran-ls"] = {
-            variableHover = false
-        },
-    },
-    root_dir = vim.fn.FindTopLevelProjectDir,
-}
--- cpp language server settings
-lspconfig.clangd.setup{
-    cmd = {vim.fn.FindClangExe()},
-}
--- disable all lsp diagnostic virtual text to reduce noise
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-        virtual_text = false,
-        signs = true,
-    }
-)
--- telescope.nvim setup
-local actions = require('telescope.actions')
-require'telescope'.setup{
-}
-EOF
+" Load lua config
+lua require('init')
+
+" Auto-recompile plugins on plugins.lua change
+augroup packer_user_config
+  autocmd!
+  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+augroup end
+
+" Vimtex settings
+" Note; <leader>ll builds and <leader>le shows compile errors
+" Note; install xdotool package for live previews in zathura
+" let g:vimtex_view_method='zathura'
+" let g:vimtex_view_method='general'
+
+" NvimTree settings
+nnoremap <leader>e :NvimTreeToggle<CR>
+let g:nvim_tree_auto_open = 1
+let g:nvim_tree_show_icons = {
+    \ 'git': 1,
+    \ 'folders': 0,
+    \ 'files': 0,
+    \ 'folder_arrows': 0,
+    \ }
+
+" Easy align settings
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
+" QFEnter settings
+let g:qfenter_keymap = {}
+let g:qfenter_keymap.hopen = ['<Leader><Space>', '<C-x>']
+let g:qfenter_keymap.vopen = ['<Leader><CR>', '<C-v>']
+
+" quick-scope
+let g:qs_highlight_on_keys = ['f', 'F']
 
 " telescope mappings
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<CR>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<CR>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<CR>
+nnoremap <C-b>      <cmd>lua require('telescope.builtin').buffers()<CR>
+nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<CR>
+nnoremap <C-p>      <cmd>lua require('telescope.builtin').find_files()<CR>
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<CR>
+nnoremap <C-f>      <cmd>lua require('telescope.builtin').live_grep()<CR>
 nnoremap <leader>fd <cmd>lua require('telescope.builtin').lsp_definitions()<CR>
 nnoremap <leader>fr <cmd>lua require('telescope.builtin').lsp_references()<CR>
 nnoremap <leader>fi <cmd>lua require('telescope.builtin').lsp_document_diagnostics()<CR>
 
 " On hover show diagnostic (if any) or use <leader>di to force diagnostic popup
-autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
-nnoremap <leader>di  <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+autocmd CursorHold * lua vim.diagnostic.open_float()
+nnoremap <leader>di  <cmd>lua vim.diagnostic.open_float()<CR>
 
 " nvim-lsp mappings
 " note: <C-o> go back previous pos, <C-i> forward to last pos
@@ -333,49 +198,6 @@ nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 " alias to check loaded lsp client status
 cnoreabbrev lspstat lua print(vim.inspect(vim.lsp.buf_get_clients()))
 
-" tab complete settings
-set completeopt=menuone,noinsert,noselect
-set shortmess+=c
-lua << EOF
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local check_back_space = function()
-    local col = vim.fn.col('.') - 1
-    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        return true
-    else
-        return false
-    end
-end
-
--- Use (s-)tab to:
---- move to prev/next item in completion menuone
---- jump to prev/next snippet's placeholder
-_G.tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-n>"
-  elseif check_back_space() then
-    return t "<Tab>"
-  else
-    return vim.fn['compe#complete']()
-  end
-end
-_G.s_tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-p>"
-  else
-    return t "<S-Tab>"
-  end
-end
-
-vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-EOF
-
 " ale syntax checker settings for filetypes which do not have a lang server
 " to check which linters are active run: :ALEinfo
 let g:ale_linters = {
@@ -393,30 +215,25 @@ let g:ale_lint_on_save = 1
 " Results are available via :Copen
 " Ensure makeprg is set properly before running
 
-" ultisnips settings (auto integration with deoplete)
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger='<c-j>'
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-
 " For project wide search/replace
 " Run :Ack {pattern} [{dir}]
 " :cdo s/foo/bar/gc | update
-if !executable('ack')
-    let g:ackprg = '~/.config/nvim/bin/ack'
-endif
+"if !executable('ack')
+"    let g:ackprg = '~/.config/nvim/bin/ack'
+"endif
 
 " automatically set project base directory ack search on `:ag `
 " requires the projec to have a `.git` file in the base dir
-cnoreabbrev ag Gcd <bar> Ack!
+" cnoreabbrev ag Gcd <bar> Ack!
 
 " set default grepprg to ripgrep if on $PATH
 if executable('rg')
-    set grepprg=rg\ --vimgrep
+  set grepprg=rg\ --vimgrep
 endif
 
 " vim-grepper settings
 let g:grepper = {
-    \ 'tools': ['rg', 'git', 'ack', 'grep', 'rgproj'],
+    \ 'tools': ['rg', 'git', 'grep', 'rgproj'],
     \ 'rgproj': {
     \   'grepprg':    'rg -n $* -- `git rev-parse --show-toplevel`',
     \ }}
@@ -431,7 +248,7 @@ nnoremap <leader>* :Grepper -tool rgproj -cword -noprompt<cr>
 cnoreabbrev vg Grepper -tool rgproj <cr>
 
 " tagbar
-nmap <F8> :TagbarToggle<CR>
+nnoremap <leader>tt :TagbarToggle<CR>
 
 " ========================================================== "
 "                    EXTRA FUNCTIONS                         "
@@ -443,6 +260,7 @@ autocmd FileType sh,ruby,python   let b:comment_leader = '# '
 autocmd FileType conf,fstab       let b:comment_leader = '# '
 autocmd FileType tex              let b:comment_leader = '% '
 autocmd FileType vim              let b:comment_leader = '" '
+autocmd FileType lua              let b:comment_leader = '-- '
 autocmd FileType fortran          let b:comment_leader = '! '
 noremap <silent> <leader>cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
 noremap <silent> <leader>cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
@@ -473,20 +291,12 @@ command! Unfuck execute DelWhitespace()
 
 " Do not enable unless you want makeprg auto-set for all filetypes
 " Set in ftplugin files each desired filetype
-autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
+" autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
 
-" customize fzf colors to match your color scheme
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+" Colors.  TODO: Auto detect term bg color from Xresources?
+" Colorscheme
+set background=light
+set termguicolors
+colorscheme NeoSolarized
+" let g:solarized_termtrans=1
+" hi Normal guibg=NONE ctermbg=NONE

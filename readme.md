@@ -5,6 +5,11 @@ Wgurecky's neovim configuration files.  Useful for c, cpp, python, and latex fil
 
 This config depends on neovim's new lsp (language server protocol) integration.
 
+Work in progress:
+
+- Migrating to pure lua configuration.
+- Migrating to null-ls for linting
+
 
 Depends
 =======
@@ -15,19 +20,19 @@ Depends
 - clangd
 - gcc
 - [ack]
-- [python-language-server]
+- [jedi-language-server]
 - [jedi]
 - [pylint]
 
-Neovim plugins are not listed here.  [vim-plug] handles installation and updates of all neovim plugins.
+Neovim plugins are not listed here.  [packer.nvim] handles installation and updates of all neovim plugins.
 
-[vim-plug]: https://github.com/junegunn/vim-plug
+[packer.nvim]: https://github.com/wbthomason/packer.nvim
 [nvim-lsp]: https://github.com/neovim/nvim-lsp
 [pynvim]: https://github.com/neovim/pynvim
 [ack]: https://beyondgrep.com/
 [jedi]: https://github.com/davidhalter/jedi
 [pylint]: https://www.pylint.org/
-[python-language-server]: https://github.com/palantir/python-language-server
+[jedi-language-server]: https://github.com/pappasam/jedi-language-server
 
 Optional
 ---------
@@ -48,9 +53,9 @@ Clone this repo into your `~/.config` dir:
 
     cd ~/.config && git clone https://github.com/wgurecky/nvim
 
-On neovim startup vim-plug should try to download automatically, if not install vim-plug from https://github.com/junegunn/vim-plug
+On neovim startup [packer.nvim] should try to download automatically, if not install from https://github.com/wbthomason/packer.nvim
 
-Next, run `:PlugInstall` to install all required vim plugins
+Next, run `:PackerInstall` to install all plugins followed by `:PackerSync`
 
 
 Config
@@ -118,9 +123,9 @@ Place `flake8` file in `~/.config/.` to ignore some minor PEP8 violation warning
 
 ### Auto Completion
 
-Auto complete for python requires the `python-language-server` and `jedi` to be installed:
+Auto complete for python requires the `jedi-language-server` and `jedi` to be installed:
 
-    pip install python-language-server jedi
+    pip install jedi-language-server jedi
 
 ### Linting
 
