@@ -27,62 +27,51 @@ vim.o.splitright = true
 -- allow easy insertion of one character with spacebar
 -- source: http://vim.wikia.com/wiki/Insert_a_single_character
 -- vim.cmd([[ nnoremap <Space> :exec "normal i".nr2char(getchar())."\e"<CR> ]])
-vim.api.nvim_set_keymap('n', '<Space>', ':exec "normal i".nr2char(getchar())."\\e"<CR>', {noremap=true, silent=true})
+vim.keymap.set('n', '<Space>', ':exec "normal i".nr2char(getchar())."\\e"<CR>', {noremap=true, silent=true})
 
 -- normal esc from terminal window
 -- tnoremap <Esc> <C-\><C-n>
-vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', {noremap=true, silent=true})
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', {noremap=true, silent=true})
 
 -- faster buffer lookup & switching with <C-e># or <C-e><buff_name>
 -- nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
-vim.api.nvim_set_keymap('n', '<C-e>', ':set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>', {noremap=true, silent=true})
+vim.keymap.set('n', '<C-e>', ':set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>', {noremap=true, silent=true})
 
 -- fast find/replace word under cursor
 -- nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
-vim.api.nvim_set_keymap('n', '<Leader>s', ':%s/\\<<C-r><C-w>\\>//g<Left><Left>', {noremap=true, silent=true})
+vim.keymap.set('n', '<Leader>s', ':%s/\\<<C-r><C-w>\\>//g<Left><Left>', {noremap=true, silent=true})
 
 -- fast escape
 -- inoremap jj <ESC>
 -- imap jw <ESC>
 -- imap jk <ESC>
-vim.api.nvim_set_keymap('i', 'jj', '<ESC>', {noremap=true, silent=true})
-vim.api.nvim_set_keymap('i', 'jk', '<ESC>', {noremap=true, silent=true})
-vim.api.nvim_set_keymap('i', 'jw', '<ESC>', {noremap=true, silent=true})
+vim.keymap.set('i', 'jj', '<ESC>', {noremap=true, silent=true})
+vim.keymap.set('i', 'jk', '<ESC>', {noremap=true, silent=true})
+vim.keymap.set('i', 'jw', '<ESC>', {noremap=true, silent=true})
 
 -- fast switch between tabs created with :tabnew
 -- nnoremap <C-Left> :tabprevious<CR>
 -- nnoremap <C-Right> :tabnext<CR>
-vim.api.nvim_set_keymap('n', '<C-Left>', ':tabprevious<CR>', {noremap=true, silent=true})
-vim.api.nvim_set_keymap('n', '<C-Right>', ':tabnext<CR>', {noremap=true, silent=true})
-
+vim.keymap.set('n', '<C-Left>', ':tabprevious<CR>', {noremap=true, silent=true})
+vim.keymap.set('n', '<C-Right>', ':tabnext<CR>', {noremap=true, silent=true})
 
 -- remap arrow keys to window resize
--- TODO: convert to lua
-vim.cmd([[
-if bufwinnr(1)
-    map <Up> <C-W>2-
-    map <Down> <C-W>2+
-    map <Left> <C-W>2<
-    map <Right> <C-W>2>
-endif
-]])
+vim.keymap.set('', '<Up>', '<C-W>2-')
+vim.keymap.set('', '<Down>', '<C-W>2+')
+vim.keymap.set('', '<Left>', '<C-W>2<')
+vim.keymap.set('', '<Right>', '<C-W>2>')
 
 -- remap ctrl+hkjl to jump windows in normal mode
--- TODO: convert to lua
-vim.cmd([[
-if bufwinnr(1)
-    nmap <C-h> <C-W>h
-    nmap <C-j> <C-W>j
-    nmap <C-k> <C-W>k
-    nmap <C-l> <C-W>l
-endif
-]])
+vim.keymap.set('n', '<C-h>', '<C-W>h')
+vim.keymap.set('n', '<C-j>', '<C-W>j')
+vim.keymap.set('n', '<C-k>', '<C-W>k')
+vim.keymap.set('n', '<C-l>', '<C-W>l')
 
 -- quick change from horizontal to vert split
 -- map <leader>th <C-w>t<C-w>H
 -- map <leader>tk <C-w>t<C-w>K
-vim.api.nvim_set_keymap('', '<leader>th', '<C-w>t<C-w>H', {noremap=true, silent=true})
-vim.api.nvim_set_keymap('', '<leader>tk', '<C-w>t<C-w>K', {noremap=true, silent=true})
+vim.keymap.set('', '<leader>th', '<C-w>t<C-w>H', {noremap=true, silent=true})
+vim.keymap.set('', '<leader>tk', '<C-w>t<C-w>K', {noremap=true, silent=true})
 
 -- fn to automatically set makeprg (required for large c++ and c projects)
 vim.cmd([[
