@@ -7,8 +7,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- Load plugins
-require('packer').startup(
-{
+local spec = {
 function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
@@ -65,8 +64,8 @@ function(use)
   end
 
 end,
-  -- Configure packer
-  config = {
+-- Configure packer
+config = {
     max_jobs = 16,
     git = {
         cmd = 'git',
@@ -74,5 +73,6 @@ end,
           submodules = 'submodule update --init --recursive'
         }
       }
-    }
-})
+  }
+}
+require('packer').startup(spec)
