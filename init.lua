@@ -122,6 +122,11 @@ set termguicolors
 colorscheme NeoSolarized
 ]])
 
+-- Statusline width
+vim.cmd([[
+set laststatus=3
+]])
+
 -- Extra useful functions
 vim.cmd([[
 " comment blocks of code

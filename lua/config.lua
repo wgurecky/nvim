@@ -67,7 +67,7 @@ require("luasnip/loaders/from_vscode").load(
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
-cmp.setup {
+cmp.setup({
   snippet = {
     expand = function(args)
       require('luasnip').lsp_expand(args.body)
@@ -104,12 +104,16 @@ cmp.setup {
     end,
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'path' },
-    { name = 'buffer' },
+    {name = 'nvim_lsp'},
+    {name = 'luasnip'},
+    {name = 'path'},
+    {name = 'buffer',
+      option = {
+        get_bufnrs = vim.api.nvim_list_bufs,
+      },
+    },
   },
-}
+})
 
 -- null-ls for adapting lang linters into language servers
 local null_ls = require("null-ls")
