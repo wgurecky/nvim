@@ -50,10 +50,8 @@ vim.keymap.set('i', 'jk', '<ESC>', {noremap=true, silent=true})
 vim.keymap.set('i', 'jw', '<ESC>', {noremap=true, silent=true})
 
 -- fast switch between tabs created with :tabnew
--- nnoremap <C-Left> :tabprevious<CR>
--- nnoremap <C-Right> :tabnext<CR>
-vim.keymap.set('n', '<C-Left>', ':tabprevious<CR>', {noremap=true, silent=true})
-vim.keymap.set('n', '<C-Right>', ':tabnext<CR>', {noremap=true, silent=true})
+vim.keymap.set('n', '<leader>tn', ':tabprevious<CR>')
+vim.keymap.set('n', '<leader>tm', ':tabnext<CR>')
 
 -- remap arrow keys to window resize
 vim.keymap.set('', '<Up>', '<C-W>2-')
