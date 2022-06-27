@@ -146,6 +146,8 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+autocmd TermEnter * call clearmatches()
+autocmd TermLeave * call clearmatches()
 
 " remove trailing whitespace from current line
 function! DelWhitespaceLine()

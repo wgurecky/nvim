@@ -124,7 +124,12 @@ local null_ls_sources = {
 null_ls.setup({sources = null_ls_sources})
 
 -- disable all lsp diagnostic virtual text to reduce noise
-vim.diagnostic.config({virtual_text = false})
+vim.diagnostic.config(
+  {
+    virtual_text = false,
+    underline = false
+  }
+)
 -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 --     vim.lsp.diagnostic.on_publish_diagnostics, {
 --         virtual_text = false,
