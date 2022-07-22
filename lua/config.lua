@@ -127,7 +127,8 @@ null_ls.setup({sources = null_ls_sources})
 vim.diagnostic.config(
   {
     virtual_text = false,
-    underline = false
+    underline = false,
+    float = { source = true },
   }
 )
 -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
