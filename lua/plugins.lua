@@ -40,7 +40,8 @@ function(use)
 
   -- neovim extras
   use 'nvim-lua/plenary.nvim'
-  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
+  -- Run :TSUpdate to update parsers
+  use 'nvim-treesitter/nvim-treesitter'
   use 'p00f/nvim-ts-rainbow'
   use 'nvim-telescope/telescope.nvim'
 
