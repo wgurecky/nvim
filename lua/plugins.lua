@@ -13,8 +13,9 @@ function(use)
   use 'wbthomason/packer.nvim'
 
   -- A S T H E T I C S
-  use 'iCyMind/NeoSolarized'
-  use 'hoob3rt/lualine.nvim'
+  -- use 'shaunsingh/solarized.nvim'
+  use 'ishan9299/nvim-solarized-lua'
+  use 'nvim-lualine/lualine.nvim'
   use 'kdheepak/tabline.nvim'
   use 'kyazdani42/nvim-web-devicons'
 
@@ -39,7 +40,8 @@ function(use)
 
   -- neovim extras
   use 'nvim-lua/plenary.nvim'
-  use 'nvim-treesitter/nvim-treesitter'
+  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
+  use 'p00f/nvim-ts-rainbow'
   use 'nvim-telescope/telescope.nvim'
 
   -- dev tools

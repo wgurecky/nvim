@@ -103,7 +103,8 @@ endfunction
 ]])
 
 -- Lua Plugins
-require('init')
+require('plugins')
+require('config')
 
 -- Auto-recompile plugins on plugins.lua change
 vim.cmd([[
@@ -114,11 +115,17 @@ augroup end
 ]])
 
 -- Colorscheme
+-- colorscheme solarized
 vim.cmd([[
 set background=light
 set termguicolors
-colorscheme NeoSolarized
 ]])
+
+-- colorscheme config in lua
+vim.g.solarized_italics = 0
+
+-- Load the colorscheme
+vim.cmd('colorscheme solarized')
 
 -- Statusline width
 vim.cmd([[

@@ -1,6 +1,23 @@
 -- lspconfig
 local lspconfig = require('lspconfig')
 
+-- treesitter
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "c", "cpp", "python", "markdown", "rst", "lua", "vim", "latex", "json" },
+  sync_install = false,
+  auto_install = true,
+  ignore_install = { "fortran" },
+  highlight = {
+    enable = true,
+    disable = { "fortran" },
+    additional_vim_regex_highlighting = false,
+  },
+  rainbow = {
+    enable = true,
+  },
+}
+
 -- nvim-tree setup
 require'nvim-tree'.setup {}
 
@@ -11,7 +28,7 @@ require'telescope'.setup{}
 --- lualine settings
 require'lualine'.setup{
     options = {
-        theme = 'solarized_light',
+        theme = 'auto',
         icons_enabled = true,
         }
 }
