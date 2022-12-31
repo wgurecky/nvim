@@ -106,14 +106,6 @@ endfunction
 require('plugins')
 require('config')
 
--- Auto-recompile plugins on plugins.lua change
-vim.cmd([[
-augroup packer_user_config
-  autocmd!
-  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-augroup end
-]])
-
 -- Colorscheme
 -- colorscheme solarized
 vim.cmd([[
