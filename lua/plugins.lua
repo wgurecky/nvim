@@ -65,6 +65,7 @@ local plugins_table = {
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-buffer',
     'saadparwaiz1/cmp_luasnip',
+    'ray-x/lsp_signature.nvim',
     },
    },
    {'L3MON4D3/LuaSnip', event = "VeryLazy"}

@@ -73,6 +73,10 @@ lspconfig.clangd.setup{
     capabilities = capabilities,
 }
 
+-- signature help config
+local lsp_signature_cfg = {doc_lines = 0,}
+require"lsp_signature".setup(lsp_signature_cfg)
+
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menu,menuone,noselect'
 

@@ -71,6 +71,9 @@ vim.keymap.set('n', '<C-l>', '<C-W>l')
 vim.keymap.set('', '<leader>th', '<C-w>t<C-w>H', {noremap=true, silent=true})
 vim.keymap.set('', '<leader>tk', '<C-w>t<C-w>K', {noremap=true, silent=true})
 
+-- in visual mode paste but do not overwrite register with removed txt with <leader>p
+vim.keymap.set("x", "<leader>p", "\"_dP")
+
 -- fn to automatically set makeprg (required for large c++ and c projects)
 vim.cmd([[
 function! g:BuildInSubDir(buildsubdir)
