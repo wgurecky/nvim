@@ -46,7 +46,6 @@ local plugins_table = {
   -- Run :TSUpdate to update parsers
   {'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      'p00f/nvim-ts-rainbow',
     },
   },
   'nvim-lua/plenary.nvim',
