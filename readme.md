@@ -24,9 +24,9 @@ Depends
 - [jedi]
 - [pylint]
 
-Neovim plugins are not listed here.  [packer.nvim] handles installation and updates of all neovim plugins.
+Neovim plugins are not listed here.  [lazy.nvim] handles installation and updates of all neovim plugins.
 
-[packer.nvim]: https://github.com/wbthomason/packer.nvim
+[lazy.nvim]: https://github.com/folke/lazy.nvim
 [nvim-lsp]: https://github.com/neovim/nvim-lsp
 [pynvim]: https://github.com/neovim/pynvim
 [ack]: https://beyondgrep.com/
@@ -53,9 +53,9 @@ Clone this repo into your `~/.config` dir:
 
     cd ~/.config && git clone https://github.com/wgurecky/nvim
 
-On neovim startup [packer.nvim] should try to download automatically, if not install from https://github.com/wbthomason/packer.nvim
+On neovim startup [lazy.nvim] should try to download automatically, if not install from https://github.com/folke/lazy.nvim
 
-Next, run `:PackerInstall` to install all plugins followed by `:PackerSync`
+Next, run `:Lazy sync` to install all plugins followed by `:Lazy show`
 
 
 Config
