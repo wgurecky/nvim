@@ -1,5 +1,5 @@
 " call g:BuildInSubDir("/build") on open
-autocmd BufNewFile,BufRead * call g:BuildInSubDir("/build")
+autocmd BufNewFile,BufRead * silent! call g:BuildInSubDir("/build")
 
 set shiftwidth=2
 set tabstop=2
@@ -7,7 +7,7 @@ set softtabstop=2
 set autoindent
 set copyindent
 
-autocmd BufNewFile,BufRead g:SetCtfTab()
+" autocmd BufNewFile,BufRead g:SetCtfTab()
 
 
 let cwd = getcwd()

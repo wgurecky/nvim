@@ -1,6 +1,23 @@
 -- lspconfig
 local lspconfig = require('lspconfig')
 
+-- treesitter
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "c", "cpp", "python", "markdown", "rst", "lua", "vim", "latex", "json" },
+  sync_install = false,
+  auto_install = true,
+  ignore_install = { "fortran" },
+  highlight = {
+    enable = true,
+    disable = { "fortran" },
+    additional_vim_regex_highlighting = false,
+  },
+  rainbow = {
+    enable = true,
+  },
+}
+
 -- nvim-tree setup
 require'nvim-tree'.setup {}
 
@@ -11,7 +28,7 @@ require'telescope'.setup{}
 --- lualine settings
 require'lualine'.setup{
     options = {
-        theme = 'solarized_light',
+        theme = 'auto',
         icons_enabled = true,
         }
 }
@@ -29,7 +46,7 @@ require('swap-buffers').setup({
 
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 -- python language server settings
@@ -56,6 +73,10 @@ lspconfig.clangd.setup{
     capabilities = capabilities,
 }
 
+-- signature help config
+local lsp_signature_cfg = {doc_lines = 0,}
+require"lsp_signature".setup(lsp_signature_cfg)
+
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menu,menuone,noselect'
 
@@ -67,7 +88,7 @@ require("luasnip/loaders/from_vscode").load(
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
-cmp.setup {
+cmp.setup({
   snippet = {
     expand = function(args)
       require('luasnip').lsp_expand(args.body)
@@ -104,12 +125,16 @@ cmp.setup {
     end,
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'path' },
-    { name = 'buffer' },
+    {name = 'nvim_lsp'},
+    {name = 'luasnip'},
+    {name = 'path'},
+    {name = 'buffer',
+      option = {
+        get_bufnrs = vim.api.nvim_list_bufs,
+      },
+    },
   },
-}
+})
 
 -- null-ls for adapting lang linters into language servers
 local null_ls = require("null-ls")
@@ -120,7 +145,13 @@ local null_ls_sources = {
 null_ls.setup({sources = null_ls_sources})
 
 -- disable all lsp diagnostic virtual text to reduce noise
-vim.diagnostic.config({virtual_text = false})
+vim.diagnostic.config(
+  {
+    virtual_text = false,
+    underline = false,
+    float = { source = true },
+  }
+)
 -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 --     vim.lsp.diagnostic.on_publish_diagnostics, {
 --         virtual_text = false,
