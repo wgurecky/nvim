@@ -72,6 +72,10 @@ lspconfig.clangd.setup{
     cmd = {vim.fn.FindClangExe()},
     capabilities = capabilities,
 }
+-- rust
+lspconfig.rust_analyzer.setup{
+    capabilities = capabilities,
+}
 
 -- signature help config
 local lsp_signature_cfg = {doc_lines = 0,}
