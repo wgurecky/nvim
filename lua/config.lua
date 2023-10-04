@@ -21,6 +21,9 @@ require'nvim-treesitter.configs'.setup {
 -- nvim-tree setup
 require'nvim-tree'.setup {}
 
+-- trouble setup
+require'trouble'.setup{}
+
 -- telescope.nvim setup
 local actions = require('telescope.actions')
 require'telescope'.setup{}
@@ -92,6 +95,7 @@ require("luasnip/loaders/from_vscode").load(
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
+local cmp_buffer = require 'cmp_buffer'
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -109,16 +113,21 @@ cmp.setup({
       behavior = cmp.ConfirmBehavior.Replace,
       select = false,
     },
-    ['<Tab>'] = function(fallback)
+    ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
+      -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
+      -- they way you will only jump inside the snippet region
       elseif luasnip.expand_or_jumpable() then
         luasnip.expand_or_jump()
+      elseif has_words_before() then
+        cmp.complete()
       else
         fallback()
       end
-    end,
-    ['<S-Tab>'] = function(fallback)
+    end, { "i", "s" }),
+
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       elseif luasnip.jumpable(-1) then
@@ -126,16 +135,17 @@ cmp.setup({
       else
         fallback()
       end
-    end,
+    end, { "i", "s" }),
   },
   sources = {
     {name = 'nvim_lsp'},
     {name = 'luasnip'},
     {name = 'path'},
-    {name = 'buffer',
-      option = {
-        get_bufnrs = vim.api.nvim_list_bufs,
-      },
+    {name = 'buffer'},
+  },
+  sorting = {
+    comparators = {
+      function(...) return cmp_buffer:compare_locality(...) end,
     },
   },
 })
@@ -208,6 +218,7 @@ nnoremap <leader>fi <cmd>lua require('telescope.builtin').diagnostics()<CR>
 " On hover show diagnostic (if any) or use <leader>di to force diagnostic popup
 autocmd CursorHold * lua vim.diagnostic.open_float()
 nnoremap <leader>di  <cmd>lua vim.diagnostic.open_float()<CR>
+nnoremap <leader>xd  <cmd>TroubleToggle document_diagnostics<cr>
 
 " nvim-lsp mappings
 " note: <C-o> go back previous pos, <C-i> forward to last pos
