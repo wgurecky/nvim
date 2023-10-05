@@ -54,7 +54,7 @@ local plugins_table = {
   -- dev tools
   {'tpope/vim-dispatch', ft = {'cpp', 'c', 'fortran'}, cmd = {'Make'}},
   {'lervag/vimtex', ft = {'tex'}},
-  {'jose-elias-alvarez/null-ls.nvim', event = "InsertEnter"},
+  {'nvimtools/none-ls.nvim', event = "InsertEnter"},
 
   -- lsp diagnostic formatting
   {'folke/trouble.nvim',

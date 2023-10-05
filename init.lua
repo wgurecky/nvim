@@ -134,7 +134,7 @@ set laststatus=3
 -- Extra useful functions
 vim.cmd([[
 " comment blocks of code
-autocmd FileType c,cpp,java,scala let b:comment_leader = '// '
+autocmd FileType rust,c,cpp,java,scala let b:comment_leader = '// '
 autocmd FileType sh,ruby,python   let b:comment_leader = '# '
 autocmd FileType conf,fstab       let b:comment_leader = '# '
 autocmd FileType tex              let b:comment_leader = '% '
