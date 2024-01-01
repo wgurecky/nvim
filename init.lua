@@ -116,7 +116,8 @@ require('config')
 -- colorscheme solarized
 vim.cmd([[
 set mouse=
-set background=light
+"set background=light
+set bg?
 set termguicolors
 ]])
 
