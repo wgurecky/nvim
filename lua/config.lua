@@ -21,6 +21,9 @@ require'nvim-treesitter.configs'.setup {
 -- nvim-tree setup
 require'nvim-tree'.setup {}
 
+-- trouble setup
+require'trouble'.setup{}
+
 -- telescope.nvim setup
 local actions = require('telescope.actions')
 require'telescope'.setup{}
@@ -72,6 +75,10 @@ lspconfig.clangd.setup{
     cmd = {vim.fn.FindClangExe()},
     capabilities = capabilities,
 }
+-- rust
+lspconfig.rust_analyzer.setup{
+    capabilities = capabilities,
+}
 
 -- signature help config
 local lsp_signature_cfg = {doc_lines = 0,}
@@ -79,6 +86,7 @@ require"lsp_signature".setup(lsp_signature_cfg)
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menu,menuone,noselect'
+vim.o.pumheight = 15
 
 -- luasnip setup
 local luasnip = require 'luasnip'
@@ -88,6 +96,7 @@ require("luasnip/loaders/from_vscode").load(
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
+local cmp_buffer = require 'cmp_buffer'
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -97,6 +106,8 @@ cmp.setup({
   mapping = {
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-k>'] = cmp.mapping.select_prev_item(),
+    ['<C-j>'] = cmp.mapping.select_next_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
@@ -128,12 +139,13 @@ cmp.setup({
     {name = 'nvim_lsp'},
     {name = 'luasnip'},
     {name = 'path'},
-    {name = 'buffer',
-      option = {
-        get_bufnrs = vim.api.nvim_list_bufs,
-      },
-    },
+    {name = 'buffer'},
   },
+--   sorting = {
+--     comparators = {
+--       function(...) return cmp_buffer:compare_locality(...) end,
+--     },
+--   },
 })
 
 -- null-ls for adapting lang linters into language servers
@@ -204,6 +216,7 @@ nnoremap <leader>fi <cmd>lua require('telescope.builtin').diagnostics()<CR>
 " On hover show diagnostic (if any) or use <leader>di to force diagnostic popup
 autocmd CursorHold * lua vim.diagnostic.open_float()
 nnoremap <leader>di  <cmd>lua vim.diagnostic.open_float()<CR>
+nnoremap <leader>xd  <cmd>TroubleToggle document_diagnostics<cr>
 
 " nvim-lsp mappings
 " note: <C-o> go back previous pos, <C-i> forward to last pos

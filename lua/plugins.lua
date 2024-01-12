@@ -22,7 +22,7 @@ local plugins_table = {
   },
   {'nvim-lualine/lualine.nvim', lazy = false},
   {'kdheepak/tabline.nvim', lazy = false},
-  {'kyazdani42/nvim-web-devicons', lazy = false},
+  {'nvim-tree/nvim-web-devicons', lazy = false},
 
   -- Common plugins
   {'caenrique/swap-buffers.nvim', event = "VeryLazy"},
@@ -54,7 +54,14 @@ local plugins_table = {
   -- dev tools
   {'tpope/vim-dispatch', ft = {'cpp', 'c', 'fortran'}, cmd = {'Make'}},
   {'lervag/vimtex', ft = {'tex'}},
-  {'jose-elias-alvarez/null-ls.nvim', event = "InsertEnter"},
+  {'nvimtools/none-ls.nvim', event = "InsertEnter"},
+
+  -- lsp diagnostic formatting
+  {'folke/trouble.nvim',
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+    },
+  },
 
   -- code auto completion
   'neovim/nvim-lspconfig',

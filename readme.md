@@ -1,7 +1,7 @@
 About
 =====
 
-Wgurecky's neovim configuration files.  Useful for c, cpp, python, and latex files.
+Wgurecky's neovim configuration files.  Useful for rust, cpp, python, and latex files.
 
 This config depends on neovim's new lsp (language server protocol) integration.
 
@@ -20,6 +20,7 @@ Depends
 - clangd
 - gcc
 - [ack]
+- [rust-analyzer]
 - [jedi-language-server]
 - [jedi]
 - [pylint]
@@ -33,6 +34,7 @@ Neovim plugins are not listed here.  [lazy.nvim] handles installation and update
 [jedi]: https://github.com/davidhalter/jedi
 [pylint]: https://www.pylint.org/
 [jedi-language-server]: https://github.com/pappasam/jedi-language-server
+[rust-analyzer]: https://rust-analyzer.github.io/
 
 Optional
 ---------
