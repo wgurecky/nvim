@@ -23,7 +23,7 @@ Depends
 - [rust-analyzer]
 - [jedi-language-server]
 - [jedi]
-- [pylint]
+- [ruff-lsp]
 
 Neovim plugins are not listed here.  [lazy.nvim] handles installation and updates of all neovim plugins.
 
@@ -32,7 +32,7 @@ Neovim plugins are not listed here.  [lazy.nvim] handles installation and update
 [pynvim]: https://github.com/neovim/pynvim
 [ack]: https://beyondgrep.com/
 [jedi]: https://github.com/davidhalter/jedi
-[pylint]: https://www.pylint.org/
+[ruff-lsp]: https://github.com/astral-sh/ruff-lsp
 [jedi-language-server]: https://github.com/pappasam/jedi-language-server
 [rust-analyzer]: https://rust-analyzer.github.io/
 
