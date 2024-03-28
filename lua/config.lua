@@ -54,6 +54,16 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 -- python language server settings
 lspconfig.jedi_language_server.setup{capabilities = capabilities}
+-- python linting language server
+require'lspconfig'.ruff_lsp.setup{
+  init_options = {
+    settings = {
+      -- Any extra CLI arguments for `ruff` go here.
+      args = {},
+    }
+  },
+  capabilities = capabilities,
+}
 -- lspconfig.pyright.setup{capabilities = capabilities}
 -- fortran language server settings
 lspconfig.fortls.setup{
@@ -151,8 +161,6 @@ cmp.setup({
 -- null-ls for adapting lang linters into language servers
 local null_ls = require("null-ls")
 local null_ls_sources = {
-  null_ls.builtins.diagnostics.pylint,
-  null_ls.builtins.diagnostics.flake8,
 }
 null_ls.setup({sources = null_ls_sources})
 
