@@ -77,6 +77,9 @@ vim.keymap.set("x", "<leader>p", "\"_dP")
 -- Q is a silly place
 vim.keymap.set("n", "Q", "<nop>")
 
+-- repeat last macro
+vim.keymap.set("n", ",", "@@")
+
 -- fn to automatically set makeprg (required for large c++ and c projects)
 vim.cmd([[
 function! g:BuildInSubDir(buildsubdir)
