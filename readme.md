@@ -131,9 +131,9 @@ Auto complete for python requires the `jedi-language-server` and `jedi` to be in
 
 ### Linting
 
-Install pylint, for ex:
+Install ruff-lsp, for ex:
 
-    pip install pylint
+    pip install ruff-lsp
 
 ### Breakpoints in Python
 
