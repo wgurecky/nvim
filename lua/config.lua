@@ -44,63 +44,6 @@ require('swap-buffers').setup({
   ignore_filetypes = {'NvimTree'}
 })
 
--- Add additional capabilities supported by nvim-cmp
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
--- Enable some language servers with the additional completion capabilities offered by nvim-cmp
--- python language server settings
-lspconfig.jedi_language_server.setup{capabilities = capabilities}
--- python linting language server
-require'lspconfig'.ruff_lsp.setup{
-  init_options = {
-    settings = {
-      -- Any extra CLI arguments for `ruff` go here.
-      args = {},
-    }
-  },
-  capabilities = capabilities,
-}
--- lspconfig.pyright.setup{capabilities = capabilities}
--- fortran language server settings
-lspconfig.fortls.setup{
-    cmd = {
-        'fortls',
-        '--autocomplete_name_only',
-        '--incrmental_sync'
-    },
-    settings = {
-        ["fortran-ls"] = {
-            variableHover = false
-        },
-    },
-    root_dir = vim.fn.FindTopLevelProjectDir,
-    capabilities = capabilities,
-}
--- cpp language server settings
-lspconfig.clangd.setup{
-    cmd = {vim.fn.FindClangExe()},
-    capabilities = capabilities,
-}
--- rust
-lspconfig.rust_analyzer.setup{
-    capabilities = capabilities,
-}
-
--- signature help config
-local lsp_signature_cfg = {doc_lines = 0,}
-require"lsp_signature".setup(lsp_signature_cfg)
-
--- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menu,menuone,noselect'
-vim.o.pumheight = 15
-
--- luasnip setup
-local luasnip = require 'luasnip'
-require("luasnip/loaders/from_vscode").load(
-    {paths={'~/.config/nvim/my_lsp_snips'}}
-)
-
 -- nvim-cmp setup
 local cmp = require 'cmp'
 local cmp_buffer = require 'cmp_buffer'
@@ -154,6 +97,63 @@ cmp.setup({
 --     },
 --   },
 })
+
+-- Add additional capabilities supported by nvim-cmp
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+-- Enable some language servers with the additional completion capabilities offered by nvim-cmp
+--
+-- python language server settings
+lspconfig.jedi_language_server.setup{capabilities = capabilities}
+-- python linting language server
+require'lspconfig'.ruff_lsp.setup{
+  init_options = {
+    settings = {
+      -- Any extra CLI arguments for `ruff` go here.
+      args = {},
+    }
+  },
+  capabilities = capabilities,
+}
+-- lspconfig.pyright.setup{capabilities = capabilities}
+-- fortran language server settings
+lspconfig.fortls.setup{
+    cmd = {
+        'fortls',
+        '--autocomplete_name_only',
+        '--incrmental_sync'
+    },
+    settings = {
+        ["fortran-ls"] = {
+            variableHover = false
+        },
+    },
+    root_dir = vim.fn.FindTopLevelProjectDir,
+    capabilities = capabilities,
+}
+-- cpp language server settings
+lspconfig.clangd.setup{
+    cmd = {vim.fn.FindClangExe()},
+    capabilities = capabilities,
+}
+-- rust
+lspconfig.rust_analyzer.setup{
+    capabilities = capabilities,
+}
+
+-- signature help config
+local lsp_signature_cfg = {doc_lines = 0,}
+require"lsp_signature".setup(lsp_signature_cfg)
+
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = 'menu,menuone,noselect'
+vim.o.pumheight = 15
+
+-- luasnip setup
+local luasnip = require 'luasnip'
+require("luasnip/loaders/from_vscode").load(
+    {paths={'~/.config/nvim/my_lsp_snips'}}
+)
 
 -- null-ls for adapting lang linters into language servers
 local null_ls = require("null-ls")
