@@ -44,6 +44,12 @@ require('swap-buffers').setup({
   ignore_filetypes = {'NvimTree'}
 })
 
+-- luasnip setup
+local luasnip = require 'luasnip'
+require("luasnip/loaders/from_vscode").load(
+    {paths={'~/.config/nvim/my_lsp_snips'}}
+)
+
 -- nvim-cmp setup
 local cmp = require 'cmp'
 local cmp_buffer = require 'cmp_buffer'
@@ -148,12 +154,6 @@ require"lsp_signature".setup(lsp_signature_cfg)
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menu,menuone,noselect'
 vim.o.pumheight = 15
-
--- luasnip setup
-local luasnip = require 'luasnip'
-require("luasnip/loaders/from_vscode").load(
-    {paths={'~/.config/nvim/my_lsp_snips'}}
-)
 
 -- null-ls for adapting lang linters into language servers
 local null_ls = require("null-ls")
