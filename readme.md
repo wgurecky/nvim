@@ -8,7 +8,7 @@ This config depends on neovim's new lsp (language server protocol) integration.
 Work in progress:
 
 - Migrating to pure lua configuration.
-- Migrating to null-ls for linting
+- Migrating to none-ls for linting
 
 
 Depends
@@ -176,9 +176,10 @@ To search and replace all instances of a word inside a project that is a git rep
 To search and replace all instances of the current word under the cursor in the current git repo do:
 
     <leader>*
+    <C-q>
     :cdo s/foo/bar/gc | update
 
-Where `<leader>` is set to `\` by default.
+Where `<leader>` is set to `\` by default.  The `<C-q>` (Ctrl+q) is required to send the telescope results to the quickfix list.
 
 To find replace the current word under the cursor in the current file use:
 

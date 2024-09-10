@@ -4,18 +4,15 @@ local lspconfig = require('lspconfig')
 -- treesitter
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "c", "cpp", "python", "markdown", "rst", "lua", "vim", "latex", "json" },
+  ensure_installed = { "c", "cpp", "rust", "python", "markdown", "rst", "lua", "vim", "json" },
   sync_install = false,
   auto_install = true,
-  ignore_install = { "fortran" },
+  ignore_install = { "fortran", "latex" },
   highlight = {
     enable = true,
-    disable = { "fortran" },
+    disable = { "fortran", "latex" },
     additional_vim_regex_highlighting = false,
-  },
-  rainbow = {
-    enable = true,
-  },
+  }
 }
 
 -- nvim-tree setup
@@ -46,57 +43,6 @@ require("tabline").setup{
 require('swap-buffers').setup({
   ignore_filetypes = {'NvimTree'}
 })
-
--- Add additional capabilities supported by nvim-cmp
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
--- Enable some language servers with the additional completion capabilities offered by nvim-cmp
--- python language server settings
-lspconfig.jedi_language_server.setup{capabilities = capabilities}
--- python linting language server
-require'lspconfig'.ruff_lsp.setup{
-  init_options = {
-    settings = {
-      -- Any extra CLI arguments for `ruff` go here.
-      args = {},
-    }
-  },
-  capabilities = capabilities,
-}
--- lspconfig.pyright.setup{capabilities = capabilities}
--- fortran language server settings
-lspconfig.fortls.setup{
-    cmd = {
-        'fortls',
-        '--autocomplete_name_only',
-        '--incrmental_sync'
-    },
-    settings = {
-        ["fortran-ls"] = {
-            variableHover = false
-        },
-    },
-    root_dir = vim.fn.FindTopLevelProjectDir,
-    capabilities = capabilities,
-}
--- cpp language server settings
-lspconfig.clangd.setup{
-    cmd = {vim.fn.FindClangExe()},
-    capabilities = capabilities,
-}
--- rust
-lspconfig.rust_analyzer.setup{
-    capabilities = capabilities,
-}
-
--- signature help config
-local lsp_signature_cfg = {doc_lines = 0,}
-require"lsp_signature".setup(lsp_signature_cfg)
-
--- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menu,menuone,noselect'
-vim.o.pumheight = 15
 
 -- luasnip setup
 local luasnip = require 'luasnip'
@@ -158,6 +104,57 @@ cmp.setup({
 --   },
 })
 
+-- Add additional capabilities supported by nvim-cmp
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+-- Enable some language servers with the additional completion capabilities offered by nvim-cmp
+--
+-- python language server settings
+lspconfig.jedi_language_server.setup{capabilities = capabilities}
+-- python linting language server
+require'lspconfig'.ruff_lsp.setup{
+  init_options = {
+    settings = {
+      -- Any extra CLI arguments for `ruff` go here.
+      args = {},
+    }
+  },
+  capabilities = capabilities,
+}
+-- lspconfig.pyright.setup{capabilities = capabilities}
+-- fortran language server settings
+lspconfig.fortls.setup{
+    cmd = {
+        'fortls',
+        '--autocomplete_name_only',
+        '--incrmental_sync'
+    },
+    settings = {
+        ["fortran-ls"] = {
+            variableHover = false
+        },
+    },
+    root_dir = vim.fn.FindTopLevelProjectDir,
+    capabilities = capabilities,
+}
+-- cpp language server settings
+lspconfig.clangd.setup{
+    cmd = {vim.fn.FindClangExe()},
+    capabilities = capabilities,
+}
+-- rust
+lspconfig.rust_analyzer.setup{
+    capabilities = capabilities,
+}
+
+-- signature help config
+local lsp_signature_cfg = {doc_lines = 0,}
+require"lsp_signature".setup(lsp_signature_cfg)
+
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = 'menu,menuone,noselect'
+vim.o.pumheight = 15
+
 -- null-ls for adapting lang linters into language servers
 local null_ls = require("null-ls")
 local null_ls_sources = {
@@ -211,12 +208,13 @@ let g:qfenter_keymap.vopen = ['<Leader><CR>', '<C-v>']
 let g:qs_highlight_on_keys = ['f', 'F']
 
 " telescope mappings
+nnoremap <leader>* :execute 'Telescope live_grep default_text=' . expand('<cword>')<cr><esc>
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<CR>
+nnoremap <C-f>      <cmd>lua require('telescope.builtin').live_grep()<CR>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<CR>
 nnoremap <C-b>      <cmd>lua require('telescope.builtin').buffers()<CR>
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<CR>
 nnoremap <C-p>      <cmd>lua require('telescope.builtin').find_files()<CR>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<CR>
-nnoremap <C-f>      <cmd>lua require('telescope.builtin').live_grep()<CR>
 nnoremap <leader>fd <cmd>lua require('telescope.builtin').lsp_definitions()<CR>
 nnoremap <leader>fr <cmd>lua require('telescope.builtin').lsp_references()<CR>
 nnoremap <leader>fi <cmd>lua require('telescope.builtin').diagnostics()<CR>
@@ -288,7 +286,7 @@ else
     let g:grepper.rgproj = { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
 endif
 " Project wide search with <leader>*
-nnoremap <leader>* :Grepper -tool rgproj -cword -noprompt<cr>
+" nnoremap <leader>* :Grepper -tool rgproj -cword -noprompt<cr>
 " Project wide search with :vg <cr>
 cnoreabbrev vg Grepper -tool rgproj <cr>
 
