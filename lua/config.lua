@@ -112,7 +112,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- python language server settings
 lspconfig.jedi_language_server.setup{capabilities = capabilities}
 -- python linting language server
-require'lspconfig'.ruff_lsp.setup{
+require'lspconfig'.ruff.setup{
   init_options = {
     settings = {
       -- Any extra CLI arguments for `ruff` go here.
