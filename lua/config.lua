@@ -7,7 +7,7 @@ require'nvim-treesitter.configs'.setup {
   ensure_installed = { "c", "cpp", "rust", "python", "markdown", "rst", "lua", "vim", "json" },
   sync_install = false,
   auto_install = true,
-  ignore_install = { "fortran", "latex" },
+  ignore_install = { "fortran", "latex", "markdown" },
   highlight = {
     enable = true,
     disable = { "fortran", "latex" },
@@ -23,7 +23,17 @@ require'trouble'.setup{}
 
 -- telescope.nvim setup
 local actions = require('telescope.actions')
-require'telescope'.setup{}
+require'telescope'.setup{
+  defaults = {
+    preview = {
+      treesitter = {
+        enable = false
+      }
+    },
+    file_ignore_patterns = { "^build/", "build/", "/build/", "/target/", "target/" }
+  }
+}
+
 
 --- lualine settings
 require'lualine'.setup{
@@ -51,68 +61,55 @@ require("luasnip/loaders/from_vscode").load(
 )
 
 -- nvim-cmp setup
-local cmp = require 'cmp'
-local cmp_buffer = require 'cmp_buffer'
-cmp.setup({
-  snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
-  },
-  mapping = {
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-k>'] = cmp.mapping.select_prev_item(),
-    ['<C-j>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = false,
+require('blink.cmp').setup({
+    -- keymap = { preset = 'default' },
+    completion = {
+      menu = {
+        auto_show = false,
+      },
     },
-    ['<Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end,
-    ['<S-Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end,
-  },
-  sources = {
-    {name = 'nvim_lsp'},
-    {name = 'luasnip'},
-    {name = 'path'},
-    {name = 'buffer'},
-  },
---   sorting = {
---     comparators = {
---       function(...) return cmp_buffer:compare_locality(...) end,
---     },
---   },
+    -- custom tab to cycle config
+    keymap = {
+      ['<Tab>'] = {
+        'show',
+        function(cmp)
+          if cmp.snippet_active() then return cmp.accept()
+          else return cmp.select_next() end
+        end,
+        'snippet_forward',
+        'fallback'
+      },
+      ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
+      -- press Enter to accept suggestion
+      ['<CR>'] = { 'accept', 'fallback' },
+      ['<Up>'] = { 'select_prev', 'fallback' },
+      ['<Down>'] = { 'select_next', 'fallback' },
+      ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
+      ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
+      ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+      ['<C-e>'] = { 'hide', 'fallback' },
+    },
+    appearance = {
+      use_nvim_cmp_as_default = true,
+    },
+    sources = {
+      default = { 'lsp', 'path', 'snippets', 'buffer' },
+    },
+    signature = { enabled = true },
+    -- fuzzy = { implementation = "prefer_rust_with_warning" }
+    fuzzy = { implementation = "lua" }
 })
 
 -- Add additional capabilities supported by nvim-cmp
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+-- local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local capabilities = require('blink.cmp').get_lsp_capabilities()
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 --
 -- python language server settings
 lspconfig.jedi_language_server.setup{capabilities = capabilities}
 -- python linting language server
-require'lspconfig'.ruff_lsp.setup{
+require'lspconfig'.ruff.setup{
   init_options = {
     settings = {
       -- Any extra CLI arguments for `ruff` go here.
@@ -146,10 +143,6 @@ lspconfig.clangd.setup{
 lspconfig.rust_analyzer.setup{
     capabilities = capabilities,
 }
-
--- signature help config
-local lsp_signature_cfg = {doc_lines = 0,}
-require"lsp_signature".setup(lsp_signature_cfg)
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menu,menuone,noselect'

@@ -65,15 +65,7 @@ local plugins_table = {
 
   -- code auto completion
   'neovim/nvim-lspconfig',
-  {'hrsh7th/nvim-cmp',
-    dependencies = {
-    'hrsh7th/cmp-nvim-lsp',
-    'hrsh7th/cmp-path',
-    'hrsh7th/cmp-buffer',
-    'saadparwaiz1/cmp_luasnip',
-    'ray-x/lsp_signature.nvim',
-    },
-   },
+  'saghen/blink.cmp',
    {'L3MON4D3/LuaSnip', event = "VeryLazy"}
 }
 -- END plugin spec
