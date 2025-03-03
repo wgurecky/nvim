@@ -7,7 +7,7 @@ require'nvim-treesitter.configs'.setup {
   ensure_installed = { "c", "cpp", "rust", "python", "markdown", "rst", "lua", "vim", "json" },
   sync_install = false,
   auto_install = true,
-  ignore_install = { "fortran", "latex" },
+  ignore_install = { "fortran", "latex", "markdown" },
   highlight = {
     enable = true,
     disable = { "fortran", "latex" },
@@ -23,7 +23,17 @@ require'trouble'.setup{}
 
 -- telescope.nvim setup
 local actions = require('telescope.actions')
-require'telescope'.setup{}
+require'telescope'.setup{
+  defaults = {
+    preview = {
+      treesitter = {
+        enable = false
+      }
+    },
+    file_ignore_patterns = { "^build/", "build/", "/build/", "/target/", "target/" }
+  }
+}
+
 
 --- lualine settings
 require'lualine'.setup{
