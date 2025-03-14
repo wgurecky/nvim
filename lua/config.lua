@@ -10,7 +10,7 @@ require'nvim-treesitter.configs'.setup {
   ignore_install = { "fortran", "latex", "markdown" },
   highlight = {
     enable = true,
-    disable = { "fortran", "latex" },
+    disable = { "fortran", "latex", "markdown"},
     additional_vim_regex_highlighting = false,
   }
 }
