@@ -10,7 +10,7 @@ require'nvim-treesitter.configs'.setup {
   ignore_install = { "fortran", "latex", "markdown" },
   highlight = {
     enable = true,
-    disable = { "fortran", "latex" },
+    disable = { "fortran", "latex", "markdown"},
     additional_vim_regex_highlighting = false,
   }
 }
@@ -62,10 +62,39 @@ require("luasnip/loaders/from_vscode").load(
 
 -- nvim-cmp setup
 require('blink.cmp').setup({
-    -- keymap = { preset = 'default' },
     completion = {
       menu = {
-        auto_show = false,
+        auto_show = true,
+      },
+      list = {
+        selection = {
+          preselect = false,
+          auto_insert = false,
+        },
+      },
+      ghost_text = {
+        enabled = true,
+        show_without_selection = true,
+      },
+      accept = {
+        auto_brackets = {
+          enabled = true,
+        },
+      },
+      trigger = {
+          show_on_trigger_character = true,
+          show_on_insert_on_trigger_character = true,
+          show_on_accept_on_trigger_character = true,
+--           prefetch_on_insert = true,
+--           show_in_snippet = true,
+--           show_on_keyword = true,
+--           show_on_blocked_trigger_characters = { ' ', '\n', '\t' },
+--           -- You can also block per filetype with a function:
+--           -- show_on_blocked_trigger_characters = function(ctx)
+--           --   if vim.bo.filetype == 'markdown' then return { ' ', '\n', '\t', '.', '/', '(', '[' } end
+--           --   return { ' ', '\n', '\t' }
+--           -- end,
+--           show_on_x_blocked_trigger_characters = { "'", '"', '(' },
       },
     },
     -- custom tab to cycle config
@@ -90,7 +119,7 @@ require('blink.cmp').setup({
       ['<C-e>'] = { 'hide', 'fallback' },
     },
     appearance = {
-      use_nvim_cmp_as_default = true,
+      use_nvim_cmp_as_default = false,
     },
     sources = {
       default = { 'lsp', 'path', 'snippets', 'buffer' },
