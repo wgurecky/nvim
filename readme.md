@@ -23,7 +23,7 @@ Depends
 - [rust-analyzer]
 - [jedi-language-server]
 - [jedi]
-- [ruff-lsp]
+- [ruff]
 
 Neovim plugins are not listed here.  [lazy.nvim] handles installation and updates of all neovim plugins.
 
@@ -32,7 +32,7 @@ Neovim plugins are not listed here.  [lazy.nvim] handles installation and update
 [pynvim]: https://github.com/neovim/pynvim
 [ack]: https://beyondgrep.com/
 [jedi]: https://github.com/davidhalter/jedi
-[ruff-lsp]: https://github.com/astral-sh/ruff-lsp
+[ruff]: https://github.com/astral-sh/ruff
 [jedi-language-server]: https://github.com/pappasam/jedi-language-server
 [rust-analyzer]: https://rust-analyzer.github.io/
 
@@ -41,8 +41,6 @@ Optional
 
 - [ripgrep]
 - [clang-tidy]
-- [proselint]
-- [write-good]
 
 [ripgrep]: https://github.com/BurntSushi/ripgrep
 [clang-tidy]: https://clang.llvm.org/extra/clang-tidy/
@@ -131,34 +129,24 @@ Auto complete for python requires the `jedi-language-server` and `jedi` to be in
 
 ### Linting
 
-Install ruff-lsp, for ex:
+Install ruff, for ex:
 
-    pip install ruff-lsp
+    pip install ruff
 
 ### Breakpoints in Python
 
 In normal mode `<leader> b` inserts a breakpoint on the line above the current cursor position.
 
-Prose
-------
-
-### Linting
-
-Install [write-good] (optional):
-
-    npm install write-good
-
-Install [proselint] (optional):
-
-    pip install proselint
-
-[proselint] is a prose checking tool for markdown and latex files.
-
-[proselint]: https://github.com/amperser/proselint
-[write-good]: https://github.com/btford/write-good
 
 Notes
 =====
+
+Telescope Find File
+--------------------
+
+To search for a file in the current project:
+
+    <C-p>
 
 Find/Replace Mappings and Shortcuts
 -----------------------------------
@@ -171,6 +159,12 @@ To search and replace a word inside all files in a directory:
 To search and replace all instances of a word inside a project that is a git repository use:
 
     :vg <pattern>
+    :cdo s/foo/bar/gc | update
+    
+or
+
+    <C-f> <pattern>
+    <C-q>
     :cdo s/foo/bar/gc | update
 
 To search and replace all instances of the current word under the cursor in the current git repo do:
