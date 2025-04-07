@@ -65,8 +65,8 @@ local plugins_table = {
 
   -- code auto completion
   'neovim/nvim-lspconfig',
-  'saghen/blink.cmp',
-   {'L3MON4D3/LuaSnip', event = "VeryLazy"}
+  {'saghen/blink.cmp', version = "*"},
+  {'L3MON4D3/LuaSnip', event = "VeryLazy"}
 }
 -- END plugin spec
 
