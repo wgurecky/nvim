@@ -150,8 +150,8 @@ require('blink.cmp').setup({
       default = { 'lsp', 'path', 'snippets', 'buffer' },
     },
     signature = { enabled = true },
-    -- fuzzy = { implementation = "prefer_rust_with_warning" }
-    fuzzy = { implementation = "lua" }
+    fuzzy = { implementation = "prefer_rust_with_warning" }
+    -- fuzzy = { implementation = "lua" }
 })
 
 -- Add additional capabilities supported by nvim-cmp
