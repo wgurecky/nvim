@@ -1,6 +1,3 @@
--- lspconfig
-local lspconfig = require('lspconfig')
-
 -- treesitter
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
@@ -89,12 +86,12 @@ require('blink.cmp').setup({
       list = {
         selection = {
           preselect = false,
-          auto_insert = false,
+          auto_insert = true,
         },
       },
       ghost_text = {
-        enabled = true,
-        show_without_selection = true,
+        enabled = false,
+        show_without_selection = false,
       },
       accept = {
         auto_brackets = {
@@ -156,7 +153,11 @@ require('blink.cmp').setup({
 
 -- Add additional capabilities supported by nvim-cmp
 -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local capabilities = require('blink.cmp').get_lsp_capabilities()
+local nvim_capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = require('blink.cmp').get_lsp_capabilities(nvim_capabilities)
+
+-- lspconfig
+local lspconfig = require('lspconfig')
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 --
