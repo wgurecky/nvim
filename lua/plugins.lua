@@ -53,7 +53,6 @@ local plugins_table = {
 
   -- dev tools
   {'tpope/vim-dispatch', ft = {'cpp', 'c', 'fortran'}, cmd = {'Make'}},
-  {'lervag/vimtex', ft = {'tex'}},
   {'nvimtools/none-ls.nvim', event = "InsertEnter"},
 
   -- lsp diagnostic formatting
@@ -65,8 +64,8 @@ local plugins_table = {
 
   -- code auto completion
   'neovim/nvim-lspconfig',
-  'saghen/blink.cmp',
-   {'L3MON4D3/LuaSnip', event = "VeryLazy"}
+  {'saghen/blink.cmp', version = "*"},
+  {'L3MON4D3/LuaSnip', event = "VeryLazy"}
 }
 -- END plugin spec
 

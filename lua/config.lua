@@ -1,6 +1,3 @@
--- lspconfig
-local lspconfig = require('lspconfig')
-
 -- treesitter
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
@@ -89,12 +86,12 @@ require('blink.cmp').setup({
       list = {
         selection = {
           preselect = false,
-          auto_insert = false,
+          auto_insert = true,
         },
       },
       ghost_text = {
-        enabled = true,
-        show_without_selection = true,
+        enabled = false,
+        show_without_selection = false,
       },
       accept = {
         auto_brackets = {
@@ -150,13 +147,17 @@ require('blink.cmp').setup({
       default = { 'lsp', 'path', 'snippets', 'buffer' },
     },
     signature = { enabled = true },
-    -- fuzzy = { implementation = "prefer_rust_with_warning" }
-    fuzzy = { implementation = "lua" }
+    fuzzy = { implementation = "prefer_rust_with_warning" }
+    -- fuzzy = { implementation = "lua" }
 })
 
 -- Add additional capabilities supported by nvim-cmp
 -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local capabilities = require('blink.cmp').get_lsp_capabilities()
+local nvim_capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = require('blink.cmp').get_lsp_capabilities(nvim_capabilities)
+
+-- lspconfig
+local lspconfig = require('lspconfig')
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 --
@@ -288,33 +289,10 @@ nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 " alias to check loaded lsp client status
 cnoreabbrev lspstat lua print(vim.inspect(vim.lsp.buf_get_clients()))
 
-" ale syntax checker settings for filetypes which do not have a lang server
-" to check which linters are active run: :ALEinfo
-" let g:ale_linters = {
-"    \ 'python': ['pylint'],
-"    \ 'cpp': ['clangd'],
-"    \ 'c': ['clangd'],
-"    \ 'fortran': ['gfortran'],
-"    \ 'tex': ['proselint', 'write-good'],
-"    \ 'markdown': ['proselint', 'write-good'],
-"    \ }
-"let g:ale_lint_on_save = 1
-
 " vim-dispatch settings
 " Run :Make! to launch background async project build.
 " Results are available via :Copen
 " Ensure makeprg is set properly before running
-
-" For project wide search/replace
-" Run :Ack {pattern} [{dir}]
-" :cdo s/foo/bar/gc | update
-"if !executable('ack')
-"    let g:ackprg = '~/.config/nvim/bin/ack'
-"endif
-
-" automatically set project base directory ack search on `:ag `
-" requires the projec to have a `.git` file in the base dir
-" cnoreabbrev ag Gcd <bar> Ack!
 
 " set default grepprg to ripgrep if on $PATH
 if executable('rg')
