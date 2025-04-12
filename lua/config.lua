@@ -289,33 +289,10 @@ nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 " alias to check loaded lsp client status
 cnoreabbrev lspstat lua print(vim.inspect(vim.lsp.buf_get_clients()))
 
-" ale syntax checker settings for filetypes which do not have a lang server
-" to check which linters are active run: :ALEinfo
-" let g:ale_linters = {
-"    \ 'python': ['pylint'],
-"    \ 'cpp': ['clangd'],
-"    \ 'c': ['clangd'],
-"    \ 'fortran': ['gfortran'],
-"    \ 'tex': ['proselint', 'write-good'],
-"    \ 'markdown': ['proselint', 'write-good'],
-"    \ }
-"let g:ale_lint_on_save = 1
-
 " vim-dispatch settings
 " Run :Make! to launch background async project build.
 " Results are available via :Copen
 " Ensure makeprg is set properly before running
-
-" For project wide search/replace
-" Run :Ack {pattern} [{dir}]
-" :cdo s/foo/bar/gc | update
-"if !executable('ack')
-"    let g:ackprg = '~/.config/nvim/bin/ack'
-"endif
-
-" automatically set project base directory ack search on `:ag `
-" requires the projec to have a `.git` file in the base dir
-" cnoreabbrev ag Gcd <bar> Ack!
 
 " set default grepprg to ripgrep if on $PATH
 if executable('rg')
