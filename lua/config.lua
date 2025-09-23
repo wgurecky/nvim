@@ -31,7 +31,6 @@ require'telescope'.setup{
   }
 }
 
-
 --- lualine settings
 require'lualine'.setup{
     options = {
@@ -77,7 +76,7 @@ local has_words_before_short = function()
   end
 end
 
--- nvim-cmp setup
+-- blink.nvim setup
 require('blink.cmp').setup({
     completion = {
       menu = {
@@ -162,9 +161,15 @@ local lspconfig = require('lspconfig')
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 --
 -- python language server settings
-lspconfig.jedi_language_server.setup{capabilities = capabilities}
+vim.lsp.config('jedi_language_server', {capabilities=capabilities})
+vim.lsp.enable('jedi_language_server')
+-- vim.lsp.config('ty', {capabilities=capabilities})
+-- vim.lsp.enable('ty')
+
 -- python linting language server
-require'lspconfig'.ruff.setup{
+-- lspconfig.ruff.setup{
+vim.lsp.config('ruff',
+{
   init_options = {
     settings = {
       -- Any extra CLI arguments for `ruff` go here.
@@ -172,10 +177,13 @@ require'lspconfig'.ruff.setup{
     }
   },
   capabilities = capabilities,
-}
+})
+vim.lsp.enable('ruff')
+
 -- lspconfig.pyright.setup{capabilities = capabilities}
 -- fortran language server settings
-lspconfig.fortls.setup{
+vim.lsp.config('fortls',
+{
     cmd = {
         'fortls',
         '--autocomplete_name_only',
@@ -188,16 +196,23 @@ lspconfig.fortls.setup{
     },
     root_dir = vim.fn.FindTopLevelProjectDir,
     capabilities = capabilities,
-}
+})
+vim.lsp.enable('fortls')
+
 -- cpp language server settings
-lspconfig.clangd.setup{
+vim.lsp.config('clangd',
+{
     cmd = {vim.fn.FindClangExe()},
     capabilities = capabilities,
-}
+})
+vim.lsp.enable('clangd')
+
 -- rust
-lspconfig.rust_analyzer.setup{
+vim.lsp.config('rust_analyzer',
+{
     capabilities = capabilities,
-}
+})
+vim.lsp.enable('rust_analyzer')
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menu,menuone,noselect'
