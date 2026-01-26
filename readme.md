@@ -8,32 +8,26 @@ This config depends on neovim's new lsp (language server protocol) integration.
 Work in progress:
 
 - Migrating to pure lua configuration.
-- Migrating to none-ls for linting
 
 
 Depends
 =======
 
 - neovim with built in lsp (neovim >=v0.5) formerly [nvim-lsp]
+- [rust-analyzer]
+- [ty]
+- [ruff]
 - [pynvim]
 - clang
 - clangd
-- gcc
-- [ack]
-- [rust-analyzer]
-- [jedi-language-server]
-- [jedi]
-- [ruff]
 
 Neovim plugins are not listed here.  [lazy.nvim] handles installation and updates of all neovim plugins.
 
 [lazy.nvim]: https://github.com/folke/lazy.nvim
 [nvim-lsp]: https://github.com/neovim/nvim-lsp
 [pynvim]: https://github.com/neovim/pynvim
-[ack]: https://beyondgrep.com/
-[jedi]: https://github.com/davidhalter/jedi
+[ty]: https://github.com/astral-sh/ty
 [ruff]: https://github.com/astral-sh/ruff
-[jedi-language-server]: https://github.com/pappasam/jedi-language-server
 [rust-analyzer]: https://rust-analyzer.github.io/
 
 Optional
@@ -123,9 +117,9 @@ Place `flake8` file in `~/.config/.` to ignore some minor PEP8 violation warning
 
 ### Auto Completion
 
-Auto complete for python requires the `jedi-language-server` and `jedi` to be installed:
+Auto complete for python requires the `ty` language server to be installed:
 
-    pip install jedi-language-server jedi
+    pip install ty
 
 ### Linting
 

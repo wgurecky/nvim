@@ -161,10 +161,10 @@ local lspconfig = require('lspconfig')
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 --
 -- python language server settings
-vim.lsp.config('jedi_language_server', {capabilities=capabilities})
-vim.lsp.enable('jedi_language_server')
--- vim.lsp.config('ty', {capabilities=capabilities})
--- vim.lsp.enable('ty')
+-- vim.lsp.config('jedi_language_server', {capabilities=capabilities})
+-- vim.lsp.enable('jedi_language_server')
+vim.lsp.config('ty', {capabilities=capabilities})
+vim.lsp.enable('ty')
 
 -- python linting language server
 -- lspconfig.ruff.setup{
