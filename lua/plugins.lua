@@ -55,6 +55,11 @@ local plugins_table = {
   {'tpope/vim-dispatch', ft = {'cpp', 'c', 'fortran'}, cmd = {'Make'}},
   {'nvimtools/none-ls.nvim', event = "InsertEnter"},
 
+  -- AI tools
+  {"frankroeder/parrot.nvim",
+    dependencies = { 'ibhagwan/fzf-lua', 'nvim-lua/plenary.nvim' },
+  },
+
   -- lsp diagnostic formatting
   {'folke/trouble.nvim',
     dependencies = { "nvim-tree/nvim-web-devicons" },
