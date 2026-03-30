@@ -36,14 +36,14 @@ Optional
 - [ripgrep]
 - [clang-tidy]
 
-LLM integration through the [parrot.nvim] plugin. To (optionally) use this plugin,
+LLM integration through the [codecompanion.nvim] plugin. To (optionally) use this plugin,
 specify your Anthropic API key in your `~./bashrc` as follows:
 
     export ANTHROPIC_API_KEY="your_api_key"
 
 [ripgrep]: https://github.com/BurntSushi/ripgrep
 [clang-tidy]: https://clang.llvm.org/extra/clang-tidy/
-[parrot.nvim]: https://github.com/frankroeder/parrot.nvim
+[codecompanion.nvim]: https://github.com/olimorris/codecompanion.nvim
 
 
 Install
