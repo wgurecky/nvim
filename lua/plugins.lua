@@ -60,23 +60,13 @@ local plugins_table = {
   --  dependencies = { 'ibhagwan/fzf-lua', 'nvim-lua/plenary.nvim' },
   -- },
   {"olimorris/codecompanion.nvim",
+    version = "18.*",
     dependencies = {
+      'nvim-lua/plenary.nvim',
       "nvim-treesitter/nvim-treesitter",
       "banjo/contextfiles.nvim",
       "ravitemer/codecompanion-history.nvim",
     },
---     extensions = {
---       contextfiles = {
---         opts = {
---           -- your contextfiles configuration here
---           -- or leave it empty to use the default configuration
---           -- by default looks for .cursor/rules file in repo
---         },
---       },
---       history = {
---         enabled = true, -- defaults to true
---       },
---     },
   },
 
   -- lsp diagnostic formatting

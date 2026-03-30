@@ -1,3 +1,14 @@
+-- check if contextfiles works
+-- require("codecompanion").prompt("context")
+--
+-- local files = require("contextfiles").get_context_files(current_file_path, { context_dir = ".cursor/rules"})
+
+-- get_context = function()
+--   local context = require("contextfiles")
+--   local current_file_path = vim.api.nvim_buf_get_name(0)
+--   return context.get_context_files(current_file_path)
+-- end
+
 -- codecompanion.nvim config
 --
 require("codecompanion").setup({
