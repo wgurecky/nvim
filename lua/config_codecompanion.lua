@@ -31,7 +31,7 @@ require("codecompanion").setup({
   },
   extensions = {
     contextfiles = {
-      callback = "contextfiles",
+      -- callback = "contextfiles",
       opts = {
         -- by default looks for .cursor/rules in the repo root
         -- you can override the file path here, e.g.:
