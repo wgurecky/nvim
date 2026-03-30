@@ -75,18 +75,6 @@ let g:qfenter_keymap.vopen = ['<Leader><CR>', '<C-v>']
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F']
 
-" telescope mappings
-nnoremap <leader>* :execute 'Telescope live_grep default_text=' . expand('<cword>')<cr><esc>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<CR>
-nnoremap <C-f>      <cmd>lua require('telescope.builtin').live_grep()<CR>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<CR>
-nnoremap <C-b>      <cmd>lua require('telescope.builtin').buffers()<CR>
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<CR>
-nnoremap <C-p>      <cmd>lua require('telescope.builtin').find_files()<CR>
-nnoremap <leader>fd <cmd>lua require('telescope.builtin').lsp_definitions()<CR>
-nnoremap <leader>fr <cmd>lua require('telescope.builtin').lsp_references()<CR>
-nnoremap <leader>fi <cmd>lua require('telescope.builtin').diagnostics()<CR>
-
 " On hover show diagnostic (if any) or use <leader>di to force diagnostic popup
 autocmd CursorHold * lua vim.diagnostic.open_float()
 nnoremap <leader>di  <cmd>lua vim.diagnostic.open_float()<CR>
