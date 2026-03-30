@@ -55,12 +55,18 @@ local plugins_table = {
   {'tpope/vim-dispatch', ft = {'cpp', 'c', 'fortran'}, cmd = {'Make'}},
   {'nvimtools/none-ls.nvim', event = "InsertEnter"},
 
+  {"Davidyz/VectorCode",
+    -- ensure version is same as CLI version: pip install vectorcode==0.7
+    version = "0.7.*",
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
+
   -- AI tools
   -- {"frankroeder/parrot.nvim",
   --  dependencies = { 'ibhagwan/fzf-lua', 'nvim-lua/plenary.nvim' },
   -- },
   {"olimorris/codecompanion.nvim",
-    version = "18.*",
+    version = "19.*",
     dependencies = {
       'nvim-lua/plenary.nvim',
       "nvim-treesitter/nvim-treesitter",

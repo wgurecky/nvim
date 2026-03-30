@@ -41,6 +41,12 @@ require("codecompanion").setup({
     history = {
       enabled = true,
     },
+--     vectorcode = {
+--       opts = {
+--         tool_opts = {
+--         },
+--       },
+--     },
   },
 })
 
