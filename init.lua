@@ -115,8 +115,11 @@ endfunction
 require('plugins')
 
 -- Specific plugin configs
+-- if os.getenv("ANTHROPIC_API_KEY") then
+--   require('config_parrot')
+-- end
 if os.getenv("ANTHROPIC_API_KEY") then
-  require('config_parrot')
+  require('config_codecompanion')
 end
 require('config_treesitter')
 require('config_telescope')

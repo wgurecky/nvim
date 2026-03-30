@@ -1,0 +1,3 @@
+-- opencode.nvim config
+--
+-- TODO:

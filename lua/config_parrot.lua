@@ -57,6 +57,43 @@ require("parrot").setup {
         end,
     },
   },
+  show_context_hints = true,
+  model_cache_expiry_hours = 0,
+  hooks = {
+    CodeConsultant = function(prt, params)
+      local chat_prompt = [[
+        Your task is to analyze the provided {{filetype}} code and suggest
+        improvements to optimize its performance. Identify areas where the
+        code can be made more efficient, faster, or less resource-intensive.
+        Provide specific suggestions for optimization, along with explanations
+        of how these changes can enhance the code's performance. The optimized
+        code should maintain the same functionality as the original code while
+        demonstrating improved efficiency.
+
+        Here is the code
+        ```{{filetype}}
+        {{filecontent}}
+        ```
+      ]]
+      prt.ChatNew(params, chat_prompt)
+    end,
+    ChatContextNew = function(prt, params)
+      local chat_prompt = [[
+        Carefully read the provided context. Do not respond immediately.
+
+      ]]
+      prt.ChatNew(params, chat_prompt)
+    end,
+  },
+  prompts = {
+      -- visual selection quick prompt tasks
+      ["Spell"] = "I want you to proofread the provided text and fix the errors.", -- e.g., :'<,'>PrtRewrite Spell
+      ["Debug"] = "I want you to examine the code and fix the errors.", -- e.g., :'<,'>PrtRewrite Debug
+      ["Doc"] = "Write a docstring that explains this function and all of the inputs.",  -- e.g., :'<,'>PrtPrepend Doc
+      ["Comment"] = "Provide a comment that explains what the snippet is doing.",  -- e.g., :'<,'>PrtPrepend Comment
+      ["Complete"] = "Continue the implementation of the provided snippet in the file {{filename}}.", -- e.g., :'<,'>PrtAppend Complete
+      ["Code"] = "Given this pseudo code description, complete the implementation of the described feature in the file {{filename}}.", -- e.g., :'<,'>PrtAppend Code
+  }
 }
 --           local last_message = payload.messages[#payload.messages]
 --           if last_message and type(last_message.content) == "string" and last_message.content:lower():find("websearch") then

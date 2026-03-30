@@ -28,7 +28,7 @@ local plugins_table = {
   {'caenrique/swap-buffers.nvim', event = "VeryLazy"},
   {'unblevable/quick-scope', keys = {'f', mode = 'n'}},
   {'yssl/QFEnter', event = "VeryLazy"},
-  {'kyazdani42/nvim-tree.lua', layz = false},
+  {'kyazdani42/nvim-tree.lua', lazy = false},
   {'junegunn/vim-easy-align', event = "VeryLazy"},
   {'majutsushi/tagbar', cmd = {'TagbarToggle'}},
   {'tpope/vim-fugitive', event = "VeryLazy"},
@@ -48,7 +48,7 @@ local plugins_table = {
     dependencies = {
     },
   },
-  'nvim-lua/plenary.nvim',
+  {'nvim-lua/plenary.nvim', lazy = false},
   'nvim-telescope/telescope.nvim',
 
   -- dev tools
@@ -56,8 +56,27 @@ local plugins_table = {
   {'nvimtools/none-ls.nvim', event = "InsertEnter"},
 
   -- AI tools
-  {"frankroeder/parrot.nvim",
-    dependencies = { 'ibhagwan/fzf-lua', 'nvim-lua/plenary.nvim' },
+  -- {"frankroeder/parrot.nvim",
+  --  dependencies = { 'ibhagwan/fzf-lua', 'nvim-lua/plenary.nvim' },
+  -- },
+  {"olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "banjo/contextfiles.nvim",
+      "ravitemer/codecompanion-history.nvim",
+    },
+--     extensions = {
+--       contextfiles = {
+--         opts = {
+--           -- your contextfiles configuration here
+--           -- or leave it empty to use the default configuration
+--           -- by default looks for .cursor/rules file in repo
+--         },
+--       },
+--       history = {
+--         enabled = true, -- defaults to true
+--       },
+--     },
   },
 
   -- lsp diagnostic formatting
