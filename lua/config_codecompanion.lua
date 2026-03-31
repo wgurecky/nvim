@@ -1,13 +1,85 @@
--- check if contextfiles works
--- require("codecompanion").prompt("context")
---
--- local files = require("contextfiles").get_context_files(current_file_path, { context_dir = ".cursor/rules"})
+-- EXPERIMENTAL CLAUDE GENERATED CONTEXT INJECTION
 
--- get_context = function()
---   local context = require("contextfiles")
---   local current_file_path = vim.api.nvim_buf_get_name(0)
---   return context.get_context_files(current_file_path)
--- end
+-- optional additional files to inject at codecompanion chat startup
+local CC_CONTEXT_FILENAME = ".cc_context.md"
+-- Example .cc_context.md content:
+--
+-- # Context
+-- - src/utils.py
+-- - docs/api.md
+-- - README.md
+
+-- Returns the root of the current git repository, or nil if not in one.
+local function get_git_root()
+  local result = vim.fn.systemlist("git rev-parse --show-toplevel")
+  if vim.v.shell_error ~= 0 or #result == 0 then
+    return nil
+  end
+  return result[1]
+end
+
+-- Context file loader for CodeCompanion
+-- Defaults to <git_root>/.cc_context.md when md_path is not provided.
+-- Relative paths in the markdown are resolved against the git repo root.
+local function parse_context_md(md_path)
+  local base_dir = get_git_root()
+  if not base_dir then
+    vim.notify("CCContext: no git repo found, falling back to cwd", vim.log.levels.WARN)
+    base_dir = vim.fn.getcwd()
+  end
+  local expanded = vim.fn.expand(md_path or (base_dir .. "/" .. CC_CONTEXT_FILENAME))
+  local ok, lines = pcall(vim.fn.readfile, expanded)
+  if not ok then
+    vim.notify("CCContext: cannot read '" .. expanded .. "'", vim.log.levels.WARN)
+    return {}
+  end
+  local files = {}
+  for _, line in ipairs(lines) do
+    local stripped = line:match("^%s*(.-)%s*$")
+    if stripped ~= "" and not stripped:match("^#") then
+      local path = stripped:match("^[-*]%s+(.+)$")
+                or stripped:match("^`(.+)`$")
+                or stripped
+      path = vim.fn.expand(path)
+      if not vim.startswith(path, "/") then
+        path = base_dir .. "/" .. path
+      end
+      if vim.fn.filereadable(path) == 1 then
+        table.insert(files, path)
+      end
+    end
+  end
+  return files
+end
+
+-- Injects .cc_context.md file contents into CodeCompanion chat context
+-- by default looks for .cc_context.md in git root dir
+function load_files_into_chat_context(chat)
+  -- TODO: allow custom context file path
+  local files = parse_context_md(nil)
+  if #files == 0 then
+    -- return
+    return vim.notify("CCContext: No .cc_context.md file", vim.log.levels.WARN)
+  end
+  for _, filepath in ipairs(files) do
+    if vim.fn.filereadable(filepath) ~= 1 then
+      return vim.notify("CCContext: cannot read '" .. filepath .. "'", vim.log.levels.WARN)
+    end
+    local ok, lines = pcall(vim.fn.readfile, filepath)
+    if not ok then
+      return vim.notify("CCContext: failed to read '" .. filepath .. "'", vim.log.levels.WARN)
+    end
+    local content = table.concat(lines, "\n")
+    local short_path = vim.fn.fnamemodify(filepath, ":~:.")
+    chat:add_context(
+      { role = "user", content = "File: `" .. short_path .. "`\n\n```\n" .. content .. "\n```" },
+      "file",
+      "<file:" .. short_path .. ">"
+    )
+    vim.notify("CCContext: added '" .. short_path .. "' to context", vim.log.levels.INFO)
+  end
+end
+
 
 -- codecompanion.nvim config
 --
@@ -15,7 +87,36 @@ require("codecompanion").setup({
   interactions = {
     chat = {
       adapter = "anthropic",
-      model = "claude-sonnet-4-6"
+      model = "claude-sonnet-4-6",
+      slash_commands = {
+        ['context_file'] = {
+          description = "Load files in .cc_context.md into context",
+          ---@param chat CodeCompanion.Chat
+          callback = function(chat)
+            load_files_into_chat_context(chat)
+          end,
+          opts = {
+            contains_code = true,
+          },
+        },
+        ["git_files"] = {
+          description = "List git files",
+          ---@param chat CodeCompanion.Chat
+          callback = function(chat)
+            local handle = io.popen("git ls-files")
+            if handle ~= nil then
+              local result = handle:read("*a")
+              handle:close()
+              chat:add_context({ role = "user", content = result }, "git", "<git_files>")
+            else
+              return vim.notify("No git files available", vim.log.levels.INFO, { title = "CodeCompanion" })
+            end
+          end,
+          opts = {
+            contains_code = false,
+          },
+        },
+      },
     },
     inline = {
       adapter = "anthropic",
@@ -27,7 +128,7 @@ require("codecompanion").setup({
     },
   },
   opts = {
-    log_level = "DEBUG",
+    log_level = "ERROR",
   },
   extensions = {
     contextfiles = {
@@ -83,3 +184,4 @@ vim.cmd([[cab cc CodeCompanion]])
 --     ]] to move to the next header
 --     { to move to the previous chat
 --     } to move to the next chat
+
