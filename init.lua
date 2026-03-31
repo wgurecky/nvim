@@ -115,17 +115,15 @@ endfunction
 require('plugins')
 
 -- Specific plugin configs
--- if os.getenv("ANTHROPIC_API_KEY") then
---   require('config_parrot')
--- end
-if os.getenv("ANTHROPIC_API_KEY") then
-  require('config_codecompanion')
-end
 require('config_treesitter')
 require('config_telescope')
 require('config_blink')
 require('config_lsp')
 require('config')
+if os.getenv("ANTHROPIC_API_KEY") or os.getenv("ENABLE_COPILOT") then
+  require('config_codecompanion')
+  require('config_copilot')
+end
 
 -- Colorscheme
 -- colorscheme solarized

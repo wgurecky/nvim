@@ -84,10 +84,24 @@ end
 -- codecompanion.nvim config
 --
 require("codecompanion").setup({
+  adapters = {
+    -- extend copilot adapter
+    copilot = function()
+      return require("codecompanion.adapters").extend("copilot", {
+        schema = {
+          model = {
+            default = "claude-3.5-sonnet", -- pin a known streaming-capable model
+          },
+        },
+      })
+    end,
+  },
   interactions = {
     chat = {
       adapter = "anthropic",
-      model = "claude-sonnet-4-6",
+      model = "claude-haiku-4-5",
+      -- adapter = "copilot",
+      -- model = "claude-sonnet-4-6",
       slash_commands = {
         ['context_file'] = {
           description = "Load files in .cc_context.md into context",
@@ -120,11 +134,14 @@ require("codecompanion").setup({
     },
     inline = {
       adapter = "anthropic",
-      model = "claude-sonnet-4-6"
+      model = "claude-haiku-4-5"
+      -- model = "claude-sonnet-4-6"
+      -- adapter = "copilot",
     },
     background = {
       adapter = "anthropic",
       model = "claude-haiku-4-5"
+      -- adapter = "copilot",
     },
   },
   opts = {

@@ -68,6 +68,7 @@ local plugins_table = {
   {"olimorris/codecompanion.nvim",
     version = "19.*",
     dependencies = {
+      'zbirenbaum/copilot.lua',
       'nvim-lua/plenary.nvim',
       "nvim-treesitter/nvim-treesitter",
       "banjo/contextfiles.nvim",
