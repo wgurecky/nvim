@@ -91,9 +91,3 @@ require('blink.cmp').setup({
     fuzzy = { implementation = "prefer_rust_with_warning" }
     -- fuzzy = { implementation = "lua" }
 })
-
--- Add additional capabilities supported by nvim-cmp
--- local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local nvim_capabilities = vim.lsp.protocol.make_client_capabilities()
-local capabilities = require('blink.cmp').get_lsp_capabilities(nvim_capabilities)
-
