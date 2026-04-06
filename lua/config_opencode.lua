@@ -1,6 +1,4 @@
 -- config_opencode.lua
-vim.env.OPENCODE_CONFIG_DIR = "$HOME/.config/nvim/opencode/"
-
 --
 -- This file is intentionally minimal; opencode's
 -- model and provider are set outside Neovim in ~/.config/opencode/opencode.jsonc.
@@ -13,6 +11,7 @@ vim.env.OPENCODE_CONFIG_DIR = "$HOME/.config/nvim/opencode/"
 --     "model": "anthropic/claude-sonnet-4-5"
 --   }
 --
+-- vim.env.OPENCODE_CONFIG_DIR = "~/.config/nvim/.opencode/"
 
 -- opencode.nvim config
 -- require("opencode").setup({
