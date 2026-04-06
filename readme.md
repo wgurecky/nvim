@@ -35,15 +35,15 @@ Optional
 
 - [ripgrep]
 - [clang-tidy]
+- [opencode]
 
-LLM integration through the [codecompanion.nvim] plugin. To (optionally) use this plugin,
-specify your Anthropic API key in your `~./bashrc` as follows:
-
-    export ANTHROPIC_API_KEY="your_api_key"
+LLM integration through the [opencode.nvim] plugin. To (optionally) use this plugin,
+ensure [opencode] is installed.
 
 [ripgrep]: https://github.com/BurntSushi/ripgrep
 [clang-tidy]: https://clang.llvm.org/extra/clang-tidy/
-[codecompanion.nvim]: https://github.com/olimorris/codecompanion.nvim
+[opencode.nvim]: https://github.com/nickjvandyke/opencode.nvim
+[opencode]: https://github.com/anomalyco/opencode
 
 
 Install
