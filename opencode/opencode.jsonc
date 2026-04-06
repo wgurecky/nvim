@@ -1,0 +1,33 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "copilot/claude-4-5-haiku-latest",
+  // "model": "opencode/pig-pickle",
+  // requires ANTHROPIC_API_KEY
+  // "model": "anthropic/claude-4-5-haiku-latest",
+  // "small_model": "anthropic/claude-4-5-haiku-latest",
+  // "theme": "opencode",
+  "autoupdate": true,
+  "permission": {
+    "edit": "ask",
+    "bash": {
+      "git *": "ask",
+      "npm *": "allow",
+      "rm *": "ask",
+      "*": "ask"
+    },
+    "webfetch": "allow"
+  },
+  "agent": {
+      "chat": {
+          "mode": "primary",
+          "temperature": 0.6,
+          "prompt": "You are a helpful assisistant in a chat interface.  Do not edit files directly, but you can suggest new code and changes.  Prefer to read documentation on the web if you are unsure.",
+          "tools": {
+              "read": true,
+              "write": false,
+              "bash": false,
+              "edit": false
+          }
+      }
+  }
+}

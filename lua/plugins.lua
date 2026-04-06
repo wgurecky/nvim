@@ -62,19 +62,20 @@ local plugins_table = {
   },
 
   -- AI tools
-  -- {"frankroeder/parrot.nvim",
-  --  dependencies = { 'ibhagwan/fzf-lua', 'nvim-lua/plenary.nvim' },
-  -- },
-  {"olimorris/codecompanion.nvim",
-    version = "19.*",
-    dependencies = {
-      'zbirenbaum/copilot.lua',
-      'nvim-lua/plenary.nvim',
-      "nvim-treesitter/nvim-treesitter",
-      "banjo/contextfiles.nvim",
-      "ravitemer/codecompanion-history.nvim",
-    },
+  {"nickjvandyke/opencode.nvim",
+   version = "*",
   },
+
+--   {"olimorris/codecompanion.nvim",
+--     version = "19.*",
+--     dependencies = {
+--       'zbirenbaum/copilot.lua',
+--       'nvim-lua/plenary.nvim',
+--       "nvim-treesitter/nvim-treesitter",
+--       "banjo/contextfiles.nvim",
+--       "ravitemer/codecompanion-history.nvim",
+--     },
+--   },
 
   -- lsp diagnostic formatting
   {'folke/trouble.nvim',
