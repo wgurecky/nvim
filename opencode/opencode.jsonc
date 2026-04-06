@@ -9,13 +9,19 @@
   "autoupdate": true,
   "permission": {
     "edit": "ask",
+    "read": "allow",
     "bash": {
       "git *": "ask",
-      "npm *": "allow",
-      "rm *": "ask",
+      "npm *": "ask",
+      "rm *": "deny",
       "*": "ask"
     },
-    "webfetch": "allow"
+    "webfetch": "allow",
+    "websearch": "allow",
+    "external_directory": {
+      "*": "deny",
+      "~/**": "deny"
+    }
   },
   "agent": {
       "chat": {
@@ -25,7 +31,6 @@
           "tools": {
               "read": true,
               "write": false,
-              "bash": false,
               "edit": false
           }
       }
