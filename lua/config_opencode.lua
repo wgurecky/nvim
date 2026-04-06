@@ -1,3 +1,20 @@
--- opencode.nvim config
+-- config_opencode.lua
 --
--- TODO:
+-- The opencode ACP adapter is configured in config_codecompanion.lua under
+-- adapters.acp.opencode.  This file is intentionally minimal; opencode's
+-- model and provider are set outside Neovim in ~/.config/opencode/config.jsonc.
+--
+-- Example ~/.config/opencode/config.jsonc:
+--
+--   {
+--     "$schema": "https://opencode.ai/config.json",
+--     "model": "anthropic/claude-sonnet-4-5"
+--   }
+--
+-- The adapter runs `opencode acp` as a subprocess (ACP = Agent Client
+-- Protocol).  The binary must be in PATH; verify with `which opencode`.
+-- ANTHROPIC_API_KEY (or another provider key) must be set in the environment
+-- that launches Neovim.
+--
+-- To switch the chat adapter to opencode interactively, press `ga` inside the
+-- CodeCompanion chat buffer and select "opencode" from the list.

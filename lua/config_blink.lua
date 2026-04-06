@@ -88,6 +88,23 @@ require('blink.cmp').setup({
       default = { 'lsp', 'path', 'snippets', 'buffer' },
     },
     signature = { enabled = true },
-    fuzzy = { implementation = "prefer_rust_with_warning" }
+    fuzzy = { implementation = "prefer_rust_with_warning" },
     -- fuzzy = { implementation = "lua" }
+
+    -- Cmdline completion for :commands (used by CodeCompanion slash commands)
+    cmdline = {
+      enabled = true,
+      keymap = {
+        preset = 'cmdline',
+        ['<Tab>'] = { 'show', 'accept' },
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+      },
+      completion = {
+        menu = {
+          auto_show = function(ctx)
+            return vim.fn.getcmdtype() == ':'
+          end,
+        },
+      },
+    },
 })

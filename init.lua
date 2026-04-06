@@ -123,6 +123,7 @@ require('config')
 if os.getenv("ANTHROPIC_API_KEY") or os.getenv("ENABLE_COPILOT") then
   require('config_codecompanion')
   require('config_copilot')
+  require('config_opencode')
 end
 
 -- Colorscheme

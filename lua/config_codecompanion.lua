@@ -85,7 +85,7 @@ end
 --
 require("codecompanion").setup({
   adapters = {
-    -- extend copilot adapter
+    -- extend copilot HTTP adapter
     copilot = function()
       return require("codecompanion.adapters").extend("copilot", {
         schema = {
@@ -95,11 +95,28 @@ require("codecompanion").setup({
         },
       })
     end,
+    -- ACP (Agent Client Protocol) adapters — run external CLI agents.
+    -- opencode is a built-in ACP preset; it runs `opencode acp` from $PATH.
+    -- Model is controlled by ~/.config/opencode/opencode.jsonc, not here.
+    -- Requires: `opencode` binary in PATH and ANTHROPIC_API_KEY in env.
+    acp = {
+      opencode = function()
+        return require("codecompanion.adapters").extend("opencode", {
+          defaults = {
+            timeout = 30000, -- 30 s; agentic sessions can be slow
+          },
+        })
+      end,
+    },
   },
   interactions = {
     chat = {
-      adapter = "anthropic",
-      model = "claude-haiku-4-5",
+      adapter = "opencode",
+      -- NOTE: `model` is ignored for ACP adapters (opencode, claude_code, etc.).
+      -- Set the model in ~/.config/opencode/config.json instead.
+      -- model = "claude-haiku-4",  -- only applies when using HTTP adapters below
+      -- adapter = "anthropic",
+      -- model = "claude-haiku-4-5",
       -- adapter = "copilot",
       -- model = "claude-sonnet-4-6",
       slash_commands = {
@@ -139,9 +156,14 @@ require("codecompanion").setup({
       -- adapter = "copilot",
     },
     background = {
-      adapter = "anthropic",
-      model = "claude-haiku-4-5"
+      -- adapter = "anthropic",
+      -- model = "claude-haiku-4-5"
       -- adapter = "copilot",
+      chat = {
+        opts = {
+          enabled = false,
+        }
+      },
     },
   },
   opts = {
@@ -159,12 +181,6 @@ require("codecompanion").setup({
     history = {
       enabled = true,
     },
---     vectorcode = {
---       opts = {
---         tool_opts = {
---         },
---       },
---     },
   },
 })
 
