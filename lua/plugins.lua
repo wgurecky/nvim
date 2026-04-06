@@ -28,7 +28,7 @@ local plugins_table = {
   {'caenrique/swap-buffers.nvim', event = "VeryLazy"},
   {'unblevable/quick-scope', keys = {'f', mode = 'n'}},
   {'yssl/QFEnter', event = "VeryLazy"},
-  {'kyazdani42/nvim-tree.lua', layz = false},
+  {'kyazdani42/nvim-tree.lua', lazy = false},
   {'junegunn/vim-easy-align', event = "VeryLazy"},
   {'majutsushi/tagbar', cmd = {'TagbarToggle'}},
   {'tpope/vim-fugitive', event = "VeryLazy"},
@@ -48,12 +48,34 @@ local plugins_table = {
     dependencies = {
     },
   },
-  'nvim-lua/plenary.nvim',
+  {'nvim-lua/plenary.nvim', lazy = false},
   'nvim-telescope/telescope.nvim',
 
   -- dev tools
   {'tpope/vim-dispatch', ft = {'cpp', 'c', 'fortran'}, cmd = {'Make'}},
   {'nvimtools/none-ls.nvim', event = "InsertEnter"},
+
+  {"Davidyz/VectorCode",
+    -- ensure version is same as CLI version: pip install vectorcode==0.7
+    version = "0.7.*",
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
+
+  -- AI tools
+  {"nickjvandyke/opencode.nvim",
+   version = "*",
+  },
+
+--   {"olimorris/codecompanion.nvim",
+--     version = "19.*",
+--     dependencies = {
+--       'zbirenbaum/copilot.lua',
+--       'nvim-lua/plenary.nvim',
+--       "nvim-treesitter/nvim-treesitter",
+--       "banjo/contextfiles.nvim",
+--       "ravitemer/codecompanion-history.nvim",
+--     },
+--   },
 
   -- lsp diagnostic formatting
   {'folke/trouble.nvim',

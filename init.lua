@@ -45,9 +45,11 @@ vim.keymap.set('n', '<Leader>s', ':%s/\\<<C-r><C-w>\\>//g<Left><Left>', {noremap
 -- inoremap jj <ESC>
 -- imap jw <ESC>
 -- imap jk <ESC>
-vim.keymap.set('i', 'jj', '<ESC>', {noremap=true, silent=true})
-vim.keymap.set('i', 'jk', '<ESC>', {noremap=true, silent=true})
-vim.keymap.set('i', 'jw', '<ESC>', {noremap=true, silent=true})
+vim.keymap.set('i', 'jj', '<ESC>', {silent=true})
+vim.keymap.set('i', 'jk', '<ESC>', {silent=true})
+vim.keymap.set('i', 'jw', '<ESC>', {silent=true})
+vim.keymap.set('t', 'jj', [[<C-\><C-n>]], {noremap = true})
+vim.keymap.set('t', 'jw', [[<C-\><C-n>]], {noremap = true})
 
 -- fast switch between tabs created with :tabnew
 vim.keymap.set('n', '<leader>tn', ':tabprevious<CR>')
@@ -113,13 +115,25 @@ endfunction
 
 -- Lua Plugins
 require('plugins')
+
+-- Specific plugin configs
+require('config_treesitter')
+require('config_telescope')
+require('config_blink')
+require('config_lsp')
 require('config')
+if vim.fn.executable('opencode') == 1 then
+  require('config_opencode')
+end
+-- if os.getenv("ANTHROPIC_API_KEY") or os.getenv("ENABLE_COPILOT") then
+--   require('config_codecompanion')
+--   require('config_copilot')
+-- end
 
 -- Colorscheme
 -- colorscheme solarized
 vim.cmd([[
 set mouse=
-set background=light
 set termguicolors
 ]])
 

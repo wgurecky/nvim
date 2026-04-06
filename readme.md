@@ -35,9 +35,15 @@ Optional
 
 - [ripgrep]
 - [clang-tidy]
+- [opencode]
+
+LLM integration through the [opencode.nvim] plugin. To (optionally) use this plugin,
+ensure [opencode] is installed.
 
 [ripgrep]: https://github.com/BurntSushi/ripgrep
 [clang-tidy]: https://clang.llvm.org/extra/clang-tidy/
+[opencode.nvim]: https://github.com/nickjvandyke/opencode.nvim
+[opencode]: https://github.com/anomalyco/opencode
 
 
 Install
