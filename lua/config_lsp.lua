@@ -7,6 +7,7 @@ local capabilities = require('blink.cmp').get_lsp_capabilities(nvim_capabilities
 
 -- lspconfig
 local lspconfig = require('lspconfig')
+-- local lspconfig = vim.lsp.config
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 --
@@ -53,6 +54,7 @@ vim.lsp.enable('fortls')
 vim.lsp.config('clangd',
 {
     cmd = {vim.fn.FindClangExe()},
+    filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
     capabilities = capabilities,
 })
 vim.lsp.enable('clangd')
