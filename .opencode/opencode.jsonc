@@ -5,7 +5,7 @@
   // requires ANTHROPIC_API_KEY
   // "model": "anthropic/claude-4-5-haiku-latest",
   // "small_model": "anthropic/claude-4-5-haiku-latest",
-  // "theme": "opencode",
+  "theme": "solarized",
   "autoupdate": true,
   "permission": {
     "edit": "ask",
