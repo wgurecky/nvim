@@ -16,9 +16,26 @@
 -- opencode.nvim config
 -- require("opencode").setup({
 -- })
+local opencode_buf = nil
+
+local function toggle_opencode()
+  -- If buffer exists and is valid, check if it's visible in a window
+  if opencode_buf and vim.api.nvim_buf_is_valid(opencode_buf) then
+    local win = vim.fn.bufwinid(opencode_buf)
+    if win ~= -1 then
+      vim.api.nvim_win_close(win, true) -- Close it if open
+    else
+      vim.cmd("vsplit | b " .. opencode_buf) -- Open it if hidden
+    end
+  else
+    -- Create a new terminal split running the server
+    vim.cmd("vsplit | term opencode --port")
+    opencode_buf = vim.api.nvim_get_current_buf()
+  end
+end
 
 -- opencode.nvim keymaps
-vim.keymap.set({ "n", "t" }, "<leader>a", function() require("opencode").toggle() end)
+vim.keymap.set({ "n", "t" }, "<leader>a", toggle_opencode, { desc = "Toggle OpenCode" })
 vim.keymap.set({ "n", "x", "v" }, "<C-a>", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask opencode…" })
 
 -- Custom commands for visual model selection
