@@ -48,6 +48,7 @@ local plugins_table = {
     dependencies = {
     },
   },
+  "arborist-ts/arborist.nvim",
   {'nvim-lua/plenary.nvim', lazy = false},
   'nvim-telescope/telescope.nvim',
 
