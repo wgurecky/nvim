@@ -16,6 +16,7 @@ vim.o.shiftwidth = 4
 vim.o.expandtab = true
 vim.o.smarttab = true
 vim.o.autoindent = true
+vim.o.autoread = true
 
 -- show immediately where so far a typed pattern matches
 vim.o.incsearch = true
