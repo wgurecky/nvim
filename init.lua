@@ -16,6 +16,7 @@ vim.o.shiftwidth = 4
 vim.o.expandtab = true
 vim.o.smarttab = true
 vim.o.autoindent = true
+vim.o.autoread = true
 
 -- show immediately where so far a typed pattern matches
 vim.o.incsearch = true
@@ -31,7 +32,7 @@ vim.keymap.set('n', '<Space>', ':exec "normal i".nr2char(getchar())."\\e"<CR>', 
 
 -- normal esc from terminal window
 -- tnoremap <Esc> <C-\><C-n>
-vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', {noremap=true, silent=true})
+-- vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', {noremap=true, silent=true})
 
 -- faster buffer lookup & switching with <C-e># or <C-e><buff_name>
 -- nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
