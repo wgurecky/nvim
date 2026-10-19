@@ -29,7 +29,7 @@ local function toggle_opencode()
     end
   else
     -- Create a new terminal split running the server
-    vim.cmd("vsplit | term opencode --port")
+    vim.cmd("vsplit | term opencode")
     opencode_buf = vim.api.nvim_get_current_buf()
   end
 end
